@@ -1,0 +1,54 @@
+.recorder-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.record-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--panel-bg);
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.record-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--accent-color);
+}
+
+.record-btn.recording {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: white;
+}
+
+.record-btn .icon {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stop-icon {
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 2px;
+}
+
+.hint-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
