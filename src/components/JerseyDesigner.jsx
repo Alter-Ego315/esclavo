@@ -59,6 +59,20 @@ const JERSEY_TEMPLATES = [
     }
 ];
 
+// Reference colors from FIFA Kit Creator
+const PRESET_COLORS = [
+    { "name": "Black", "hex": "#000000" }, { "name": "White", "hex": "#ffffff" },
+    { "name": "Arsenal Red", "hex": "#cf151f" }, { "name": "Arsenal Navy", "hex": "#232e44" },
+    { "name": "Chelsea Blue", "hex": "#123e89" }, { "name": "Liverpool Red", "hex": "#b7121d" },
+    { "name": "Man City Blue", "hex": "#4ea7f0" }, { "name": "Man Utd Red", "hex": "#ce152d" },
+    { "name": "Real Madrid Gold", "hex": "#baa071" }, { "name": "Barcelona Blue", "hex": "#2261b2" },
+    { "name": "Barcelona Red", "hex": "#d63c54" }, { "name": "PSG Navy", "hex": "#242e47" },
+    { "name": "Juventus Gold", "hex": "#bf9556" }, { "name": "Dortmund Yellow", "hex": "#f1d501" },
+    { "name": "Bayern Red", "hex": "#d00a2c" }, { "name": "Inter Blue", "hex": "#2270d7" },
+    { "name": "Milan Red", "hex": "#d3222d" }, { "name": "Napoli Blue", "hex": "#308ded" },
+    { "name": "Ajax Red", "hex": "#d2122e" }, { "name": "Ginga Green", "hex": "#39FF14" }
+];
+
 const JerseyDesigner = () => {
     // Default "Teo 69" State
     const [colors, setColors] = useState({
@@ -217,14 +231,31 @@ const JerseyDesigner = () => {
                                     <label style={{ display: 'block', fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', marginBottom: '8px' }}>
                                         NIVEL DE VIBRACIÓN (COLOR PUNCH)
                                     </label>
-                                    <input
-                                        type="range"
+                                    <input type="range"
                                         min="0"
                                         max="100"
                                         value={vibrancy}
                                         onChange={(e) => setVibrancy(parseInt(e.target.value))}
                                         style={{ width: '100%', accentColor: 'var(--primary)' }}
                                     />
+                                </div>
+
+                                <div className="presets-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
+                                    {PRESET_COLORS.map(c => (
+                                        <button
+                                            key={c.name}
+                                            title={c.name}
+                                            onClick={() => handleColorChange('primary', c.hex)}
+                                            style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                borderRadius: '50%',
+                                                background: c.hex,
+                                                border: '1px solid rgba(255,255,255,0.2)',
+                                                cursor: 'pointer'
+                                            }}
+                                        />
+                                    ))}
                                 </div>
                             </div>
                         )}

@@ -3,109 +3,122 @@ import React from 'react';
 const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, brandLogo, font = 'Orbitron', view = 'front', vibrancy = 50 }) => {
     const { primary, secondary, accent } = colors;
 
-    // Mapping logic for 3D textures
+    // Use saturation for "vibrancy" effect
+    // To implement real color manipulation we'd need more complex logic or just use opacity layers
     const isSleeve = view.includes('sleeve');
     const isBack = view.includes('back');
     const isFront = view.includes('front');
 
-    // Color punch logic
-    const saturation = 0.6 + (vibrancy / 100);
+    // For the 3D Texture, we just need a square filler. 
+    // The previous svg used 'bodyPathFront' which was a jersey silhouette. 
+    // For UV mapped cylinder texturing, we want the pattern to fill the whole square 
+    // because the cylinder face UVs cover the whole square.
 
-    // Anatomical Silhouette Paths (Pro-Fit)
-    const bodyPathFront = "M160 80 Q250 110 340 80 L370 120 Q380 250 350 460 L150 460 Q120 250 130 120 Z";
-    const bodyPathBack = "M160 80 Q250 100 340 80 L370 120 Q380 250 350 460 L150 460 Q120 250 130 120 Z";
+    // However, logos need to be centered.
 
     return (
-        <div className={`jersey-preview-container ${view}-view`} style={{ background: '#000', width: '2048px', height: '2048px' }}>
-            <svg viewBox="0 0 500 500" className="jersey-svg" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+        <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '1024px', height: '1024px' }}>
+            <svg viewBox="0 0 1024 1024" className="jersey-svg" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%', shapeRendering: 'geometricPrecision' }}>
                 <defs>
                     <linearGradient id="jerseyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" style={{ stopColor: primary, stopOpacity: 1 }} />
                         <stop offset="100%" style={{ stopColor: secondary, stopOpacity: 1 }} />
                     </linearGradient>
 
-                    <pattern id="pixelPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <rect width="10" height="10" fill={secondary} opacity={0.6 * saturation} />
-                        <rect x="10" y="10" width="10" height="10" fill={secondary} opacity={0.6 * saturation} />
+                    {/* Scale patterns up for 1024x1024 */}
+                    <pattern id="pixelPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <rect width="20" height="20" fill={secondary} opacity={0.3} />
+                        <rect x="20" y="20" width="20" height="20" fill={secondary} opacity={0.3} />
                     </pattern>
 
-                    <pattern id="diagonalPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                        <rect width="20" height="40" fill={secondary} opacity={0.6 * saturation} />
+                    <pattern id="diagonalPattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                        <rect width="40" height="80" fill={secondary} opacity={0.3} />
                     </pattern>
 
-                    <filter id="anatomyDepth" x="-20%" y="-20%" width="140%" height="140%">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
-                        <feDiffuseLighting in="noise" lighting-color="#ffffff" surfaceScale="3" result="diffuse">
-                            <feDistantLight azimuth="45" elevation="60" />
-                        </feDiffuseLighting>
-                        <feComposite in="diffuse" in2="SourceGraphic" operator="arithmetic" k1="0.1" k2="0.9" k3="0.05" k4="0" />
-                    </filter>
-
-                    <clipPath id="bodyClip">
-                        <path d={isBack ? bodyPathBack : bodyPathFront} />
-                    </clipPath>
-
-                    <radialGradient id="muscleShadow" cx="50%" cy="30%" r="50%">
-                        <stop offset="0%" stopColor="black" stopOpacity="0" />
-                        <stop offset="100%" stopColor="black" stopOpacity="0.4" />
-                    </radialGradient>
+                    {/* Mesh Pattern */}
+                    <pattern id="meshPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <circle cx="2" cy="2" r="2" fill="#000" opacity="0.1" />
+                    </pattern>
                 </defs>
 
+                {/* BACKGROUND / BASE CONTENT */}
+                <rect width="1024" height="1024" fill={pattern === 'gradient' ? 'url(#jerseyGradient)' : primary} />
+
+                {/* Patterns */}
+                {pattern === 'stripes' && (
+                    <g fill={secondary} opacity={0.7}>
+                        {[160, 320, 480, 640, 800].map((x, i) => (
+                            <rect key={i} x={x} y="0" width="80" height="1024" />
+                        ))}
+                    </g>
+                )}
+                {pattern === 'hoops' && (
+                    <g fill={secondary} opacity={0.7}>
+                        {[160, 320, 480, 640, 800].map((y, i) => (
+                            <rect key={i} x="0" y={y} width="1024" height="80" />
+                        ))}
+                    </g>
+                )}
+                {pattern === 'pixels' && <rect width="1024" height="1024" fill="url(#pixelPattern)" />}
+                {pattern === 'diagonal' && <rect width="1024" height="1024" fill="url(#diagonalPattern)" />}
+
+                {/* Fabric Texture Overlay (Subtle) */}
+                <rect width="1024" height="1024" fill="url(#meshPattern)" />
+
+                {/* LOGOS & TEXT - Center them for Cylinder Mapping */}
+                {/* Cylinder UVs map 0-1 horizontally. 512 is center. */}
+
                 {!isSleeve && (
-                    <g filter="url(#anatomyDepth)">
-                        <path
-                            d={isBack ? bodyPathBack : bodyPathFront}
-                            fill={pattern === 'gradient' ? 'url(#jerseyGradient)' : primary}
-                        />
-                        <g clipPath="url(#bodyClip)">
-                            {pattern === 'stripes' && (
-                                <g fill={secondary} opacity={0.7 * saturation}>
-                                    {[160, 190, 220, 250, 280, 310, 340].map(x => (
-                                        <rect key={x} x={x - 5} y="80" width="10" height="380" />
-                                    ))}
-                                </g>
-                            )}
-                            {pattern === 'hoops' && (
-                                <g fill={secondary} opacity={0.7 * saturation}>
-                                    {[120, 170, 220, 270, 320, 370, 420].map(y => (
-                                        <rect key={y} x="0" y={y} width="500" height="15" />
-                                    ))}
-                                </g>
-                            )}
-                            {pattern === 'pixels' && <rect width="500" height="500" fill="url(#pixelPattern)" />}
-                            {pattern === 'diagonal' && <rect width="500" height="500" fill="url(#diagonalPattern)" />}
-                        </g>
-
-                        {isFront && (
-                            <path d="M160 80 Q250 120 340 80 L320 60 Q250 100 180 60 Z" fill="#050505" />
-                        )}
-                        {isBack && (
-                            <path d="M160 80 Q250 105 340 80 L320 60 Q250 85 180 60 Z" fill="#020202" />
-                        )}
+                    <g>
+                        {/* Collar Detail */}
+                        <path d="M 0 0 L 1024 0 L 1024 100 Q 512 300 0 100 Z" fill={primary} fillOpacity="0.2" />
 
                         {isFront && (
                             <g>
-                                <image href={teamLogo || "/logo.png"} x="275" y="145" width="45" height="45" />
-                                {brandLogo && <image href={brandLogo} x="180" y="150" width="40" height="40" style={{ filter: 'brightness(4)' }} />}
-                                {sponsorLogo && <image href={sponsorLogo} x="175" y="270" width="150" height="75" preserveAspectRatio="xMidYMid meet" />}
+                                {/* Team Logo - Left Chest (approx x=700) */}
+                                <image href={teamLogo || "/logo.png"} x="680" y="250" width="120" height="120" />
+
+                                {/* Brand Logo - Right Chest (approx x=200) */}
+                                {brandLogo && (
+                                    <image href={brandLogo} x="220" y="270" width="100" height="80" style={{ filter: 'brightness(4)' }} />
+                                )}
+
+                                {/* Sponsor - Center Chest */}
+                                {sponsorLogo && (
+                                    <image href={sponsorLogo} x="312" y="450" width="400" height="200" preserveAspectRatio="xMidYMid meet" />
+                                )}
                             </g>
                         )}
 
                         {isBack && (
                             <g>
-                                <text x="250" y="155" textAnchor="middle" fill="#ffffff" style={{ fontFamily: font, fontSize: '44px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '6px' }}>{name}</text>
-                                <text x="250" y="340" textAnchor="middle" fill="#ffffff" style={{ fontFamily: font, fontSize: '190px', fontWeight: '900' }}>{number}</text>
+                                {/* Name */}
+                                <text x="512" y="300" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '100px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '10px' }}>
+                                    {name}
+                                </text>
+
+                                {/* Number */}
+                                <text x="512" y="750" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '450px', fontWeight: '900' }}>
+                                    {number}
+                                </text>
                             </g>
                         )}
                     </g>
                 )}
 
+                {/* Sleeves have simple patterns mostly */}
                 {isSleeve && (
-                    <g filter="url(#anatomyDepth)">
-                        <rect width="500" height="500" fill={accent} />
-                        {pattern === 'pixels' && <rect width="500" height="500" fill="url(#pixelPattern)" opacity={0.5 * saturation} />}
+                    <g>
+                        <rect width="1024" height="1024" fill={accent} opacity="0.2" /> {/* Tint sleeves */}
+                        <g transform="translate(512, 512)">
+                            {/* Optional sleeve graphics */}
+                        </g>
                     </g>
                 )}
+
+                {/* Border / Seam hints for realism */}
+                <rect x="0" y="0" width="1024" height="1024" fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="20" />
+
             </svg>
         </div>
     );
