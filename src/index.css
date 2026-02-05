@@ -1,146 +1,41 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Syncopate:wght@700&display=swap');
-
 :root {
-    --bg-dark: #ffffff;
-    --bg-card: rgba(22, 22, 26, 0.7);
-    --primary: #febe10; /* La Liga Gold */
-    --primary-glow: rgba(254, 190, 16, 0.3);
-    --accent: #ee2523; /* La Liga Red */
-    --glass: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-elevated: rgba(255, 255, 255, 0.12);
-    --text-main: #000000;
-    --text-dim: #8e8e93;
-    --pitch-green: #1a3a16;
-    --pitch-lines: rgba(255, 255, 255, 0.2);
-}
+    --bg: #0a0a0a;
+    --surface: #1a1a1a;
+    --primary: #39FF14;
+    --secondary: #ffffff;
+    --accent: #00f2ff;
+    --border: rgba(255, 255, 255, 0.1);
+    --text: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.5);
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    user-select: none;
+    color-scheme: dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+    background-color: var(--bg);
+    color: var(--text);
 }
 
 #root {
-    height: 100%;
     width: 100%;
+    height: 100vh;
 }
 
-.app-container {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background: #ffffff;
-    position: relative;
-}
-
-.app-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(circle at 20% 30%, rgba(254, 190, 16, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(238, 37, 35, 0.05) 0%, transparent 40%);
-    pointer-events: none;
-}
-
-/* Typography Enhancements */
-h1, h2, h3 {
-    font-family: 'Outfit', sans-serif;
-    letter-spacing: -0.02em;
-}
-
-.text-primary { color: var(--primary); }
-.text-accent { color: var(--accent); }
-.text-dim { color: var(--text-dim); }
-
-/* Advanced Glassmorphism */
-.glass-panel {
-    background: var(--glass);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-.glass-elevated {
-    background: var(--glass-elevated);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(25px);
-    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse-glow {
-    0% { box-shadow: 0 0 0 0 var(--primary-glow); }
-    70% { box-shadow: 0 0 0 15px rgba(254, 190, 16, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(254, 190, 16, 0); }
-}
-
-.animate-fade-in {
-    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Buttons */
 button {
     cursor: pointer;
-    border: none;
-    font-family: inherit;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-}
-
-button::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(rgba(255,255,255,0.1), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-button:hover::after {
-    opacity: 1;
-}
-
-button:active {
-    transform: scale(0.96);
-}
-
-/* Specific Utilities */
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, #d49c00 100%);
-    color: #000;
-    font-weight: 700;
-    padding: 12px 24px;
-    box-shadow: 0 4px 15px var(--primary-glow);
-}
-
-.btn-primary:hover {
-    box-shadow: 0 6px 20px var(--primary-glow);
-    transform: translateY(-1px);
 }

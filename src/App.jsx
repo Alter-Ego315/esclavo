@@ -1,28 +1,17 @@
 import React, { useState } from 'react';
-import TeamSelection from './components/TeamSelection';
-import Match from './components/Match';
+import SplashScreen from './components/SplashScreen';
+import JerseyDesigner from './components/JerseyDesigner';
 import './index.css';
 
 function App() {
-    const [gameState, setGameState] = useState('selection'); // 'selection' or 'match'
-    const [matchConfig, setMatchConfig] = useState(null);
-
-    const handleStartMatch = (config) => {
-        setMatchConfig(config);
-        setGameState('match');
-    };
-
-    const handleEndMatch = () => {
-        setGameState('selection');
-        setMatchConfig(null);
-    };
+    const [showSplash, setShowSplash] = useState(true);
 
     return (
-        <div className="app-container">
-            {gameState === 'selection' ? (
-                <TeamSelection onStartMatch={handleStartMatch} />
+        <div className="ginga-app">
+            {showSplash ? (
+                <SplashScreen onComplete={() => setShowSplash(false)} />
             ) : (
-                <Match matchConfig={matchConfig} onQuit={handleEndMatch} />
+                <JerseyDesigner />
             )}
         </div>
     );
