@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Jersey3D from './Jersey3D';
 import JerseyPreview from './JerseyPreview';
-import { Palette, Layers, Type, Download, Share2, Sparkles, RotateCw, Check, Shield, Shirt, Scissors } from 'lucide-react';
+import { Palette, Layers, Type, Download, Share2, Sparkles, RotateCw, Check, Image, User, Grip } from 'lucide-react';
 import '../styles/JerseyDesigner.css';
 
 const BRAND_LOGOS = [
@@ -183,15 +183,15 @@ const JerseyDesigner = () => {
                 <aside className="controls-section">
                     <nav className="controls-nav">
                         <button className={activeTab === 'shield' ? 'active' : ''} onClick={() => setActiveTab('shield')}>
-                            <Shield size={20} />
+                            <Image size={20} />
                             <span>ESCUDO</span>
                         </button>
                         <button className={activeTab === 'neck' ? 'active' : ''} onClick={() => setActiveTab('neck')}>
-                            <Shirt size={20} />
+                            <User size={20} />
                             <span>CUELLO</span>
                         </button>
                         <button className={activeTab === 'sleeves' ? 'active' : ''} onClick={() => setActiveTab('sleeves')}>
-                            <Scissors size={20} />
+                            <Grip size={20} />
                             <span>MANGAS</span>
                         </button>
                         <button className={activeTab === 'text' ? 'active' : ''} onClick={() => setActiveTab('text')}>
