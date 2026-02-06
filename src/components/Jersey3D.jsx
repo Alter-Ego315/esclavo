@@ -4,7 +4,40 @@ import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture, Decal 
 import * as THREE from 'three';
 import JerseyPreview from './JerseyPreview';
 
-const ShirtModel = ({ texture, color, vibrancy }) => {
+// Helper to generate texture from SVG
+const generateTextureFromSvg = (selector) => {
+    return new Promise((resolve) => {
+        const svg = document.querySelector(selector);
+        if (!svg) {
+            resolve(null);
+            return;
+        }
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const canvas = document.createElement('canvas');
+        // Use ViewBox sizes from JerseyPreview
+        const isDecal = selector.includes('text-decal');
+        const size = isDecal ? 512 : 1024;
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        img.onload = () => {
+            ctx.clearRect(0, 0, size, size);
+            ctx.drawImage(img, 0, 0, size, size);
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.colorSpace = THREE.SRGBColorSpace;
+            tex.flipY = false;
+            if (!isDecal) {
+                tex.wrapS = THREE.RepeatWrapping;
+                tex.wrapT = THREE.RepeatWrapping;
+            }
+            resolve(tex);
+        };
+        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+    });
+};
+
+const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
     // Load the GLB model
     // Ensure the file is in public/shirt_baked.glb
     const { nodes } = useGLTF('/shirt_baked.glb');
@@ -42,7 +75,20 @@ const ShirtModel = ({ texture, color, vibrancy }) => {
                 receiveShadow
                 geometry={nodes.T_Shirt_male.geometry}
                 material={material || nodes.T_Shirt_male.material}
-            />
+            >
+                {/* Back Text Decal */}
+                {decalTexture && (
+                    <Decal
+                        position={[0, 0.4, -0.25]} // Approximate back position
+                        rotation={[0, Math.PI, 0]} // Facing backwards
+                        scale={[0.4, 0.4, 1]} // Scale of the text block
+                        map={decalTexture}
+                        depthTest={true}
+                        polygonOffset={true}
+                        polygonOffsetFactor={-1}
+                    />
+                )}
+            </mesh>
         </group>
     );
 };
@@ -52,43 +98,25 @@ useGLTF.preload('/shirt_baked.glb');
 
 const Jersey3D = (props) => {
     const [texture, setTexture] = useState(null);
+    const [decalTexture, setDecalTexture] = useState(null);
     const containerRef = useRef();
 
     // Texture generation logic
     useEffect(() => {
-        const updateTexture = async () => {
-            // Scope selector to this component's container if possible, 
-            // but simpler to use ID or specific class.
-            // We added 'full-view' class.
-            const svg = document.querySelector(`.hidden-previews .full-view svg`);
-            if (!svg) return;
+        const updateTextures = async () => {
+            // Generate Main Texture
+            const mainTex = await generateTextureFromSvg(`.hidden-previews .full-view svg`);
+            if (mainTex) setTexture(mainTex);
 
-            // Simple serialization
-            const svgData = new XMLSerializer().serializeToString(svg);
-            const canvas = document.createElement('canvas');
-            canvas.width = 1024;
-            canvas.height = 1024;
-            const ctx = canvas.getContext('2d');
-
-            const img = new Image();
-            img.onload = () => {
-                ctx.clearRect(0, 0, 1024, 1024);
-                ctx.drawImage(img, 0, 0, 1024, 1024);
-                const tex = new THREE.CanvasTexture(canvas);
-                tex.colorSpace = THREE.SRGBColorSpace;
-                tex.flipY = false;
-                tex.wrapS = THREE.RepeatWrapping;
-                tex.wrapT = THREE.RepeatWrapping;
-                setTexture(tex);
-            };
-            // Add current time triggers to avoid cache
-            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+            // Generate Decal Texture
+            const decalTex = await generateTextureFromSvg(`.hidden-previews .text-decal-view svg`);
+            if (decalTex) setDecalTexture(decalTex);
         };
 
         // Increase timeout slightly to allow React to paint the hidden SVG
-        const timer = setTimeout(updateTexture, 300);
+        const timer = setTimeout(updateTextures, 300);
         return () => clearTimeout(timer);
-    }, [props.colors, props.pattern, props.name, props.number, props.font, props.teamLogo, props.sponsorLogo, props.brandLogo, props.vibrancy]);
+    }, [props.colors, props.pattern, props.name, props.number, props.font, props.teamLogo, props.sponsorLogo, props.brandLogo, props.vibrancy, props.collar, props.sleeve]);
 
     return (
         <div className="jersey-3d-wrapper studio-mode" ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -102,7 +130,7 @@ const Jersey3D = (props) => {
 
                 {/* Raised model to center it */}
                 <group position={[0, 0.5, 0]}>
-                    <ShirtModel texture={texture} color={props.colors.primary} />
+                    <ShirtModel texture={texture} decalTexture={decalTexture} color={props.colors.primary} />
                 </group>
 
                 {/* Controls */}
@@ -121,6 +149,7 @@ const Jersey3D = (props) => {
             {/* We only need ONE view that wraps the whole shirt for this model usually */}
             <div className="hidden-previews" style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', top: 0, left: 0, zIndex: -1 }}>
                 <div className="full-view"><JerseyPreview {...props} view="full" /></div>
+                <div className="text-decal-view"><JerseyPreview {...props} view="text-decal" /></div>
             </div>
         </div>
     );

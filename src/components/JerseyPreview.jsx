@@ -10,6 +10,18 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
     // Bottom/Top areas map to sleeves/shoulders.
     // *This is a common UV layout for this specific open-source model.*
 
+    // Special view for generating the Decal texture (Text only)
+    if (view === 'text-decal') {
+        return (
+            <div className="jersey-preview-container" style={{ width: '512px', height: '512px', background: 'transparent' }}>
+                <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+                    <text x="256" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
+                    <text x="256" y="400" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
+                </svg>
+            </div>
+        );
+    }
+
     return (
         <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '1024px', height: '1024px' }}>
             <svg viewBox="0 0 1024 1024" className="jersey-svg" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%', shapeRendering: 'geometricPrecision' }}>
@@ -102,22 +114,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 </g>
 
                 {/* 4. BACK AREA */}
-                {/* Often mapped to the sides or bottom in simple unwraps. 
-                    For this specific model, if it's the Adrian Hajdin one,
-                    it might use a "Decal" approach usually.
-                    But if we force texture, the back is usually on the edges X coordinates.
-                    Let's try placing name/number on the far right (wrapping) for now, 
-                    or assumes center is front and back is behind (which implies UV wrap).
-                    
-                    *Correction*: Validating the specific UVs of this GLB without opening it in Blender is hard.
-                    However, usually these "shirt_baked" models have a Full Front UV Island.
-                    Applying text to specific coordinates is guessing.
-                    
-                    Strategy: Place Name/Number VERY LARGE on the "Back" zone if we knew it.
-                    Since we don't, I will render them but might need adjustment.
-                    Let's assume standard T-pose unwrap:
-                    Center = Front.
-                    Far Left/Right = Back meet point.
                 */}
 
                 {/* 4. BACK AREA - ATTEMPT 7: REFINED CENTER & SMALLER */}
