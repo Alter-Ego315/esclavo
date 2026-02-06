@@ -120,13 +120,16 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     Far Left/Right = Back meet point.
                 */}
 
-                {/* 4. BACK AREA - ATTEMPT 5: SPINE WRAP & RAISED */}
-                {/* User requested: Centered (so x=0/1024), Raised (y=250), Bigger (70/220), No Front. */}
-                <g transform="translate(0, 250)">
+                {/* 4. BACK AREA - FINAL ATTEMPT: SPINE WRAP (CENTERED) & RAISED */}
+                {/* User confirmed "Centered" (Spine) was best.
+                    Drawing at x=0 and x=1024 to handling canvas wrapping manually.
+                    Raised to y=200.
+                */}
+                <g transform="translate(0, 200)">
                     <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '70px', fontWeight: '900' }}>{name}</text>
                     <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '220px', fontWeight: '900' }}>{number}</text>
                 </g>
-                <g transform="translate(1024, 250)">
+                <g transform="translate(1024, 200)">
                     <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '70px', fontWeight: '900' }}>{name}</text>
                     <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '220px', fontWeight: '900' }}>{number}</text>
                 </g>
