@@ -1,6 +1,6 @@
 import React from 'react';
 
-const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, brandLogo, font = 'Orbitron', view = 'full', vibrancy = 50 }) => {
+const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, brandLogo, font = 'Orbitron', view = 'full', vibrancy = 50, sleeve, collar }) => {
     const { primary, secondary, accent } = colors;
 
     // Based on the standard shirt_baked.glb UV mapping:
