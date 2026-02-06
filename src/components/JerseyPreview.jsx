@@ -114,7 +114,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 </g>
 
                 {/* 4. BACK AREA */}
-                */}
+
 
                 {/* 4. BACK AREA - ATTEMPT 7: REFINED CENTER & SMALLER */}
                 {/* 210 was centered but bled to front. 150 was decentered.
