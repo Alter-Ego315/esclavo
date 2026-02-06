@@ -77,6 +77,8 @@ const Jersey3D = (props) => {
                 const tex = new THREE.CanvasTexture(canvas);
                 tex.colorSpace = THREE.SRGBColorSpace;
                 tex.flipY = false;
+                tex.wrapS = THREE.RepeatWrapping;
+                tex.wrapT = THREE.RepeatWrapping;
                 setTexture(tex);
             };
             // Add current time triggers to avoid cache

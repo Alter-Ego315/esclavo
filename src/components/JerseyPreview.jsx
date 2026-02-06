@@ -121,11 +121,12 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 */}
 
                 {/* 4. BACK AREA - SPINE WRAP STRATEGY */}
-                <g transform="translate(0, 400)">
+                {/* Moved higher to sit on upper back/shoulders properly */}
+                <g transform="translate(0, 300)">
                     <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
                     <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
                 </g>
-                <g transform="translate(1024, 400)">
+                <g transform="translate(1024, 300)">
                     <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
                     <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
                 </g>
