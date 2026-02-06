@@ -76,8 +76,8 @@ const PRESET_COLORS = [
 const JerseyDesigner = () => {
     // Default "Teo 69" State
     const [colors, setColors] = useState({
-        primary: '#0a0a0a',
-        secondary: '#39FF14',
+        primary: '#ffffff',
+        secondary: '#000000',
         accent: '#1a1a1a'
     });
     const [pattern, setPattern] = useState('splatter');

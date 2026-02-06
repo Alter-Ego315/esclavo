@@ -17,8 +17,8 @@ const ShirtModel = ({ texture, color, vibrancy }) => {
             const newMat = new THREE.MeshStandardMaterial({
                 map: texture || null,
                 color: texture ? 0xffffff : new THREE.Color(color),
-                roughness: 0.3,
-                metalness: 0.1,
+                roughness: 0.7,
+                metalness: 0.0,
                 side: THREE.DoubleSide
             });
 
