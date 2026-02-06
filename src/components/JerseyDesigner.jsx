@@ -138,11 +138,11 @@ const JerseyDesigner = () => {
     };
 
     return (
-        <div className="designer-container">
-            <header className="app-header">
-                <div className="header-logo">
-                    <img src="/logo.png" alt="Ginga" className="mini-logo" />
-                    <span>GINGA <small>PRO STUDIO</small></span>
+        <div className="jersey-designer-container">
+            {/* Header */}
+            <header className="designer-header">
+                <div className="header-left">
+                    <img src="/ginga-logo-header.png" alt="Ginga" className="header-logo" style={{ height: '40px' }} />
                 </div>
                 <div className="header-actions">
                     <button className="btn-icon" title="Girar Camiseta" onClick={() => setView(view === 'front' ? 'back' : 'front')}>
