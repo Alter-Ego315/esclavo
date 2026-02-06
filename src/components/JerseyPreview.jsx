@@ -120,13 +120,17 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     Far Left/Right = Back meet point.
                 */}
 
-                {/* 4. BACK AREA - ATTEMPT 2: BOTTOM CENTER STRATEGY */}
-                {/* Assuming UVs are Front Top / Back Bottom or similar. 
-                    Placing at x=512 (Center), y=750 (Bottom half).
+                {/* 4. BACK AREA - ATTEMPT 3: QUARTER STRATEGY */}
+                {/* 0/1024 (Spine) caused distortion. y=750 (Bottom) was sleeve.
+                    Trying x=256 and x=768 (Sides/Back Panels) to find clear space.
                 */}
-                <g transform="translate(512, 750)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="180" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
+                <g transform="translate(256, 450)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '50px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="180" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '160px', fontWeight: '900' }}>{number}</text>
+                </g>
+                <g transform="translate(768, 450)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '50px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="180" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '160px', fontWeight: '900' }}>{number}</text>
                 </g>
 
             </svg>
