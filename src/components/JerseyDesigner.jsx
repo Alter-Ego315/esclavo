@@ -61,16 +61,16 @@ const JERSEY_TEMPLATES = [
 
 // Reference colors from FIFA Kit Creator
 const PRESET_COLORS = [
-    { "name": "Black", "hex": "#000000" }, { "name": "White", "hex": "#ffffff" },
-    { "name": "Arsenal Red", "hex": "#cf151f" }, { "name": "Arsenal Navy", "hex": "#232e44" },
-    { "name": "Chelsea Blue", "hex": "#123e89" }, { "name": "Liverpool Red", "hex": "#b7121d" },
-    { "name": "Man City Blue", "hex": "#4ea7f0" }, { "name": "Man Utd Red", "hex": "#ce152d" },
-    { "name": "Real Madrid Gold", "hex": "#baa071" }, { "name": "Barcelona Blue", "hex": "#2261b2" },
-    { "name": "Barcelona Red", "hex": "#d63c54" }, { "name": "PSG Navy", "hex": "#242e47" },
-    { "name": "Juventus Gold", "hex": "#bf9556" }, { "name": "Dortmund Yellow", "hex": "#f1d501" },
-    { "name": "Bayern Red", "hex": "#d00a2c" }, { "name": "Inter Blue", "hex": "#2270d7" },
-    { "name": "Milan Red", "hex": "#d3222d" }, { "name": "Napoli Blue", "hex": "#308ded" },
-    { "name": "Ajax Red", "hex": "#d2122e" }, { "name": "Ginga Green", "hex": "#39FF14" }
+    { "name": "Negro", "hex": "#000000" }, { "name": "Blanco", "hex": "#ffffff" },
+    { "name": "Rojo Arsenal", "hex": "#cf151f" }, { "name": "Azul Arsenal", "hex": "#232e44" },
+    { "name": "Azul Chelsea", "hex": "#123e89" }, { "name": "Rojo Liverpool", "hex": "#b7121d" },
+    { "name": "Azul Man City", "hex": "#4ea7f0" }, { "name": "Rojo Man Utd", "hex": "#ce152d" },
+    { "name": "Oro Real Madrid", "hex": "#baa071" }, { "name": "Azul Barcelona", "hex": "#2261b2" },
+    { "name": "Rojo Barcelona", "hex": "#d63c54" }, { "name": "Azul PSG", "hex": "#242e47" },
+    { "name": "Oro Juventus", "hex": "#bf9556" }, { "name": "Amarillo Dortmund", "hex": "#f1d501" },
+    { "name": "Rojo Bayern", "hex": "#d00a2c" }, { "name": "Azul Inter", "hex": "#2270d7" },
+    { "name": "Rojo Milan", "hex": "#d3222d" }, { "name": "Azul Napoli", "hex": "#308ded" },
+    { "name": "Rojo Ajax", "hex": "#d2122e" }, { "name": "Verde Ginga", "hex": "#39FF14" }
 ];
 
 const JerseyDesigner = () => {
@@ -137,12 +137,12 @@ const JerseyDesigner = () => {
                     <span>GINGA <small>PRO STUDIO</small></span>
                 </div>
                 <div className="header-actions">
-                    <button className="btn-icon" title="Flip Jersey" onClick={() => setView(view === 'front' ? 'back' : 'front')}>
+                    <button className="btn-icon" title="Girar Camiseta" onClick={() => setView(view === 'front' ? 'back' : 'front')}>
                         <RotateCw size={18} />
                     </button>
                     <button className="btn-primary" onClick={handleExport}>
                         <Download size={18} />
-                        <span>EXPORT</span>
+                        <span>EXPORTAR</span>
                     </button>
                 </div>
             </header>
@@ -174,7 +174,7 @@ const JerseyDesigner = () => {
                     <nav className="controls-nav">
                         <button className={activeTab === 'templates' ? 'active' : ''} onClick={() => setActiveTab('templates')}>
                             <Sparkles size={20} />
-                            <span>TEMPLATES</span>
+                            <span>PLANTILLAS</span>
                         </button>
                         <button className={activeTab === 'colors' ? 'active' : ''} onClick={() => setActiveTab('colors')}>
                             <Palette size={20} />
@@ -197,7 +197,7 @@ const JerseyDesigner = () => {
                     <div className="controls-content">
                         {activeTab === 'templates' && (
                             <div className="control-group">
-                                <h3>Pro Designs</h3>
+                                <h3>Diseños Pro</h3>
                                 <div className="templates-grid">
                                     {JERSEY_TEMPLATES.map(t => (
                                         <div key={t.id} className="template-card" onClick={() => applyTemplate(t)}>
@@ -213,17 +213,17 @@ const JerseyDesigner = () => {
 
                         {activeTab === 'colors' && (
                             <div className="control-group">
-                                <h3>Palette & Depth</h3>
+                                <h3>Paleta y Profundidad</h3>
                                 <div className="color-picker-item">
-                                    <label>Primary Body</label>
+                                    <label>Cuerpo Principal</label>
                                     <input type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} />
                                 </div>
                                 <div className="color-picker-item">
-                                    <label>Secondary Pattern</label>
+                                    <label>Patrón Secundario</label>
                                     <input type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} />
                                 </div>
                                 <div className="color-picker-item">
-                                    <label>Raglan Sleeves</label>
+                                    <label>Mangas / Detalles</label>
                                     <input type="color" value={colors.accent} onChange={(e) => handleColorChange('accent', e.target.value)} />
                                 </div>
 
@@ -262,7 +262,7 @@ const JerseyDesigner = () => {
 
                         {activeTab === 'patterns' && (
                             <div className="control-group">
-                                <h3>Style Patterns</h3>
+                                <h3>Estilo de Patrón</h3>
                                 <div className="pattern-grid">
                                     {['none', 'stripes', 'hoops', 'diagonal', 'pixels', 'gradient', 'splatter'].map(p => (
                                         <button key={p} className={pattern === p ? 'active' : ''} onClick={() => setPattern(p)}>
@@ -275,28 +275,28 @@ const JerseyDesigner = () => {
 
                         {activeTab === 'text' && (
                             <div className="control-group">
-                                <h3>Typography</h3>
+                                <h3>Tipografía</h3>
                                 <div className="input-item">
-                                    <label>Player Name</label>
+                                    <label>Nombre Jugador</label>
                                     <input type="text" value={name} maxLength={12} onChange={(e) => setName(e.target.value)} />
                                 </div>
                                 <div className="input-item">
-                                    <label>Squad Number</label>
+                                    <label>Dorsal</label>
                                     <input type="text" value={number} maxLength={2} onChange={(e) => setNumber(e.target.value)} />
                                 </div>
                                 <div className="input-item">
-                                    <label>Font Family</label>
+                                    <label>Fuente</label>
                                     <select value={font} onChange={(e) => setFont(e.target.value)} className="font-select">
                                         <option value="Orbitron">Orbitron (Tech)</option>
-                                        <option value="Impact">Impact (Classic Bold)</option>
-                                        <option value="Goldman">Goldman (Sporty)</option>
-                                        <option value="Roboto Condensed">Roboto Cond (Modern)</option>
+                                        <option value="Impact">Impact (Clásico Bold)</option>
+                                        <option value="Goldman">Goldman (Deportivo)</option>
+                                        <option value="Roboto Condensed">Roboto Cond (Moderno)</option>
                                         <option value="Courier New">Mono (Retro)</option>
-                                        <option value="cursive">Dynamic Script</option>
+                                        <option value="cursive">Script Dinámico</option>
                                         <option value="Bebas Neue">Bebas Neue (Power)</option>
-                                        <option value="Permanent Marker">Marker (Street)</option>
+                                        <option value="Permanent Marker">Marker (Callejero)</option>
                                         <option value="Press Start 2P">8-Bit (Retro)</option>
-                                        <option value="Audiowide">Audiowide (Futuristic)</option>
+                                        <option value="Audiowide">Audiowide (Futurista)</option>
                                     </select>
                                 </div>
                             </div>
@@ -304,9 +304,9 @@ const JerseyDesigner = () => {
 
                         {activeTab === 'logos' && (
                             <div className="control-group">
-                                <h3>Identity & Brand</h3>
+                                <h3>Identidad de Marca</h3>
 
-                                <label className="sub-label">Brand Apparel</label>
+                                <label className="sub-label">Marca Deportiva</label>
                                 <div className="brand-grid">
                                     {BRAND_LOGOS.map(brand => (
                                         <button
@@ -321,20 +321,20 @@ const JerseyDesigner = () => {
                                 </div>
 
                                 <div className="upload-item" style={{ marginTop: '24px' }}>
-                                    <label>Team Crest</label>
+                                    <label>Escudo del Equipo</label>
                                     <div className="upload-zone">
                                         {teamLogo && <img src={teamLogo} className="upload-preview" alt="team logo" />}
                                         <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'team')} />
-                                        <span>Click to Upload</span>
+                                        <span>Click para Subir</span>
                                     </div>
                                 </div>
 
                                 <div className="upload-item" style={{ marginTop: '20px' }}>
-                                    <label>Main Sponsor</label>
+                                    <label>Patrocinador Principal</label>
                                     <div className="upload-zone">
                                         {sponsorLogo && <img src={sponsorLogo} className="upload-preview" alt="sponsor logo" />}
                                         <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'sponsor')} />
-                                        <span>Click to Upload</span>
+                                        <span>Click para Subir</span>
                                     </div>
                                 </div>
                             </div>
