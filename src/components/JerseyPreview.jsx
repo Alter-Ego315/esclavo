@@ -121,14 +121,14 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 */}
 
                 {/* 4. BACK AREA - SPINE WRAP STRATEGY */}
-                {/* Moved higher to sit on upper back/shoulders properly */}
-                <g transform="translate(0, 300)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
+                {/* Moved lower to y=420 to avoid neck distortion/armpits */}
+                <g transform="translate(0, 420)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '50px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="180" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '160px', fontWeight: '900' }}>{number}</text>
                 </g>
-                <g transform="translate(1024, 300)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
+                <g transform="translate(1024, 420)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '50px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="180" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '160px', fontWeight: '900' }}>{number}</text>
                 </g>
 
             </svg>
