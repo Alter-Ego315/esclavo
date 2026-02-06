@@ -157,20 +157,22 @@ const JerseyDesigner = () => {
 
             <main className="designer-layout">
                 <section className="preview-section">
-                    <Jersey3D
-                        colors={colors}
-                        pattern={pattern}
-                        name={name}
-                        number={number}
-                        font={font}
-                        teamLogo={teamLogo}
-                        sponsorLogo={sponsorLogo}
-                        brandLogo={brandLogo}
-                        vibrancy={vibrancy}
-                        view={view}
-                        collar={collar}
-                        sleeve={sleeve}
-                    />
+                    <React.Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'white' }}>Cargando Modelo 3D...</div>}>
+                        <Jersey3D
+                            colors={colors}
+                            pattern={pattern}
+                            name={name}
+                            number={number}
+                            font={font}
+                            teamLogo={teamLogo}
+                            sponsorLogo={sponsorLogo}
+                            brandLogo={brandLogo}
+                            vibrancy={vibrancy}
+                            view={view}
+                            collar={collar}
+                            sleeve={sleeve}
+                        />
+                    </React.Suspense>
 
                     <div className="view-indicator">
                         <button className="flip-btn" onClick={() => setView(view === 'front' ? 'back' : 'front')}>
