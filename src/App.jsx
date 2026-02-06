@@ -5,16 +5,10 @@ import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
 
 function App() {
-    const [showSplash, setShowSplash] = useState(true);
-
     return (
         <div className="ginga-app">
             <ErrorBoundary>
-                {showSplash ? (
-                    <SplashScreen onComplete={() => setShowSplash(false)} />
-                ) : (
-                    <JerseyDesigner />
-                )}
+                <JerseyDesigner />
             </ErrorBoundary>
         </div>
     );
