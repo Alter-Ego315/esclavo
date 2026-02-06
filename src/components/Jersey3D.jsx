@@ -90,8 +90,8 @@ const Jersey3D = (props) => {
 
     return (
         <div className="jersey-3d-wrapper studio-mode" ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
-            {/* Camera adjusted: z from 0.6 to 2.5 for zoom out */}
-            <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 2.5], fov: 45 }} gl={{ preserveDrawingBuffer: true }}>
+            {/* Camera adjusted: z to 1.4 for balanced view */}
+            <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 1.4], fov: 45 }} gl={{ preserveDrawingBuffer: true }}>
                 <ambientLight intensity={0.7} />
                 <Environment preset="city" />
 
