@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Jersey3D from './Jersey3D';
 import JerseyPreview from './JerseyPreview';
-import { Palette, Layers, Type, Download, Settings, Share2, Sparkles, RotateCw, Check } from 'lucide-react';
+import { Palette, Layers, Type, Download, Share2, Sparkles, RotateCw, Check, Shield, Shirt, Scissors } from 'lucide-react';
 import '../styles/JerseyDesigner.css';
 
 const BRAND_LOGOS = [
@@ -88,7 +88,15 @@ const JerseyDesigner = () => {
     const [sponsorLogo, setSponsorLogo] = useState(null);
     const [brandLogo, setBrandLogo] = useState(BRAND_LOGOS[1].url); // Default Nike
     const [vibrancy, setVibrancy] = useState(50);
-    const [activeTab, setActiveTab] = useState('templates');
+
+    // New Features State
+    const [collar, setCollar] = useState('round'); // round, v-neck, polo
+    const [sleeve, setSleeve] = useState('normal'); // normal, raglan
+
+    // Navigation State
+    const [activeTab, setActiveTab] = useState('shield'); // shield, neck, sleeves, text, design
+    const [designTab, setDesignTab] = useState('templates'); // templates, colors, patterns
+
     const [view, setView] = useState('front');
     const [show3D, setShow3D] = useState(true);
 
@@ -160,6 +168,8 @@ const JerseyDesigner = () => {
                         brandLogo={brandLogo}
                         vibrancy={vibrancy}
                         view={view}
+                        collar={collar}
+                        sleeve={sleeve}
                     />
 
                     <div className="view-indicator">
@@ -172,110 +182,105 @@ const JerseyDesigner = () => {
 
                 <aside className="controls-section">
                     <nav className="controls-nav">
-                        <button className={activeTab === 'templates' ? 'active' : ''} onClick={() => setActiveTab('templates')}>
-                            <Sparkles size={20} />
-                            <span>PLANTILLAS</span>
+                        <button className={activeTab === 'shield' ? 'active' : ''} onClick={() => setActiveTab('shield')}>
+                            <Shield size={20} />
+                            <span>ESCUDO</span>
                         </button>
-                        <button className={activeTab === 'colors' ? 'active' : ''} onClick={() => setActiveTab('colors')}>
-                            <Palette size={20} />
-                            <span>COLORES</span>
+                        <button className={activeTab === 'neck' ? 'active' : ''} onClick={() => setActiveTab('neck')}>
+                            <Shirt size={20} />
+                            <span>CUELLO</span>
                         </button>
-                        <button className={activeTab === 'patterns' ? 'active' : ''} onClick={() => setActiveTab('patterns')}>
-                            <Layers size={20} />
-                            <span>PATRONES</span>
+                        <button className={activeTab === 'sleeves' ? 'active' : ''} onClick={() => setActiveTab('sleeves')}>
+                            <Scissors size={20} />
+                            <span>MANGAS</span>
                         </button>
                         <button className={activeTab === 'text' ? 'active' : ''} onClick={() => setActiveTab('text')}>
                             <Type size={20} />
                             <span>TEXTO</span>
                         </button>
-                        <button className={activeTab === 'logos' ? 'active' : ''} onClick={() => setActiveTab('logos')}>
-                            <Share2 size={20} />
-                            <span>LOGOS</span>
+                        <button className={activeTab === 'design' ? 'active' : ''} onClick={() => setActiveTab('design')}>
+                            <Palette size={20} />
+                            <span>DISEÑO</span>
                         </button>
                     </nav>
 
                     <div className="controls-content">
-                        {activeTab === 'templates' && (
+                        {/* 1. SECCIÓN ESCUDO */}
+                        {activeTab === 'shield' && (
                             <div className="control-group">
-                                <h3>Diseños Pro</h3>
-                                <div className="templates-grid">
-                                    {JERSEY_TEMPLATES.map(t => (
-                                        <div key={t.id} className="template-card" onClick={() => applyTemplate(t)}>
-                                            <div className="template-preview" style={{ background: t.colors.primary }}>
-                                                <div className="template-stripe" style={{ background: t.colors.secondary }}></div>
-                                            </div>
-                                            <span>{t.name}</span>
-                                        </div>
-                                    ))}
+                                <h3>Escudo del Equipo</h3>
+                                <p className="section-desc">Sube tu escudo y aparecerá en el pecho.</p>
+
+                                <div className="upload-item" style={{ marginTop: '20px' }}>
+                                    <div className="upload-zone">
+                                        {teamLogo && <img src={teamLogo} className="upload-preview" alt="team logo" />}
+                                        <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'team')} />
+                                        <span>Click para Subir Imagen</span>
+                                    </div>
+                                </div>
+                                <div className="upload-item" style={{ marginTop: '20px' }}>
+                                    <label>Patrocinador (Opcional)</label>
+                                    <div className="upload-zone">
+                                        {sponsorLogo && <img src={sponsorLogo} className="upload-preview" alt="sponsor logo" />}
+                                        <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'sponsor')} />
+                                        <span>Click para Subir</span>
+                                    </div>
+                                </div>
+                                <div className="upload-item" style={{ marginTop: '20px' }}>
+                                    <label>Marca Deportiva</label>
+                                    <div className="brand-grid">
+                                        {BRAND_LOGOS.map(brand => (
+                                            <button
+                                                key={brand.id}
+                                                className={`brand-btn ${brandLogo === brand.url ? 'active' : ''}`}
+                                                onClick={() => setBrandLogo(brand.url)}
+                                            >
+                                                {brand.name}
+                                                {brandLogo === brand.url && <Check size={14} className="check-icon" />}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         )}
 
-                        {activeTab === 'colors' && (
+                        {/* 2. SECCIÓN CUELLO */}
+                        {activeTab === 'neck' && (
                             <div className="control-group">
-                                <h3>Paleta y Profundidad</h3>
-                                <div className="color-picker-item">
-                                    <label>Cuerpo Principal</label>
-                                    <input type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} />
-                                </div>
-                                <div className="color-picker-item">
-                                    <label>Patrón Secundario</label>
-                                    <input type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} />
-                                </div>
-                                <div className="color-picker-item">
-                                    <label>Mangas / Detalles</label>
-                                    <input type="color" value={colors.accent} onChange={(e) => handleColorChange('accent', e.target.value)} />
-                                </div>
-
-                                <div className="vibrancy-control" style={{ marginTop: '20px' }}>
-                                    <label style={{ display: 'block', fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', marginBottom: '8px' }}>
-                                        NIVEL DE VIBRACIÓN (COLOR PUNCH)
-                                    </label>
-                                    <input type="range"
-                                        min="0"
-                                        max="100"
-                                        value={vibrancy}
-                                        onChange={(e) => setVibrancy(parseInt(e.target.value))}
-                                        style={{ width: '100%', accentColor: 'var(--primary)' }}
-                                    />
-                                </div>
-
-                                <div className="presets-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
-                                    {PRESET_COLORS.map(c => (
-                                        <button
-                                            key={c.name}
-                                            title={c.name}
-                                            onClick={() => handleColorChange('primary', c.hex)}
-                                            style={{
-                                                width: '24px',
-                                                height: '24px',
-                                                borderRadius: '50%',
-                                                background: c.hex,
-                                                border: '1px solid rgba(255,255,255,0.2)',
-                                                cursor: 'pointer'
-                                            }}
-                                        />
-                                    ))}
+                                <h3>Estilo de Cuello</h3>
+                                <div className="options-grid">
+                                    <button className={`option-card ${collar === 'round' ? 'active' : ''}`} onClick={() => setCollar('round')}>
+                                        <span>Circular</span>
+                                    </button>
+                                    <button className={`option-card ${collar === 'v-neck' ? 'active' : ''}`} onClick={() => setCollar('v-neck')}>
+                                        <span>En V</span>
+                                    </button>
+                                    <button className={`option-card ${collar === 'polo' ? 'active' : ''}`} onClick={() => setCollar('polo')}>
+                                        <span>Polo / Camisero</span>
+                                    </button>
                                 </div>
                             </div>
                         )}
 
-                        {activeTab === 'patterns' && (
+                        {/* 3. SECCIÓN MANGAS */}
+                        {activeTab === 'sleeves' && (
                             <div className="control-group">
-                                <h3>Estilo de Patrón</h3>
-                                <div className="pattern-grid">
-                                    {['none', 'stripes', 'hoops', 'diagonal', 'pixels', 'gradient', 'splatter'].map(p => (
-                                        <button key={p} className={pattern === p ? 'active' : ''} onClick={() => setPattern(p)}>
-                                            {p.charAt(0).toUpperCase() + p.slice(1)}
-                                        </button>
-                                    ))}
+                                <h3>Tipo de Manga</h3>
+                                <div className="options-grid">
+                                    <button className={`option-card ${sleeve === 'normal' ? 'active' : ''}`} onClick={() => setSleeve('normal')}>
+                                        <span>Normal</span>
+                                    </button>
+                                    <button className={`option-card ${sleeve === 'raglan' ? 'active' : ''}`} onClick={() => setSleeve('raglan')}>
+                                        <span>Raglan</span>
+                                    </button>
                                 </div>
                             </div>
                         )}
 
+                        {/* 4. SECCIÓN TEXTO */}
                         {activeTab === 'text' && (
                             <div className="control-group">
-                                <h3>Tipografía</h3>
+                                <h3>Personalización</h3>
                                 <div className="input-item">
                                     <label>Nombre Jugador</label>
                                     <input type="text" value={name} maxLength={12} onChange={(e) => setName(e.target.value)} />
@@ -302,40 +307,73 @@ const JerseyDesigner = () => {
                             </div>
                         )}
 
-                        {activeTab === 'logos' && (
-                            <div className="control-group">
-                                <h3>Identidad de Marca</h3>
-
-                                <label className="sub-label">Marca Deportiva</label>
-                                <div className="brand-grid">
-                                    {BRAND_LOGOS.map(brand => (
-                                        <button
-                                            key={brand.id}
-                                            className={`brand-btn ${brandLogo === brand.url ? 'active' : ''}`}
-                                            onClick={() => setBrandLogo(brand.url)}
-                                        >
-                                            {brand.name}
-                                            {brandLogo === brand.url && <Check size={14} className="check-icon" />}
-                                        </button>
-                                    ))}
+                        {/* 5. SECCIÓN DISEÑO (SUB-PESTAÑAS) */}
+                        {activeTab === 'design' && (
+                            <div className="design-section-wrapper">
+                                <div className="sub-tabs">
+                                    <button className={designTab === 'templates' ? 'active' : ''} onClick={() => setDesignTab('templates')}>Plantillas</button>
+                                    <button className={designTab === 'colors' ? 'active' : ''} onClick={() => setDesignTab('colors')}>Colores</button>
+                                    <button className={designTab === 'patterns' ? 'active' : ''} onClick={() => setDesignTab('patterns')}>Patrones</button>
                                 </div>
 
-                                <div className="upload-item" style={{ marginTop: '24px' }}>
-                                    <label>Escudo del Equipo</label>
-                                    <div className="upload-zone">
-                                        {teamLogo && <img src={teamLogo} className="upload-preview" alt="team logo" />}
-                                        <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'team')} />
-                                        <span>Click para Subir</span>
-                                    </div>
-                                </div>
+                                <div className="sub-content">
+                                    {designTab === 'templates' && (
+                                        <div className="templates-grid">
+                                            {JERSEY_TEMPLATES.map(t => (
+                                                <div key={t.id} className="template-card" onClick={() => applyTemplate(t)}>
+                                                    <div className="template-preview" style={{ background: t.colors.primary }}>
+                                                        <div className="template-stripe" style={{ background: t.colors.secondary }}></div>
+                                                    </div>
+                                                    <span>{t.name}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
 
-                                <div className="upload-item" style={{ marginTop: '20px' }}>
-                                    <label>Patrocinador Principal</label>
-                                    <div className="upload-zone">
-                                        {sponsorLogo && <img src={sponsorLogo} className="upload-preview" alt="sponsor logo" />}
-                                        <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'sponsor')} />
-                                        <span>Click para Subir</span>
-                                    </div>
+                                    {designTab === 'colors' && (
+                                        <div className="control-group">
+                                            <div className="color-picker-item">
+                                                <label>Cuerpo Principal</label>
+                                                <input type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} />
+                                            </div>
+                                            <div className="color-picker-item">
+                                                <label>Patrón Secundario</label>
+                                                <input type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} />
+                                            </div>
+                                            <div className="color-picker-item">
+                                                <label>Mangas / Detalles</label>
+                                                <input type="color" value={colors.accent} onChange={(e) => handleColorChange('accent', e.target.value)} />
+                                            </div>
+
+                                            <div className="presets-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
+                                                {PRESET_COLORS.map(c => (
+                                                    <button
+                                                        key={c.name}
+                                                        title={c.name}
+                                                        onClick={() => handleColorChange('primary', c.hex)}
+                                                        style={{
+                                                            width: '24px',
+                                                            height: '24px',
+                                                            borderRadius: '50%',
+                                                            background: c.hex,
+                                                            border: '1px solid rgba(255,255,255,0.2)',
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {designTab === 'patterns' && (
+                                        <div className="pattern-grid">
+                                            {['none', 'stripes', 'hoops', 'diagonal', 'pixels', 'gradient', 'splatter'].map(p => (
+                                                <button key={p} className={pattern === p ? 'active' : ''} onClick={() => setPattern(p)}>
+                                                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}

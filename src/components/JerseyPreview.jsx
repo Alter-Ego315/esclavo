@@ -46,6 +46,40 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     </g>
                 )}
 
+                {/* 2.5 SLEEVE STYLES (Raglan vs Normal) */}
+                {/* Raglan simulates a diagonal cut from neck to underarm. 
+                    Approximating on UV map: Draw diagonal patches from center-top outwards/downwards.
+                */}
+                {colors.accent && sleeve === 'raglan' && (
+                    <g fill={colors.accent}>
+                        {/* Left Raglan Shoulder */}
+                        <path d="M300,0 L512,200 L512,0 Z" />
+                        {/* Right Raglan Shoulder */}
+                        <path d="M724,0 L512,200 L512,0 Z" />
+                    </g>
+                )}
+
+                {/* 2.6 COLLAR STYLES */}
+                <g transform="translate(512, 50)">
+                    {/* V-NECK */}
+                    {colors.accent && collar === 'v-neck' && (
+                        <path d="M-50,0 L0,80 L50,0 L50,-20 L-50,-20 Z" fill={colors.accent} stroke="none" />
+                    )}
+
+                    {/* POLO */}
+                    {colors.accent && collar === 'polo' && (
+                        <g>
+                            {/* Collar Fold Left */}
+                            <path d="M-60,0 L-10,60 L-30,80 L-100,20 Z" fill={colors.accent} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
+                            {/* Collar Fold Right */}
+                            <path d="M60,0 L10,60 L30,80 L100,20 Z" fill={colors.accent} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
+                            {/* Placket */}
+                            <rect x="-10" y="50" width="20" height="60" fill={colors.accent} />
+                            <circle cx="0" cy="70" r="3" fill="white" />
+                            <circle cx="0" cy="90" r="3" fill="white" />
+                        </g>
+                    )}
+                </g>
 
                 {/* 3. FRONT CHEST AREA (Approximation for standard UVs) */}
                 {/* The front is typically the center ~40-60% width of the texture */}
