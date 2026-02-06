@@ -120,15 +120,13 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     Far Left/Right = Back meet point.
                 */}
 
-                {/* 4. BACK AREA - SPINE WRAP STRATEGY */}
-                {/* Moved lower to y=420 to avoid neck distortion/armpits */}
-                <g transform="translate(0, 420)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '50px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="180" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '160px', fontWeight: '900' }}>{number}</text>
-                </g>
-                <g transform="translate(1024, 420)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '50px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="180" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '160px', fontWeight: '900' }}>{number}</text>
+                {/* 4. BACK AREA - ATTEMPT 2: BOTTOM CENTER STRATEGY */}
+                {/* Assuming UVs are Front Top / Back Bottom or similar. 
+                    Placing at x=512 (Center), y=750 (Bottom half).
+                */}
+                <g transform="translate(512, 750)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="180" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
                 </g>
 
             </svg>
