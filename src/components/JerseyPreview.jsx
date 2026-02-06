@@ -120,18 +120,18 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     Far Left/Right = Back meet point.
                 */}
 
-                {/* 4. BACK AREA - ATTEMPT 6: SWEET SPOT BACK PANELS */}
-                {/* 0=Side. 256=Front-ish. 150=Back-ish.
-                    Trying 210/814 to center on the "Back Panel" visual area.
-                    y=200 (High).
+                {/* 4. BACK AREA - ATTEMPT 7: REFINED CENTER & SMALLER */}
+                {/* 210 was centered but bled to front. 150 was decentered.
+                    Trying 180/844 (Mid-point).
+                    Reducing font size to prevent wrapping bleed.
                 */}
-                <g transform="translate(210, 200)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '65px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '210px', fontWeight: '900' }}>{number}</text>
+                <g transform="translate(180, 200)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '55px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
                 </g>
-                <g transform="translate(814, 200)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '65px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '210px', fontWeight: '900' }}>{number}</text>
+                <g transform="translate(844, 200)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '55px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
                 </g>
 
             </svg>
