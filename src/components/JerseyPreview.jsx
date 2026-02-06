@@ -120,19 +120,15 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     Far Left/Right = Back meet point.
                 */}
 
-                {/* 4. BACK AREA - ATTEMPT 4: DEEP BACK PANELS STRATEGY */}
-                {/* 256/768 was Side (visible Front & Back). 
-                    Moving closer to 0/1024 (Spine) to hide from Front.
-                    x=150 (Left Back) and x=874 (Right Back).
-                    y=360 (Raised per request).
-                */}
-                <g transform="translate(150, 360)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '55px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '190px', fontWeight: '900' }}>{number}</text>
+                {/* 4. BACK AREA - ATTEMPT 5: SPINE WRAP & RAISED */}
+                {/* User requested: Centered (so x=0/1024), Raised (y=250), Bigger (70/220), No Front. */}
+                <g transform="translate(0, 250)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '70px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '220px', fontWeight: '900' }}>{number}</text>
                 </g>
-                <g transform="translate(874, 360)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '55px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '190px', fontWeight: '900' }}>{number}</text>
+                <g transform="translate(1024, 250)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '70px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '220px', fontWeight: '900' }}>{number}</text>
                 </g>
 
             </svg>
