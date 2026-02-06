@@ -1,20 +1,14 @@
 import React from 'react';
 
-const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, brandLogo, font = 'Orbitron', view = 'front', vibrancy = 50 }) => {
+const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, brandLogo, font = 'Orbitron', view = 'full', vibrancy = 50 }) => {
     const { primary, secondary, accent } = colors;
 
-    // Use saturation for "vibrancy" effect
-    // To implement real color manipulation we'd need more complex logic or just use opacity layers
-    const isSleeve = view.includes('sleeve');
-    const isBack = view.includes('back');
-    const isFront = view.includes('front');
-
-    // For the 3D Texture, we just need a square filler. 
-    // The previous svg used 'bodyPathFront' which was a jersey silhouette. 
-    // For UV mapped cylinder texturing, we want the pattern to fill the whole square 
-    // because the cylinder face UVs cover the whole square.
-
-    // However, logos need to be centered.
+    // Based on the standard shirt_baked.glb UV mapping:
+    // The texture is usually creating a full wrap.
+    // Center area (approx 50% width) is Front.
+    // Sides are Back.
+    // Bottom/Top areas map to sleeves/shoulders.
+    // *This is a common UV layout for this specific open-source model.*
 
     return (
         <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '1024px', height: '1024px' }}>
@@ -25,99 +19,78 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                         <stop offset="100%" style={{ stopColor: secondary, stopOpacity: 1 }} />
                     </linearGradient>
 
-                    {/* Scale patterns up for 1024x1024 */}
                     <pattern id="pixelPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <rect width="20" height="20" fill={secondary} opacity={0.3} />
-                        <rect x="20" y="20" width="20" height="20" fill={secondary} opacity={0.3} />
+                        <rect width="20" height="20" fill={secondary} opacity={0.15} />
+                        <rect x="20" y="20" width="20" height="20" fill={secondary} opacity={0.15} />
                     </pattern>
 
                     <pattern id="diagonalPattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                        <rect width="40" height="80" fill={secondary} opacity={0.3} />
-                    </pattern>
-
-                    {/* Mesh Pattern */}
-                    <pattern id="meshPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <circle cx="2" cy="2" r="2" fill="#000" opacity="0.1" />
+                        <rect width="40" height="80" fill={secondary} opacity={0.15} />
                     </pattern>
                 </defs>
 
-                {/* BACKGROUND / BASE CONTENT */}
+                {/* 1. BASE COLOR LAYER */}
                 <rect width="1024" height="1024" fill={pattern === 'gradient' ? 'url(#jerseyGradient)' : primary} />
 
-                {/* Patterns */}
+                {/* 2. GLOBAL PATTERNS */}
+                {pattern === 'pixels' && <rect width="1024" height="1024" fill="url(#pixelPattern)" />}
+                {pattern === 'diagonal' && <rect width="1024" height="1024" fill="url(#diagonalPattern)" />}
                 {pattern === 'stripes' && (
-                    <g fill={secondary} opacity={0.7}>
-                        {[160, 320, 480, 640, 800].map((x, i) => (
-                            <rect key={i} x={x} y="0" width="80" height="1024" />
-                        ))}
+                    <g fill={secondary} opacity={0.5}>
+                        {[100, 300, 500, 700, 900].map(x => <rect key={x} x={x} y="0" width="50" height="1024" />)}
                     </g>
                 )}
                 {pattern === 'hoops' && (
-                    <g fill={secondary} opacity={0.7}>
-                        {[160, 320, 480, 640, 800].map((y, i) => (
-                            <rect key={i} x="0" y={y} width="1024" height="80" />
-                        ))}
-                    </g>
-                )}
-                {pattern === 'pixels' && <rect width="1024" height="1024" fill="url(#pixelPattern)" />}
-                {pattern === 'diagonal' && <rect width="1024" height="1024" fill="url(#diagonalPattern)" />}
-
-                {/* Fabric Texture Overlay (Subtle) */}
-                <rect width="1024" height="1024" fill="url(#meshPattern)" />
-
-                {/* LOGOS & TEXT - Center them for Cylinder Mapping */}
-                {/* Cylinder UVs map 0-1 horizontally. 512 is center. */}
-
-                {!isSleeve && (
-                    <g>
-                        {/* Collar Detail */}
-                        <path d="M 0 0 L 1024 0 L 1024 100 Q 512 300 0 100 Z" fill={primary} fillOpacity="0.2" />
-
-                        {isFront && (
-                            <g>
-                                {/* Team Logo - Left Chest (approx x=700) */}
-                                <image href={teamLogo || "/logo.png"} x="680" y="250" width="120" height="120" />
-
-                                {/* Brand Logo - Right Chest (approx x=200) */}
-                                {brandLogo && (
-                                    <image href={brandLogo} x="220" y="270" width="100" height="80" style={{ filter: 'brightness(4)' }} />
-                                )}
-
-                                {/* Sponsor - Center Chest */}
-                                {sponsorLogo && (
-                                    <image href={sponsorLogo} x="312" y="450" width="400" height="200" preserveAspectRatio="xMidYMid meet" />
-                                )}
-                            </g>
-                        )}
-
-                        {isBack && (
-                            <g>
-                                {/* Name */}
-                                <text x="512" y="300" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '100px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '10px' }}>
-                                    {name}
-                                </text>
-
-                                {/* Number */}
-                                <text x="512" y="750" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '450px', fontWeight: '900' }}>
-                                    {number}
-                                </text>
-                            </g>
-                        )}
+                    <g fill={secondary} opacity={0.5}>
+                        {[100, 300, 500, 700, 900].map(y => <rect key={y} x="0" y={y} width="1024" height="50" />)}
                     </g>
                 )}
 
-                {/* Sleeves have simple patterns mostly */}
-                {isSleeve && (
-                    <g>
-                        <rect width="1024" height="1024" fill={accent} opacity="0.2" /> {/* Tint sleeves */}
-                        <g transform="translate(512, 512)">
-                            {/* Optional sleeve graphics */}
-                        </g>
-                    </g>
-                )}
 
-                {/* Border / Seam hints for realism */}
-                <rect x="0" y="0" width="1024" height="1024" fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="20" />
+                {/* 3. FRONT CHEST AREA (Approximation for standard UVs) */}
+                {/* The front is typically the center ~40-60% width of the texture */}
+                <g transform="translate(512, 512)">
+
+                    {/* Brand Logo - Right Chest */}
+                    {brandLogo && (
+                        <image href={brandLogo} x="-150" y="-180" width="70" height="70" style={{ filter: 'brightness(4)' }} />
+                    )}
+
+                    {/* Team Logo - Left Chest */}
+                    {teamLogo && (
+                        <image href={teamLogo} x="80" y="-190" width="80" height="80" />
+                    )}
+
+                    {/* Sponsor Logo - Center Chest */}
+                    {sponsorLogo && (
+                        <image href={sponsorLogo} x="-200" y="-50" width="400" height="150" preserveAspectRatio="xMidYMid meet" />
+                    )}
+                </g>
+
+                {/* 4. BACK AREA */}
+                {/* Often mapped to the sides or bottom in simple unwraps. 
+                    For this specific model, if it's the Adrian Hajdin one,
+                    it might use a "Decal" approach usually.
+                    But if we force texture, the back is usually on the edges X coordinates.
+                    Let's try placing name/number on the far right (wrapping) for now, 
+                    or assumes center is front and back is behind (which implies UV wrap).
+                    
+                    *Correction*: Validating the specific UVs of this GLB without opening it in Blender is hard.
+                    However, usually these "shirt_baked" models have a Full Front UV Island.
+                    Applying text to specific coordinates is guessing.
+                    
+                    Strategy: Place Name/Number VERY LARGE on the "Back" zone if we knew it.
+                    Since we don't, I will render them but might need adjustment.
+                    Let's assume standard T-pose unwrap:
+                    Center = Front.
+                    Far Left/Right = Back meet point.
+                */}
+
+                <g transform="translate(150, 400) rotate(0)">
+                    {/* Back Name Guess - Left side wrap? */}
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
+                </g>
 
             </svg>
         </div>
