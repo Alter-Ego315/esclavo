@@ -99,16 +99,29 @@ const JerseyDesigner = () => {
         }
     };
 
-    const handleExport = () => {
-        const svg = document.querySelector(show3D ? '.hidden-previews .body-front-view svg' : '.jersey-preview-container svg');
-        if (svg) {
-            const svgData = new XMLSerializer().serializeToString(svg);
-            const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `ginga-jersey-${name || 'style'}.svg`;
-            link.click();
+    const jersey3DRef = React.useRef();
+
+    const handleExport = async () => {
+        if (jersey3DRef.current) {
+            // Show loading state or feedback here if needed
+            const images = await jersey3DRef.current.captureViews();
+
+            if (images) {
+                const JSZip = (await import('jszip')).default;
+                const saveAs = (await import('file-saver')).saveAs;
+
+                const zip = new JSZip();
+
+                // Add Front Image
+                zip.file(`ginga-jersey-${name || 'style'}-front.png`, images.front.split(',')[1], { base64: true });
+
+                // Add Back Image
+                zip.file(`ginga-jersey-${name || 'style'}-back.png`, images.back.split(',')[1], { base64: true });
+
+                // Generate and Download
+                const content = await zip.generateAsync({ type: 'blob' });
+                saveAs(content, `ginga-jersey-pack-${name || 'exported'}.zip`);
+            }
         }
     };
 
@@ -131,6 +144,7 @@ const JerseyDesigner = () => {
                 <section className="preview-section">
                     <React.Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'white' }}>Cargando Modelo 3D...</div>}>
                         <Jersey3D
+                            ref={jersey3DRef}
                             colors={colors}
                             pattern={pattern}
                             name={name}

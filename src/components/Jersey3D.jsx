@@ -171,10 +171,62 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor }) => {
 // Preload to avoid loading delay
 useGLTF.preload('/shirt_baked.glb');
 
-const Jersey3D = (props) => {
+// ... imports
+import React, { useEffect, useState, useRef, useMemo, useImperativeHandle, forwardRef } from 'react';
+// ... (imports remain the same)
+
+// ... helper functions ...
+
+// ... ShirtModel component ...
+
+const Jersey3D = forwardRef((props, ref) => {
     const [texture, setTexture] = useState(null);
     const [decalTexture, setDecalTexture] = useState(null);
     const containerRef = useRef();
+    const controlsRef = useRef();
+    const canvasRef = useRef();
+
+    // Expose capture method to parent
+    useImperativeHandle(ref, () => ({
+        captureViews: async () => {
+            const canvas = canvasRef.current;
+            const controls = controlsRef.current;
+            if (!canvas || !controls) return null;
+
+            // Helper to capture current frame
+            const capture = () => {
+                return new Promise(resolve => {
+                    requestAnimationFrame(() => {
+                        // Force a render if needed, but r3f usually handles it
+                        // We might need to wait a frame for the camera to settle
+                        setTimeout(() => {
+                            const dataUrl = canvas.toDataURL('image/png');
+                            resolve(dataUrl);
+                        }, 200); // Small delay to ensure render
+                    });
+                });
+            };
+
+            // 1. FRONT VIEW
+            controls.object.position.set(0, 0, 0.9); // Front camera pos
+            controls.target.set(0, 0.12, 0); // Target
+            controls.update();
+
+            const frontImage = await capture();
+
+            // 2. BACK VIEW
+            controls.object.position.set(0, 0, -0.9); // Back camera pos
+            controls.update();
+
+            const backImage = await capture();
+
+            // Reset view (optional)
+            controls.object.position.set(0, 0, 0.9);
+            controls.update();
+
+            return { front: frontImage, back: backImage };
+        }
+    }));
 
     // Texture generation logic
     useEffect(() => {
@@ -195,7 +247,14 @@ const Jersey3D = (props) => {
 
     return (
         <div className="jersey-3d-wrapper studio-mode" ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
-            <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 0.9], fov: 45 }} gl={{ preserveDrawingBuffer: true }}>
+            <Canvas
+                shadows
+                dpr={[1, 2]}
+                camera={{ position: [0, 0, 0.9], fov: 45 }}
+                gl={{ preserveDrawingBuffer: true }}
+                ref={canvasRef}
+                onCreated={({ gl }) => { canvasRef.current = gl.domElement; }}
+            >
                 <ambientLight intensity={0.7} />
                 <Environment preset="city" />
 
@@ -215,6 +274,7 @@ const Jersey3D = (props) => {
 
                 {/* Controls */}
                 <OrbitControls
+                    ref={controlsRef}
                     target={[0, 0.12, 0]}
                     enablePan={false}
                     minDistance={0.5}
@@ -231,6 +291,6 @@ const Jersey3D = (props) => {
             </div>
         </div>
     );
-};
+});
 
 export default Jersey3D;
