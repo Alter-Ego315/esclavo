@@ -152,14 +152,6 @@ const JerseyDesigner = () => {
                             <Image size={20} />
                             <span>ESCUDO</span>
                         </button>
-                        <button className={activeTab === 'neck' ? 'active' : ''} onClick={() => setActiveTab('neck')}>
-                            <User size={20} />
-                            <span>CUELLO</span>
-                        </button>
-                        <button className={activeTab === 'sleeves' ? 'active' : ''} onClick={() => setActiveTab('sleeves')}>
-                            <Grip size={20} />
-                            <span>MANGAS</span>
-                        </button>
                         <button className={activeTab === 'text' ? 'active' : ''} onClick={() => setActiveTab('text')}>
                             <Type size={20} />
                             <span>TEXTO</span>
@@ -195,38 +187,7 @@ const JerseyDesigner = () => {
                             </div>
                         )}
 
-                        {/* 2. SECCIÓN CUELLO */}
-                        {activeTab === 'neck' && (
-                            <div className="control-group">
-                                <h3>Estilo de Cuello</h3>
-                                <div className="options-grid">
-                                    <button className={`option-card ${collar === 'round' ? 'active' : ''}`} onClick={() => setCollar('round')}>
-                                        <span>Circular</span>
-                                    </button>
-                                    <button className={`option-card ${collar === 'v-neck' ? 'active' : ''}`} onClick={() => setCollar('v-neck')}>
-                                        <span>En V</span>
-                                    </button>
-                                    <button className={`option-card ${collar === 'polo' ? 'active' : ''}`} onClick={() => setCollar('polo')}>
-                                        <span>Polo / Camisero</span>
-                                    </button>
-                                </div>
-                            </div>
-                        )}
 
-                        {/* 3. SECCIÓN MANGAS */}
-                        {activeTab === 'sleeves' && (
-                            <div className="control-group">
-                                <h3>Tipo de Manga</h3>
-                                <div className="options-grid">
-                                    <button className={`option-card ${sleeve === 'normal' ? 'active' : ''}`} onClick={() => setSleeve('normal')}>
-                                        <span>Normal</span>
-                                    </button>
-                                    <button className={`option-card ${sleeve === 'raglan' ? 'active' : ''}`} onClick={() => setSleeve('raglan')}>
-                                        <span>Raglan</span>
-                                    </button>
-                                </div>
-                            </div>
-                        )}
 
                         {/* 4. SECCIÓN TEXTO */}
                         {activeTab === 'text' && (
