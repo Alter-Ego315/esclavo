@@ -78,10 +78,10 @@ const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
             >
                 {decalTexture && (
                     <Decal
-                        debug={true} // VISUAL DEBUG: Keeping on to confirm hit
-                        position={[0, 0.25, -0.2]} // LOWERED to hit upper back
+                        debug={false}
+                        position={[0, 0.25, -0.2]}
                         rotation={[0, 0, 0]}
-                        scale={[0.6, 0.6, 2]}
+                        scale={[-0.6, 0.6, 2]} // Negative X to fix mirroring
                         map={decalTexture}
                         depthTest={false}
                         renderOrder={1}
