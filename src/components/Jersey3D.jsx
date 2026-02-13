@@ -37,7 +37,7 @@ const generateTextureFromSvg = (selector) => {
     });
 };
 
-const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
+const ShirtModel = ({ texture, color, vibrancy }) => {
     // Load the GLB model
     // Ensure the file is in public/shirt_baked.glb
     const { nodes } = useGLTF('/shirt_baked.glb');
@@ -112,7 +112,7 @@ const Jersey3D = (props) => {
 
                 {/* Raised model to center it */}
                 <group position={[0, 0.5, 0]}>
-                    <ShirtModel texture={texture} decalTexture={decalTexture} color={props.colors.primary} />
+                    <ShirtModel texture={texture} color={props.colors.primary} />
                 </group>
 
                 {/* Controls */}
