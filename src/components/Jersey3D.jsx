@@ -78,11 +78,12 @@ const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
             >
                 {decalTexture && (
                     <Decal
-                        position={[0, 0.4, -0.35]} // Placed behind the back
-                        rotation={[0, 0, 0]} // Face +Z (Towards the back of the shirt)
-                        scale={[0.7, 0.7, 0.7]}
+                        debug={true} // VISUAL DEBUG: Shows the projection box
+                        position={[0, 0.5, -0.5]} // From behind
+                        rotation={[0, 0, 0]} // Face +Z (Towards back of shirt)
+                        scale={[0.6, 0.6, 4]} // Deep projection to guarantee hit
                         map={decalTexture}
-                        depthTest={false} // Force visibility on top
+                        depthTest={false}
                         renderOrder={1}
                     />
                 )}
