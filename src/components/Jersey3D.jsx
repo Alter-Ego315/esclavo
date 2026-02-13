@@ -139,21 +139,21 @@ const Jersey3D = (props) => {
                 {/* Spotlights for dramatic effect */}
                 <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow />
 
-                {/* Raised model to center it - Scaled up to fill screen and remove gaps */}
-                <group position={[0, -0.4, 0]} scale={[1.15, 1.15, 1.15]}>
+                {/* Raised model to center it - Reverted scale per user request */}
+                <group position={[0, -0.1, 0]}>
                     <ShirtModel texture={texture} decalTexture={decalTexture} color={props.colors.primary} />
                 </group>
 
                 {/* Controls */}
                 <OrbitControls
-                    target={[0, 0, 0]}
+                    target={[0, 0.1, 0]}
                     enablePan={false}
                     minDistance={0.5}
                     maxDistance={3}
                     makeDefault
                 />
 
-                <ContactShadows position={[0, -0.5, 0]} opacity={0.6} scale={10} blur={2} far={1.5} />
+                <ContactShadows position={[0, -0.6, 0]} opacity={0.4} scale={10} blur={2.5} far={1.5} />
             </Canvas>
 
             {/* Hidden DOM element for centralized texture generation */}
