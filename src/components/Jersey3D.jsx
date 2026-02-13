@@ -23,13 +23,6 @@ const generateTextureFromSvg = (selector) => {
         const img = new Image();
         img.onload = () => {
             ctx.clearRect(0, 0, size, size);
-
-            // Mirror the decal texture horizontally to fix backward text
-            if (isDecal) {
-                ctx.translate(size, 0);
-                ctx.scale(-1, 1);
-            }
-
             ctx.drawImage(img, 0, 0, size, size);
             const tex = new THREE.CanvasTexture(canvas);
             tex.colorSpace = THREE.SRGBColorSpace;
@@ -116,7 +109,17 @@ const Jersey3D = (props) => {
 
             // Generate Decal Texture
             const decalTex = await generateTextureFromSvg(`.hidden-previews .text-decal-view svg`);
-            if (decalTex) setDecalTexture(decalTex);
+            if (decalTex) {
+                // FLIP TEXTURE: Standard Three.js way to mirror horizontally
+                decalTex.wrapS = THREE.RepeatWrapping;
+                decalTex.repeat.x = -1;
+                decalTex.offset.x = 1; // Needed when repeating -1 to shift it back into view
+                // Alternative: decalTex.center.set(0.5, 0.5); decalTex.repeat.set(-1, 1);
+
+                // Ensure updates
+                decalTex.needsUpdate = true;
+                setDecalTexture(decalTex);
+            }
         };
 
         // Increase timeout slightly to allow React to paint the hidden SVG
