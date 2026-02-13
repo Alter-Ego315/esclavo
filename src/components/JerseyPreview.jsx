@@ -15,8 +15,8 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
         return (
             <div className="jersey-preview-container" style={{ width: '512px', height: '512px', background: 'transparent' }}>
                 <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
-                    <text x="256" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
-                    <text x="256" y="400" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
+                    <text x="256" y="220" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
+                    <text x="256" y="370" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
                 </svg>
             </div>
         );
