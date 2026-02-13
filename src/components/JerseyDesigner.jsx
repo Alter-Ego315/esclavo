@@ -62,7 +62,7 @@ const JerseyDesigner = () => {
     const [font, setFont] = useState('Orbitron');
     const [teamLogo, setTeamLogo] = useState('/logo.png'); // Default Ginga Logo
     const [sponsorLogo, setSponsorLogo] = useState(null);
-    const [sponsorLogo, setSponsorLogo] = useState(null);
+
     const [vibrancy, setVibrancy] = useState(50);
 
     // New Features State
