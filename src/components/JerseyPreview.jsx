@@ -136,11 +136,11 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 <g transform="translate(512, 512)">
 
                     {/* COMPANY LOGO (Green Player) - Right Chest (Wearer's Right - Image Left) */}
-                    {companyLogoB64 && <image href={companyLogoB64} x="-75" y="-135" width="80" height="80" />}
+                    {companyLogoB64 && <image href={companyLogoB64} x="-100" y="-100" width="80" height="80" />}
 
                     {/* Team Logo - Left Chest (Wearer's Left - Image Right) */}
                     {teamLogoB64 && (
-                        <image href={teamLogoB64} x="75" y="-135" width="80" height="80" />
+                        <image href={teamLogoB64} x="100" y="-100" width="80" height="80" />
                     )}
 
                     {/* Sponsor Logo - Center Chest */}
