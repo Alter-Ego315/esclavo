@@ -22,6 +22,44 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
         );
     }
 
+    // Helper hook to convert URLs to Base64 for SVG embedding
+    const useBase64Image = (url) => {
+        const [base64, setBase64] = React.useState(null);
+        React.useEffect(() => {
+            if (!url) {
+                setBase64(null);
+                return;
+            }
+            // If already base64, use it
+            if (url.startsWith('data:')) {
+                setBase64(url);
+                return;
+            }
+
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                setBase64(canvas.toDataURL('image/png'));
+            };
+            img.onerror = () => {
+                console.error('Failed to load image for base64 conversion:', url);
+                // Fallback: try to usage original url (might fail in blob)
+                setBase64(url);
+            };
+            img.src = url;
+        }, [url]);
+        return base64;
+    };
+
+    const companyLogoB64 = useBase64Image('/ginga-green.png');
+    const teamLogoB64 = useBase64Image(teamLogo);
+    const sponsorLogoB64 = useBase64Image(sponsorLogo);
+
     return (
         <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '1024px', height: '1024px' }}>
             <svg viewBox="0 0 1024 1024" className="jersey-svg" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%', shapeRendering: 'geometricPrecision' }}>
@@ -98,16 +136,16 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 <g transform="translate(512, 512)">
 
                     {/* COMPANY LOGO (Green Player) - Right Chest (Wearer's Right - Image Left) */}
-                    <image href="/ginga-green.png" x="-80" y="-190" width="80" height="80" />
+                    {companyLogoB64 && <image href={companyLogoB64} x="-80" y="-190" width="80" height="80" />}
 
                     {/* Team Logo - Left Chest (Wearer's Left - Image Right) */}
-                    {teamLogo && (
-                        <image href={teamLogo} x="80" y="-190" width="80" height="80" />
+                    {teamLogoB64 && (
+                        <image href={teamLogoB64} x="80" y="-190" width="80" height="80" />
                     )}
 
                     {/* Sponsor Logo - Center Chest */}
-                    {sponsorLogo && (
-                        <image href={sponsorLogo} x="-200" y="-50" width="400" height="150" preserveAspectRatio="xMidYMid meet" />
+                    {sponsorLogoB64 && (
+                        <image href={sponsorLogoB64} x="-200" y="-50" width="400" height="150" preserveAspectRatio="xMidYMid meet" />
                     )}
                 </g>
 
