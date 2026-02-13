@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture, Decal } from '@react-three/drei';
 import * as THREE from 'three';
@@ -49,25 +49,85 @@ const generateTextureFromSvg = async (selector, mirror = false) => {
     });
 };
 
-const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
-    // Load the GLB model
-    // Ensure the file is in public/shirt_baked.glb
+
+
+// ... generateTextureFromSvg ...
+
+// Generate Alpha Map for V-Neck
+const generateVNeckAlphaMap = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 1024;
+    const ctx = canvas.getContext('2d');
+
+    // Fill white (opaque)
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, 1024, 1024);
+
+    // Draw Black V-Neck shape (Transparent) based on UV mapping
+    // Center top area is neck.
+    // Approximate UV location for neck is top center.
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    // Inverted V shape at top center
+    ctx.moveTo(462, 0); // Top Left
+    ctx.lineTo(512, 100); // Bottom point of V
+    ctx.lineTo(562, 0); // Top Right
+    ctx.closePath();
+    ctx.fill();
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.colorSpace = THREE.SRGBColorSpace; // Non-color data usually, but this matches map
+    return tex;
+};
+
+const PoloCollar = ({ color }) => {
+    // A simplified Polo collar using 3D primitives
+    // Positioned relative to the shirt neck
+    return (
+        <group position={[0, 0.46, 0.05]} rotation={[0.2, 0, 0]} scale={[1, 1, 1]}>
+            {/* Left Flap */}
+            <mesh position={[-0.08, 0, 0]} rotation={[0, 0, 0.3]}>
+                <boxGeometry args={[0.18, 0.08, 0.01]} />
+                <meshStandardMaterial color={color} roughness={0.8} />
+            </mesh>
+            {/* Right Flap */}
+            <mesh position={[0.08, 0, 0]} rotation={[0, 0, -0.3]}>
+                <boxGeometry args={[0.18, 0.08, 0.01]} />
+                <meshStandardMaterial color={color} roughness={0.8} />
+            </mesh>
+            {/* Back part */}
+            <mesh position={[0, 0.03, -0.06]} rotation={[Math.PI / 2 - 0.2, 0, 0]}>
+                <cylinderGeometry args={[0.13, 0.13, 0.08, 32, 1, true, Math.PI, Math.PI]} />
+                <meshStandardMaterial color={color} side={THREE.DoubleSide} roughness={0.8} />
+            </mesh>
+        </group>
+    );
+};
+
+const ShirtModel = ({ texture, decalTexture, color, collar, accentColor }) => {
     const { nodes } = useGLTF('/shirt_baked.glb');
     const [material, setMaterial] = useState(null);
 
-    // Apply the dynamic texture to the model
+    // V-Neck Alpha Map
+    const vNeckAlphaMap = useMemo(() => {
+        if (collar === 'v-neck') return generateVNeckAlphaMap();
+        return null; // Round view has no cut
+    }, [collar]);
+
     useEffect(() => {
         if (nodes.T_Shirt_male) {
-            // Create a new material to avoid sharing issues
             const newMat = new THREE.MeshStandardMaterial({
                 map: texture || null,
                 color: texture ? 0xffffff : new THREE.Color(color),
                 roughness: 0.7,
                 metalness: 0.0,
-                side: THREE.DoubleSide
+                side: THREE.DoubleSide,
+                alphaMap: vNeckAlphaMap,
+                transparent: !!vNeckAlphaMap,
+                alphaTest: 0.5 // Cutoff
             });
 
-            // Fix texture encoding/flipping
             if (texture) {
                 texture.flipY = false;
                 texture.colorSpace = THREE.SRGBColorSpace;
@@ -76,7 +136,7 @@ const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
 
             setMaterial(newMat);
         }
-    }, [texture, color, nodes]);
+    }, [texture, color, nodes, vNeckAlphaMap]);
 
     if (!nodes.T_Shirt_male) return null;
 
@@ -95,14 +155,18 @@ const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
                         rotation={[0, 0, 0]}
                         scale={[0.6, 0.6, 0.3]}
                         map={decalTexture}
-                        depthTest={false}
+                        depthTest={true} // Changed to true to respect alpha?
                         renderOrder={1}
                     />
                 )}
             </mesh>
+            {collar === 'polo' && <PoloCollar color={accentColor || color} />}
         </group>
     );
 };
+
+// ... usage in Jersey3D ...
+// <ShirtModel ... collar={props.collar} accentColor={props.colors.accent} />
 
 // Preload to avoid loading delay
 useGLTF.preload('/shirt_baked.glb');
@@ -140,7 +204,13 @@ const Jersey3D = (props) => {
 
                 {/* Raised model to center it - Positioned to sit nicely above the bottom button */}
                 <group position={[0, 0.12, 0]}>
-                    <ShirtModel texture={texture} decalTexture={decalTexture} color={props.colors.primary} />
+                    <ShirtModel
+                        texture={texture}
+                        decalTexture={decalTexture}
+                        color={props.colors.primary}
+                        collar={props.collar}
+                        accentColor={props.colors.accent}
+                    />
                 </group>
 
                 {/* Controls */}
