@@ -97,14 +97,12 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 {/* The front is typically the center ~40-60% width of the texture */}
                 <g transform="translate(512, 512)">
 
-                    {/* COMPANY LOGO (Green Player) - Left Chest (Wearer's Left - Image Right) */}
-                    {/* Moved closer to center (x=80) to avoid armpit/side placement */}
-                    <image href="/ginga-green.png" x="80" y="-190" width="80" height="80" />
+                    {/* COMPANY LOGO (Green Player) - Right Chest (Wearer's Right - Image Left) */}
+                    <image href="/ginga-green.png" x="-80" y="-190" width="80" height="80" />
 
-                    {/* Team Logo - Right Chest (Wearer's Right - Image Left) */}
-                    {/* Moved closer to center (x=-80) to avoid armpit/side placement */}
+                    {/* Team Logo - Left Chest (Wearer's Left - Image Right) */}
                     {teamLogo && (
-                        <image href={teamLogo} x="-80" y="-190" width="80" height="80" />
+                        <image href={teamLogo} x="80" y="-190" width="80" height="80" />
                     )}
 
                     {/* Sponsor Logo - Center Chest */}
