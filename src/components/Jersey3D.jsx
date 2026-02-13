@@ -131,8 +131,8 @@ const Jersey3D = (props) => {
 
     return (
         <div className="jersey-3d-wrapper studio-mode" ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
-            {/* Camera adjusted: Centered and closer */}
-            <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 1.1], fov: 45 }} gl={{ preserveDrawingBuffer: true }}>
+            {/* Camera adjusted: Centered and closer to fill screen (Zoomed in) */}
+            <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 0.75], fov: 45 }} gl={{ preserveDrawingBuffer: true }}>
                 <ambientLight intensity={0.7} />
                 <Environment preset="city" />
 
@@ -140,15 +140,15 @@ const Jersey3D = (props) => {
                 <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow />
 
                 {/* Raised model to center it */}
-                <group position={[0, 0.5, 0]}>
+                <group position={[0, -0.1, 0]}>
                     <ShirtModel texture={texture} decalTexture={decalTexture} color={props.colors.primary} />
                 </group>
 
                 {/* Controls */}
                 <OrbitControls
-                    target={[0, 0.5, 0]}
+                    target={[0, 0.2, 0]}
                     enablePan={false}
-                    minDistance={0.8}
+                    minDistance={0.5}
                     maxDistance={3}
                     makeDefault
                 />
