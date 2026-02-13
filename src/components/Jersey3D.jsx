@@ -4,36 +4,48 @@ import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture, Decal 
 import * as THREE from 'three';
 import JerseyPreview from './JerseyPreview';
 
-// Helper to generate texture from SVG
-const generateTextureFromSvg = (selector) => {
+// Helper to generate texture from SVG DOM
+const generateTextureFromSvg = async (selector, mirror = false) => {
     return new Promise((resolve) => {
-        const svg = document.querySelector(selector);
-        if (!svg) {
+        const svgElement = document.querySelector(selector);
+        if (!svgElement) {
             resolve(null);
             return;
         }
-        const svgData = new XMLSerializer().serializeToString(svg);
+
+        // Serialize SVG and create Blob
+        const svgString = new XMLSerializer().serializeToString(svgElement);
+        const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+
+        // Draw to Canvas
         const canvas = document.createElement('canvas');
-        // Use ViewBox sizes from JerseyPreview
-        const isDecal = selector.includes('text-decal');
-        const size = isDecal ? 512 : 1024;
+        const size = 1024; // High res
         canvas.width = size;
         canvas.height = size;
         const ctx = canvas.getContext('2d');
+
         const img = new Image();
         img.onload = () => {
             ctx.clearRect(0, 0, size, size);
+
+            if (mirror) {
+                ctx.translate(size, 0);
+                ctx.scale(-1, 1);
+            }
+
             ctx.drawImage(img, 0, 0, size, size);
             const tex = new THREE.CanvasTexture(canvas);
             tex.colorSpace = THREE.SRGBColorSpace;
-            tex.flipY = false;
-            if (!isDecal) {
-                tex.wrapS = THREE.RepeatWrapping;
-                tex.wrapT = THREE.RepeatWrapping;
-            }
+
+            // Texture settings
+            tex.minFilter = THREE.LinearFilter;
+            tex.magFilter = THREE.LinearFilter;
+
+            URL.revokeObjectURL(url);
             resolve(tex);
         };
-        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        img.src = url;
     });
 };
 
@@ -104,22 +116,12 @@ const Jersey3D = (props) => {
     useEffect(() => {
         const updateTextures = async () => {
             // Generate Main Texture
-            const mainTex = await generateTextureFromSvg(`.hidden-previews .full-view svg`);
+            const mainTex = await generateTextureFromSvg(`.hidden-previews .full-view svg`, false);
             if (mainTex) setTexture(mainTex);
 
-            // Generate Decal Texture
-            const decalTex = await generateTextureFromSvg(`.hidden-previews .text-decal-view svg`);
-            if (decalTex) {
-                // FLIP TEXTURE: Standard Three.js way to mirror horizontally
-                decalTex.wrapS = THREE.RepeatWrapping;
-                decalTex.repeat.x = -1;
-                decalTex.offset.x = 1; // Needed when repeating -1 to shift it back into view
-                // Alternative: decalTex.center.set(0.5, 0.5); decalTex.repeat.set(-1, 1);
-
-                // Ensure updates
-                decalTex.needsUpdate = true;
-                setDecalTexture(decalTex);
-            }
+            // Generate Decal Texture (MIRRORED)
+            const decalTex = await generateTextureFromSvg(`.hidden-previews .text-decal-view svg`, true);
+            if (decalTex) setDecalTexture(decalTex);
         };
 
         // Increase timeout slightly to allow React to paint the hidden SVG
