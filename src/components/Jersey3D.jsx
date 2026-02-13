@@ -75,20 +75,7 @@ const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
                 receiveShadow
                 geometry={nodes.T_Shirt_male.geometry}
                 material={material || nodes.T_Shirt_male.material}
-            >
-                {/* Back Text Decal */}
-                {decalTexture && (
-                    <Decal
-                        position={[0, 0.4, -0.25]} // Approximate back position
-                        rotation={[0, Math.PI, 0]} // Facing backwards
-                        scale={[0.4, 0.4, 1]} // Scale of the text block
-                        map={decalTexture}
-                        depthTest={true}
-                        polygonOffset={true}
-                        polygonOffsetFactor={-1}
-                    />
-                )}
-            </mesh>
+            />
         </group>
     );
 };
@@ -98,7 +85,6 @@ useGLTF.preload('/shirt_baked.glb');
 
 const Jersey3D = (props) => {
     const [texture, setTexture] = useState(null);
-    const [decalTexture, setDecalTexture] = useState(null);
     const containerRef = useRef();
 
     // Texture generation logic
@@ -107,10 +93,6 @@ const Jersey3D = (props) => {
             // Generate Main Texture
             const mainTex = await generateTextureFromSvg(`.hidden-previews .full-view svg`);
             if (mainTex) setTexture(mainTex);
-
-            // Generate Decal Texture
-            const decalTex = await generateTextureFromSvg(`.hidden-previews .text-decal-view svg`);
-            if (decalTex) setDecalTexture(decalTex);
         };
 
         // Increase timeout slightly to allow React to paint the hidden SVG
@@ -149,7 +131,6 @@ const Jersey3D = (props) => {
             {/* We only need ONE view that wraps the whole shirt for this model usually */}
             <div className="hidden-previews" style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', top: 0, left: 0, zIndex: -1 }}>
                 <div className="full-view"><JerseyPreview {...props} view="full" /></div>
-                <div className="text-decal-view"><JerseyPreview {...props} view="text-decal" /></div>
             </div>
         </div>
     );

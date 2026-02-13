@@ -97,14 +97,14 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 {/* The front is typically the center ~40-60% width of the texture */}
                 <g transform="translate(512, 512)">
 
-                    {/* Brand Logo - Right Chest */}
+                    {/* Brand Logo - Left Chest (Wearer's Left - Image Right) */}
                     {brandLogo && (
-                        <image href={brandLogo} x="-150" y="-180" width="70" height="70" style={{ filter: 'brightness(4)' }} />
+                        <image href={brandLogo} x="100" y="-180" width="70" height="70" style={{ filter: 'brightness(4)' }} />
                     )}
 
-                    {/* Team Logo - Left Chest */}
+                    {/* Team Logo - Right Chest (Wearer's Right - Image Left) */}
                     {teamLogo && (
-                        <image href={teamLogo} x="80" y="-190" width="80" height="80" />
+                        <image href={teamLogo} x="-170" y="-190" width="80" height="80" />
                     )}
 
                     {/* Sponsor Logo - Center Chest */}
@@ -114,20 +114,20 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 </g>
 
                 {/* 4. BACK AREA */}
-
-
-                {/* 4. BACK AREA - ATTEMPT 7: REFINED CENTER & SMALLER */}
-                {/* 210 was centered but bled to front. 150 was decentered.
-                    Trying 180/844 (Mid-point).
-                    Reducing font size to prevent wrapping bleed.
+                {/* 
+                    Back Text Logic:
+                    - Front is approx 256 to 768 (Center 512).
+                    - Back is split: 0-256 (Left Back) and 768-1024 (Right Back).
+                    - Previous value 180 bled into 256 because of text width.
+                    - New Center Targets: 128 and 896.
                 */}
-                <g transform="translate(180, 200)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '55px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
+                <g transform="translate(128, 200)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '50px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '150px', fontWeight: '900' }}>{number}</text>
                 </g>
-                <g transform="translate(844, 200)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '55px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
+                <g transform="translate(896, 200)">
+                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '50px', fontWeight: '900' }}>{name}</text>
+                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '150px', fontWeight: '900' }}>{number}</text>
                 </g>
 
             </svg>
