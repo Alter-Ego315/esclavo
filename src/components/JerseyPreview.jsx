@@ -114,21 +114,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 </g>
 
                 {/* 4. BACK AREA */}
-                {/* 
-                    Back Text Logic:
-                    - Front is approx 256 to 768 (Center 512).
-                    - Back is split: 0-256 (Left Back) and 768-1024 (Right Back).
-                    - Previous value 180 bled into 256 because of text width.
-                    - New Center Targets: 128 and 896.
-                */}
-                <g transform="translate(128, 200)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '50px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '150px', fontWeight: '900' }}>{number}</text>
-                </g>
-                <g transform="translate(896, 200)">
-                    <text x="0" y="0" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '50px', fontWeight: '900' }}>{name}</text>
-                    <text x="0" y="200" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '150px', fontWeight: '900' }}>{number}</text>
-                </g>
+                {/* Text is now handled exclusively by the 3D Decal in Jersey3D.js to ensure meaningful positioning on the back. */}
 
             </svg>
         </div>
