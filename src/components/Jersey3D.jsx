@@ -76,16 +76,14 @@ const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
                 geometry={nodes.T_Shirt_male.geometry}
                 material={material || nodes.T_Shirt_male.material}
             >
-                {/* Back Text Decal - Explicit 3D Positioning */}
                 {decalTexture && (
                     <Decal
-                        position={[0, 0.4, -0.25]} // Z= -0.25 puts it on the back
-                        rotation={[0, Math.PI, 0]} // Rotate 180deg to face backwards
-                        scale={[0.4, 0.4, 1]}
+                        position={[0, 0.4, -0.35]} // Placed behind the back
+                        rotation={[0, 0, 0]} // Face +Z (Towards the back of the shirt)
+                        scale={[0.7, 0.7, 0.7]}
                         map={decalTexture}
-                        depthTest={true}
-                        polygonOffset={true}
-                        polygonOffsetFactor={-1}
+                        depthTest={false} // Force visibility on top
+                        renderOrder={1}
                     />
                 )}
             </mesh>
