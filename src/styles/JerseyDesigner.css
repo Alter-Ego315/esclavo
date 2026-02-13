@@ -170,11 +170,11 @@
 
 .view-indicator {
     position: absolute;
-    top: 24px;
-    right: 24px;
-    bottom: auto;
-    left: auto;
-    transform: none;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: auto;
+    right: auto;
     z-index: 10;
     color: var(--text-dim);
     font-size: 0.7rem;
