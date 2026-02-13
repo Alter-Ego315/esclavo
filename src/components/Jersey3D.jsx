@@ -23,6 +23,13 @@ const generateTextureFromSvg = (selector) => {
         const img = new Image();
         img.onload = () => {
             ctx.clearRect(0, 0, size, size);
+
+            // Mirror the decal texture horizontally to fix backward text
+            if (isDecal) {
+                ctx.translate(size, 0);
+                ctx.scale(-1, 1);
+            }
+
             ctx.drawImage(img, 0, 0, size, size);
             const tex = new THREE.CanvasTexture(canvas);
             tex.colorSpace = THREE.SRGBColorSpace;
@@ -81,7 +88,7 @@ const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
                         debug={false}
                         position={[0, 0.25, -0.2]}
                         rotation={[0, 0, 0]}
-                        scale={[-0.6, 0.6, 2]} // Negative X to fix mirroring
+                        scale={[0.6, 0.6, 2]}
                         map={decalTexture}
                         depthTest={false}
                         renderOrder={1}
