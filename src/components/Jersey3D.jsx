@@ -139,14 +139,14 @@ const Jersey3D = (props) => {
                 {/* Spotlights for dramatic effect */}
                 <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow />
 
-                {/* Raised model to center it */}
-                <group position={[0, -0.1, 0]}>
+                {/* Raised model to center it - Lowered further to remove bottom gap */}
+                <group position={[0, -0.35, 0]}>
                     <ShirtModel texture={texture} decalTexture={decalTexture} color={props.colors.primary} />
                 </group>
 
                 {/* Controls */}
                 <OrbitControls
-                    target={[0, 0.2, 0]}
+                    target={[0, 0, 0]}
                     enablePan={false}
                     minDistance={0.5}
                     maxDistance={3}
