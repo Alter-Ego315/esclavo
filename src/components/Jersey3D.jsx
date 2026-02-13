@@ -139,8 +139,8 @@ const Jersey3D = (props) => {
                 {/* Spotlights for dramatic effect */}
                 <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow />
 
-                {/* Raised model to center it - Lowered further to remove bottom gap */}
-                <group position={[0, -0.35, 0]}>
+                {/* Raised model to center it - Scaled up to fill screen and remove gaps */}
+                <group position={[0, -0.4, 0]} scale={[1.15, 1.15, 1.15]}>
                     <ShirtModel texture={texture} decalTexture={decalTexture} color={props.colors.primary} />
                 </group>
 
