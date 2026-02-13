@@ -4,30 +4,6 @@ import JerseyPreview from './JerseyPreview';
 import { Palette, Layers, Type, Download, Share2, Sparkles, RotateCw, Check, Image, User, Grip } from 'lucide-react';
 import '../styles/JerseyDesigner.css';
 
-const BRAND_LOGOS = [
-    { id: 'none', name: 'None', url: null },
-    {
-        id: 'nike',
-        name: 'Nike',
-        url: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg'
-    },
-    {
-        id: 'adidas',
-        name: 'Adidas',
-        url: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg'
-    },
-    {
-        id: 'puma',
-        name: 'Puma',
-        url: 'https://upload.wikimedia.org/wikipedia/commons/8/88/Puma_complete_logo.svg'
-    },
-    {
-        id: 'jordan',
-        name: 'Jordan',
-        url: 'https://upload.wikimedia.org/wikipedia/en/3/37/Jumpman_logo.svg'
-    }
-];
-
 const JERSEY_TEMPLATES = [
     {
         id: 'ginga-classic',
@@ -86,7 +62,7 @@ const JerseyDesigner = () => {
     const [font, setFont] = useState('Orbitron');
     const [teamLogo, setTeamLogo] = useState('/logo.png'); // Default Ginga Logo
     const [sponsorLogo, setSponsorLogo] = useState(null);
-    const [brandLogo, setBrandLogo] = useState(BRAND_LOGOS[1].url); // Default Nike
+    const [sponsorLogo, setSponsorLogo] = useState(null);
     const [vibrancy, setVibrancy] = useState(50);
 
     // New Features State
@@ -118,7 +94,6 @@ const JerseyDesigner = () => {
             reader.onloadend = () => {
                 if (type === 'team') setTeamLogo(reader.result);
                 if (type === 'sponsor') setSponsorLogo(reader.result);
-                if (type === 'brand') setBrandLogo(reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -166,7 +141,6 @@ const JerseyDesigner = () => {
                             font={font}
                             teamLogo={teamLogo}
                             sponsorLogo={sponsorLogo}
-                            brandLogo={brandLogo}
                             vibrancy={vibrancy}
                             view={view}
                             collar={collar}
@@ -226,21 +200,6 @@ const JerseyDesigner = () => {
                                         {sponsorLogo && <img src={sponsorLogo} className="upload-preview" alt="sponsor logo" />}
                                         <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'sponsor')} />
                                         <span>Click para Subir</span>
-                                    </div>
-                                </div>
-                                <div className="upload-item" style={{ marginTop: '20px' }}>
-                                    <label>Marca Deportiva</label>
-                                    <div className="brand-grid">
-                                        {BRAND_LOGOS.map(brand => (
-                                            <button
-                                                key={brand.id}
-                                                className={`brand-btn ${brandLogo === brand.url ? 'active' : ''}`}
-                                                onClick={() => setBrandLogo(brand.url)}
-                                            >
-                                                {brand.name}
-                                                {brandLogo === brand.url && <Check size={14} className="check-icon" />}
-                                            </button>
-                                        ))}
                                     </div>
                                 </div>
                             </div>

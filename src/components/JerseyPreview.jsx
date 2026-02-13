@@ -98,16 +98,13 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 <g transform="translate(512, 512)">
 
                     {/* COMPANY LOGO (Green Player) - Left Chest (Wearer's Left - Image Right) */}
-                    <image href="/Logo Ginga trasparente sin texto (verde).png" x="100" y="-190" width="80" height="80" />
-
-                    {/* Brand Logo - Center Chest (Moved to avoid overlap) */}
-                    {brandLogo && (
-                        <image href={brandLogo} x="-35" y="-180" width="70" height="70" style={{ filter: 'brightness(4)' }} />
-                    )}
+                    {/* Moved closer to center (x=80) to avoid armpit/side placement */}
+                    <image href="/ginga-green.png" x="80" y="-190" width="80" height="80" />
 
                     {/* Team Logo - Right Chest (Wearer's Right - Image Left) */}
+                    {/* Moved closer to center (x=-80) to avoid armpit/side placement */}
                     {teamLogo && (
-                        <image href={teamLogo} x="-170" y="-190" width="80" height="80" />
+                        <image href={teamLogo} x="-160" y="-190" width="80" height="80" />
                     )}
 
                     {/* Sponsor Logo - Center Chest */}
