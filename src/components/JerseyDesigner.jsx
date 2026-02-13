@@ -120,9 +120,6 @@ const JerseyDesigner = () => {
                     <img src="/ginga-logo-header.png" alt="Ginga" className="header-logo" style={{ height: '40px' }} />
                 </div>
                 <div className="header-actions">
-                    <button className="btn-icon" title="Girar Camiseta" onClick={() => setView(view === 'front' ? 'back' : 'front')}>
-                        <RotateCw size={18} />
-                    </button>
                     <button className="btn-primary" onClick={handleExport}>
                         <Download size={18} />
                         <span>EXPORTAR</span>
@@ -147,13 +144,6 @@ const JerseyDesigner = () => {
                             sleeve={sleeve}
                         />
                     </React.Suspense>
-
-                    <div className="view-indicator">
-                        <button className="flip-btn" onClick={() => setView(view === 'front' ? 'back' : 'front')}>
-                            <RotateCw size={14} style={{ marginRight: '8px' }} />
-                            GIRAR CAMISETA ({view === 'front' ? 'VER ESPALDA' : 'VER FRONTAL'})
-                        </button>
-                    </div>
                 </section>
 
                 <aside className="controls-section">
