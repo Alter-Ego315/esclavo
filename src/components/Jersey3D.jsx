@@ -131,29 +131,26 @@ const Jersey3D = (props) => {
 
     return (
         <div className="jersey-3d-wrapper studio-mode" ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
-            {/* Camera adjusted: Centered and closer to fill screen (Zoomed in) */}
-            <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 0.75], fov: 45 }} gl={{ preserveDrawingBuffer: true }}>
+            <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 0.8], fov: 45 }} gl={{ preserveDrawingBuffer: true }}>
                 <ambientLight intensity={0.7} />
                 <Environment preset="city" />
 
                 {/* Spotlights for dramatic effect */}
                 <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow />
 
-                {/* Raised model to center it - Reverted scale per user request */}
-                <group position={[0, -0.1, 0]}>
+                {/* Raised model to center it */}
+                <group position={[0, -0.2, 0]}>
                     <ShirtModel texture={texture} decalTexture={decalTexture} color={props.colors.primary} />
                 </group>
 
                 {/* Controls */}
                 <OrbitControls
-                    target={[0, 0.1, 0]}
+                    target={[0, 0, 0]}
                     enablePan={false}
                     minDistance={0.5}
                     maxDistance={3}
                     makeDefault
                 />
-
-                <ContactShadows position={[0, -0.6, 0]} opacity={0.4} scale={10} blur={2.5} far={1.5} />
             </Canvas>
 
             {/* Hidden DOM element for centralized texture generation */}
