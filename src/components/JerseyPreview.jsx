@@ -140,7 +140,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
 
                     {/* Team Logo - Left Chest (Wearer's Left - Image Right) */}
                     {teamLogoB64 && (
-                        <image href={teamLogoB64} x="170" y="-325" width="60" height="60" />
+                        <image href={teamLogoB64} x="-342" y="-325" width="60" height="60" />
                     )}
 
                     {/* Sponsor Logo - Center Chest */}
