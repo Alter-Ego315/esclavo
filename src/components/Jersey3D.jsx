@@ -93,7 +93,7 @@ const ShirtModel = ({ texture, decalTexture, color, vibrancy }) => {
                         debug={false}
                         position={[0, 0.25, -0.2]}
                         rotation={[0, 0, 0]}
-                        scale={[0.6, 0.6, 2]}
+                        scale={[0.6, 0.6, 0.3]}
                         map={decalTexture}
                         depthTest={false}
                         renderOrder={1}
