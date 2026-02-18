@@ -68,6 +68,7 @@ const JerseyDesigner = () => {
     // New Features State
     const [collar, setCollar] = useState('round'); // round, v-neck, polo
     const [sleeve, setSleeve] = useState('normal'); // normal, raglan
+    const [showFontDropdown, setShowFontDropdown] = useState(false);
 
     // Navigation State
     const [activeTab, setActiveTab] = useState('shield'); // shield, neck, sleeves, text, design
@@ -217,29 +218,96 @@ const JerseyDesigner = () => {
                                 </div>
                                 <div className="input-item">
                                     <label>Fuente</label>
-                                    <div className="font-grid">
-                                        {[
-                                            { name: 'Orbitron', label: 'Orbitron' },
-                                            { name: 'Impact', label: 'Impact' },
-                                            { name: 'Goldman', label: 'Goldman' },
-                                            { name: 'Roboto Condensed', label: 'Roboto' },
-                                            { name: 'Courier New', label: 'Mono' },
-                                            { name: 'cursive', label: 'Script' },
-                                            { name: 'Bebas Neue', label: 'Bebas' },
-                                            { name: 'Permanent Marker', label: 'Marker' },
-                                            { name: 'Press Start 2P', label: '8-Bit' },
-                                            { name: 'Audiowide', label: 'Audiowide' }
-                                        ].map(f => (
-                                            <button
-                                                key={f.name}
-                                                className={`font-option ${font === f.name ? 'active' : ''}`}
-                                                onClick={() => setFont(f.name)}
-                                                style={{ fontFamily: f.name }}
-                                            >
-                                                <span style={{ fontSize: '1.1em' }}>{f.label}</span>
-                                                {font === f.name && <Check size={16} />}
-                                            </button>
-                                        ))}
+                                    <div className="custom-select-container" style={{ position: 'relative' }}>
+                                        <button
+                                            className="font-select-trigger"
+                                            onClick={() => setShowFontDropdown(!showFontDropdown)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '12px 16px',
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                background: 'var(--bg)',
+                                                border: '1px solid var(--border)',
+                                                borderRadius: '10px',
+                                                color: 'var(--text)',
+                                                cursor: 'pointer',
+                                                fontFamily: font,
+                                                fontSize: '16px'
+                                            }}
+                                        >
+                                            <span>
+                                                {[
+                                                    { name: 'Orbitron', label: 'Orbitron' },
+                                                    { name: 'Impact', label: 'Impact' },
+                                                    { name: 'Goldman', label: 'Goldman' },
+                                                    { name: 'Roboto Condensed', label: 'Roboto' },
+                                                    { name: 'Courier New', label: 'Mono' },
+                                                    { name: 'cursive', label: 'Script' },
+                                                    { name: 'Bebas Neue', label: 'Bebas' },
+                                                    { name: 'Permanent Marker', label: 'Marker' },
+                                                    { name: 'Press Start 2P', label: '8-Bit' },
+                                                    { name: 'Audiowide', label: 'Audiowide' }
+                                                ].find(f => f.name === font)?.label || font}
+                                            </span>
+                                            <Grip size={16} style={{ opacity: 0.5 }} />
+                                        </button>
+
+                                        {showFontDropdown && (
+                                            <div className="font-dropdown-menu" style={{
+                                                position: 'absolute',
+                                                top: '110%',
+                                                left: 0,
+                                                width: '100%',
+                                                background: 'var(--surface)',
+                                                border: '1px solid var(--border)',
+                                                borderRadius: '10px',
+                                                zIndex: 50,
+                                                maxHeight: '250px',
+                                                overflowY: 'auto',
+                                                boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
+                                            }}>
+                                                {[
+                                                    { name: 'Orbitron', label: 'Orbitron' },
+                                                    { name: 'Impact', label: 'Impact' },
+                                                    { name: 'Goldman', label: 'Goldman' },
+                                                    { name: 'Roboto Condensed', label: 'Roboto' },
+                                                    { name: 'Courier New', label: 'Mono' },
+                                                    { name: 'cursive', label: 'Script' },
+                                                    { name: 'Bebas Neue', label: 'Bebas' },
+                                                    { name: 'Permanent Marker', label: 'Marker' },
+                                                    { name: 'Press Start 2P', label: '8-Bit' },
+                                                    { name: 'Audiowide', label: 'Audiowide' }
+                                                ].map(f => (
+                                                    <button
+                                                        key={f.name}
+                                                        className={`font-option ${font === f.name ? 'active' : ''}`}
+                                                        onClick={() => {
+                                                            setFont(f.name);
+                                                            setShowFontDropdown(false);
+                                                        }}
+                                                        style={{
+                                                            fontFamily: f.name,
+                                                            width: '100%',
+                                                            padding: '12px 16px',
+                                                            textAlign: 'left',
+                                                            background: font === f.name ? 'rgba(57, 255, 20, 0.05)' : 'transparent',
+                                                            color: font === f.name ? 'var(--primary)' : 'var(--text)',
+                                                            border: 'none',
+                                                            borderBottom: '1px solid rgba(255,255,255,0.05)',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                            alignItems: 'center'
+                                                        }}
+                                                    >
+                                                        <span style={{ fontSize: '1.1em' }}>{f.label}</span>
+                                                        {font === f.name && <Check size={16} />}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
