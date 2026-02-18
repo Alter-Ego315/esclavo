@@ -217,18 +217,30 @@ const JerseyDesigner = () => {
                                 </div>
                                 <div className="input-item">
                                     <label>Fuente</label>
-                                    <select value={font} onChange={(e) => setFont(e.target.value)} className="font-select">
-                                        <option value="Orbitron">Orbitron (Tech)</option>
-                                        <option value="Impact">Impact (Clásico Bold)</option>
-                                        <option value="Goldman">Goldman (Deportivo)</option>
-                                        <option value="Roboto Condensed">Roboto Cond (Moderno)</option>
-                                        <option value="Courier New">Mono (Retro)</option>
-                                        <option value="cursive">Script Dinámico</option>
-                                        <option value="Bebas Neue">Bebas Neue (Power)</option>
-                                        <option value="Permanent Marker">Marker (Callejero)</option>
-                                        <option value="Press Start 2P">8-Bit (Retro)</option>
-                                        <option value="Audiowide">Audiowide (Futurista)</option>
-                                    </select>
+                                    <div className="font-grid">
+                                        {[
+                                            { name: 'Orbitron', label: 'Orbitron' },
+                                            { name: 'Impact', label: 'Impact' },
+                                            { name: 'Goldman', label: 'Goldman' },
+                                            { name: 'Roboto Condensed', label: 'Roboto' },
+                                            { name: 'Courier New', label: 'Mono' },
+                                            { name: 'cursive', label: 'Script' },
+                                            { name: 'Bebas Neue', label: 'Bebas' },
+                                            { name: 'Permanent Marker', label: 'Marker' },
+                                            { name: 'Press Start 2P', label: '8-Bit' },
+                                            { name: 'Audiowide', label: 'Audiowide' }
+                                        ].map(f => (
+                                            <button
+                                                key={f.name}
+                                                className={`font-option ${font === f.name ? 'active' : ''}`}
+                                                onClick={() => setFont(f.name)}
+                                                style={{ fontFamily: f.name }}
+                                            >
+                                                <span style={{ fontSize: '1.1em' }}>{f.label}</span>
+                                                {font === f.name && <Check size={16} />}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         )}
