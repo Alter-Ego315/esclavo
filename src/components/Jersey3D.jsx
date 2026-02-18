@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useRef, useMemo, forwardRef, useImperativeHandle } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture, Decal } from '@react-three/drei';
 import * as THREE from 'three';
@@ -171,13 +171,7 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor }) => {
 // Preload to avoid loading delay
 useGLTF.preload('/shirt_baked.glb');
 
-// ... imports
-import React, { useEffect, useState, useRef, useMemo, useImperativeHandle, forwardRef } from 'react';
-// ... (imports remain the same)
 
-// ... helper functions ...
-
-// ... ShirtModel component ...
 
 const Jersey3D = forwardRef((props, ref) => {
     const [texture, setTexture] = useState(null);
