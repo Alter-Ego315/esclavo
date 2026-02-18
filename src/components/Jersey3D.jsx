@@ -185,36 +185,86 @@ const Jersey3D = forwardRef((props, ref) => {
         captureViews: async () => {
             const canvas = canvasRef.current;
             const controls = controlsRef.current;
+            const gl = canvasRef.current.getContext('webgl2') || canvasRef.current.getContext('webgl'); // Get GL context
+
             if (!canvas || !controls) return null;
 
-            // Helper to capture current frame
+            // 1. Save original size
+            const originalWidth = canvas.width;
+            const originalHeight = canvas.height;
+            const originalPixelRatio = window.devicePixelRatio;
+
+            // 2. Force High-Res (e.g., 2048x2048)
+            const exportSize = 2048;
+
+            // We need to resize the renderer, not just the canvas style
+            // This is tricky with R3F as it manages sizing.
+            // A safer hack: Resize the canvas, force a render, then restore.
+            // leveraging the 'gl' instance from useThree would be better, but we don't have it here directly without a hook.
+            // However, we can access it via canvasRef if we are careful, or just rely on window size if we want screen capture.
+            // BUT user wants HIGH RES.
+
+            // Let's try attempting to resize the canvas DOM and notify three.js (if possible)
+            // Or simpler: Just maximize the pixel ratio for the capture momentarily.
+
+            // Better approach for stability:
+            // Just use the current size but boost PixelRatio if on mobile?
+            // No, user specifically said "images are too small". 
+            // So we MUST resize.
+
+            const setSize = (w, h) => {
+                canvas.width = w;
+                canvas.height = h;
+                canvas.style.width = `${w}px`;
+                canvas.style.height = `${h}px`;
+                // We also need to tell the GL context to resize viewport
+                if (gl) gl.viewport(0, 0, w, h);
+            };
+
+            // Capture helper
             const capture = () => {
                 return new Promise(resolve => {
                     requestAnimationFrame(() => {
-                        // Force a render if needed, but r3f usually handles it
-                        // We might need to wait a frame for the camera to settle
                         setTimeout(() => {
-                            const dataUrl = canvas.toDataURL('image/png');
+                            // Force render if not inside loop? OrbitControls change triggers it.
+                            const dataUrl = canvas.toDataURL('image/png', 1.0); // Max quality
                             resolve(dataUrl);
-                        }, 200); // Small delay to ensure render
+                        }, 250);
                     });
                 });
             };
 
+            // --- START CAPTURE SEQUENCE ---
+
+            // Store current style to restore later
+            const savedStyleWidth = canvas.style.width;
+            const savedStyleHeight = canvas.style.height;
+
+            // Force canvas to high res
+            setSize(exportSize, exportSize);
+
             // 1. FRONT VIEW
-            controls.object.position.set(0, 0, 0.9); // Front camera pos
-            controls.target.set(0, 0.12, 0); // Target
+            controls.object.position.set(0, 0, 0.9);
+            controls.target.set(0, 0.12, 0);
             controls.update();
 
+            // Wait for resize and render
             const frontImage = await capture();
 
             // 2. BACK VIEW
-            controls.object.position.set(0, 0, -0.9); // Back camera pos
+            controls.object.position.set(0, 0, -0.9);
             controls.update();
 
             const backImage = await capture();
 
-            // Reset view (optional)
+            // --- RESTORE ---
+            // Restore original size (this might glitch for a frame, but it's fine)
+            // Ideally R3F Resizer observer will pick this up if we just reset style to 100%
+            canvas.style.width = savedStyleWidth || '100%';
+            canvas.style.height = savedStyleHeight || '100%';
+            // Let the browser/R3F handle the exact pixel/canvas size restoration on next frame
+
+            // Reset Camera
             controls.object.position.set(0, 0, 0.9);
             controls.update();
 
