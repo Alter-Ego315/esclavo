@@ -4,49 +4,37 @@ import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture, Decal 
 import * as THREE from 'three';
 import JerseyPreview from './JerseyPreview';
 
-// Helper to generate texture from SVG DOM
-const generateTextureFromSvg = async (selector, mirror = false) => {
-    return new Promise((resolve) => {
-        const svgElement = document.querySelector(selector);
-        if (!svgElement) {
-            resolve(null);
-            return;
-        }
+const generateNameNumberTexture = (name, number, font, color) => {
+    const canvas = document.createElement('canvas');
+    const size = 1024; // High res
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
 
-        // Serialize SVG and create Blob
-        const svgString = new XMLSerializer().serializeToString(svgElement);
-        const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(svgBlob);
+    // Clear
+    ctx.clearRect(0, 0, size, size);
 
-        // Draw to Canvas
-        const canvas = document.createElement('canvas');
-        const size = 4096; // 4K Resolution !
-        canvas.width = size;
-        canvas.height = size;
-        const ctx = canvas.getContext('2d');
+    // Text Settings
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = color;
 
-        const img = new Image();
-        img.onload = () => {
-            ctx.clearRect(0, 0, size, size);
+    // Draw Name (Top)
+    // Scale font size based on length
+    let fontSizeName = 120;
+    if (name.length > 8) fontSizeName = 100;
+    if (name.length > 12) fontSizeName = 80;
 
-            if (mirror) {
-                ctx.translate(size, 0);
-                ctx.scale(-1, 1);
-            }
+    ctx.font = `900 ${fontSizeName}px "${font}"`; // Quote font name to handle spaces
+    ctx.fillText(name, size / 2, size * 0.4);
 
-            ctx.drawImage(img, 0, 0, size, size);
-            const tex = new THREE.CanvasTexture(canvas);
-            tex.colorSpace = THREE.SRGBColorSpace;
+    // Draw Number (Bottom)
+    ctx.font = `900 350px "${font}"`;
+    ctx.fillText(number, size / 2, size * 0.7);
 
-            // Texture settings
-            tex.minFilter = THREE.LinearFilter;
-            tex.magFilter = THREE.LinearFilter;
-
-            URL.revokeObjectURL(url);
-            resolve(tex);
-        };
-        img.src = url;
-    });
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
 };
 
 
@@ -277,12 +265,19 @@ const Jersey3D = forwardRef((props, ref) => {
     // Texture generation logic
     useEffect(() => {
         const updateTextures = async () => {
-            // Generate Main Texture
+            // Generate Main Texture (Patterns/Colors - still uses SVG as it works fine)
             const mainTex = await generateTextureFromSvg(`.hidden-previews .full-view svg`, false);
             if (mainTex) setTexture(mainTex);
 
-            // Generate Decal Texture (MIRRORED)
-            const decalTex = await generateTextureFromSvg(`.hidden-previews .text-decal-view svg`, true);
+            // Generate Decal Texture (Name/Number - use Canvas for fonts)
+            // Wait for fonts to be ready (optional but recommended)
+            try {
+                await document.fonts.load(`100px "${props.font}"`);
+            } catch (e) {
+                console.warn('Font load warning:', e);
+            }
+
+            const decalTex = generateNameNumberTexture(props.name, props.number, props.font, props.colors.secondary);
             if (decalTex) setDecalTexture(decalTex);
         };
 
