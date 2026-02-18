@@ -80,6 +80,9 @@ const FONT_OPTIONS = [
     { name: 'Saira Stencil One', label: 'Saira Stencil' },
     { name: 'UnifrakturMaguntia', label: 'Unifraktur (Gothic)' },
     { name: 'Playfair Display', label: 'Vogue/Mermaid (Serif)' },
+    { name: 'Monoton', label: 'Prisma (Lines)' },
+    { name: 'Rubik Glitch', label: 'Glitch (Distorted)' },
+    { name: 'Turret Road', label: 'Turret (SciFi)' },
 
     // Special Requests (Batch 2 - Fallbacks)
     { name: 'Manchester United', label: 'Man Utd', fallback: 'Montserrat' },
@@ -99,7 +102,7 @@ const FONT_OPTIONS = [
     { name: 'Champions', label: 'Champions', fallback: 'Montserrat' },
     { name: 'Adidas 2024', label: 'Adidas 24', fallback: 'Saira Condensed' },
     { name: 'Lin Libertine', label: 'Lin Libertine', fallback: 'Playfair Display' },
-    { name: 'Permanent Marker', label: 'Marker', fallback: 'Permanent Marker' }, // Dup but ok
+    { name: 'Permanent Marker', label: 'Marker', fallback: 'Permanent Marker' },
     { name: 'AC Milan', label: 'AC Milan', fallback: 'Teko' },
     { name: 'Sevilla 2020', label: 'Sevilla 20', fallback: 'Montserrat' },
     { name: 'Aldo the Apache', label: 'Aldo Apache', fallback: 'Black Ops One' },
@@ -131,25 +134,38 @@ const FONT_OPTIONS = [
     { name: 'EFL 2022', label: 'EFL 22', fallback: 'Saira Condensed' },
     { name: 'England 2020', label: 'England 20', fallback: 'Oswald' },
 
-    // Special Requests (Need custom font files to work perfectly, defaulting to fallbacks)
-    { name: 'Liverpool 2022', label: 'Liverpool 2022', fallback: 'Oswald' },
-    { name: 'Real Madrid 2023', label: 'Real Madrid 23', fallback: 'Montserrat' },
-    { name: 'Barcelona 2012', label: 'Barcelona 12', fallback: 'Teko' },
-    { name: 'Adidas 2022', label: 'Adidas 2022', fallback: 'Saira Condensed' },
-    { name: 'Nike 2022', label: 'Nike 2022', fallback: 'Oswald' },
-    { name: 'Puma 2022', label: 'Puma 2022', fallback: 'Teko' },
-    { name: 'Premier League', label: 'Premier League', fallback: 'Anton' },
-    { name: 'La Liga 23-24', label: 'La Liga 23', fallback: 'Teko' },
-    { name: 'Serie A', label: 'Serie A', fallback: 'Montserrat' },
-    { name: 'Ligue 1', label: 'Ligue 1', fallback: 'Roboto Condensed' },
-    { name: 'Bundesliga', label: 'Bundesliga', fallback: 'Oswald' },
-    { name: 'World Cup 2022', label: 'World Cup 22', fallback: 'Goldman' },
-    { name: 'Euro 2020', label: 'Euro 2020', fallback: 'Chakra Petch' },
-    { name: 'American Captain', label: 'American Captain', fallback: 'Oswald' },
-    { name: 'Varsity', label: 'Varsity', fallback: 'Saira Condensed' },
-    { name: 'Bebas Neue', label: 'Bebas Neue' },
-    { name: 'Impact', label: 'Impact' },
-    { name: 'Courier New', label: 'Monospace' }
+    // Special Requests (Batch 3)
+    { name: 'Firestarter', label: 'Firestarter', fallback: 'Rubik Glitch' },
+    { name: 'France 2020-21', label: 'France 20', fallback: 'Montserrat' },
+    { name: 'Liverpool', label: 'Liverpool', fallback: 'Oswald' },
+    { name: 'MLS 20', label: 'MLS 20', fallback: 'Saira Condensed' },
+    { name: 'MLS Old', label: 'MLS Old', fallback: 'Saira Stencil One' },
+    { name: 'Netherlands Euro 2020', label: 'Netherlands 20', fallback: 'Turret Road' },
+    { name: 'Premier League Shirt', label: 'PL Shirt', fallback: 'Anton' },
+    { name: 'Premier League Shirt Old', label: 'PL Shirt Old', fallback: 'Oswald' },
+    { name: 'Prisma', label: 'Prisma', fallback: 'Monoton' },
+    { name: 'PSG 20-21', label: 'PSG 20', fallback: 'Oswald' },
+    { name: 'PSG 21-22 Away', label: 'PSG 21 Away', fallback: 'Montserrat' },
+    { name: 'PSV Eindhoven 2020-21', label: 'PSV 20', fallback: 'Teko' },
+    { name: 'Real Madrid 2022', label: 'Real Madrid 22', fallback: 'Cinzel' },
+];
+{ name: 'Real Madrid 2023', label: 'Real Madrid 23', fallback: 'Montserrat' },
+{ name: 'Barcelona 2012', label: 'Barcelona 12', fallback: 'Teko' },
+{ name: 'Adidas 2022', label: 'Adidas 2022', fallback: 'Saira Condensed' },
+{ name: 'Nike 2022', label: 'Nike 2022', fallback: 'Oswald' },
+{ name: 'Puma 2022', label: 'Puma 2022', fallback: 'Teko' },
+{ name: 'Premier League', label: 'Premier League', fallback: 'Anton' },
+{ name: 'La Liga 23-24', label: 'La Liga 23', fallback: 'Teko' },
+{ name: 'Serie A', label: 'Serie A', fallback: 'Montserrat' },
+{ name: 'Ligue 1', label: 'Ligue 1', fallback: 'Roboto Condensed' },
+{ name: 'Bundesliga', label: 'Bundesliga', fallback: 'Oswald' },
+{ name: 'World Cup 2022', label: 'World Cup 22', fallback: 'Goldman' },
+{ name: 'Euro 2020', label: 'Euro 2020', fallback: 'Chakra Petch' },
+{ name: 'American Captain', label: 'American Captain', fallback: 'Oswald' },
+{ name: 'Varsity', label: 'Varsity', fallback: 'Saira Condensed' },
+{ name: 'Bebas Neue', label: 'Bebas Neue' },
+{ name: 'Impact', label: 'Impact' },
+{ name: 'Courier New', label: 'Monospace' }
 ];
 
 const JerseyDesigner = () => {
