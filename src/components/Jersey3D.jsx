@@ -14,6 +14,10 @@ const generateNameNumberTexture = (name, number, font, color) => {
     // Clear
     ctx.clearRect(0, 0, size, size);
 
+    // MIRROR TEXTURE (Back of shirt needs flipped texture)
+    ctx.translate(size, 0);
+    ctx.scale(-1, 1);
+
     // Text Settings
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
