@@ -61,7 +61,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
     const sponsorLogoB64 = useBase64Image(sponsorLogo);
 
     return (
-        <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '1024px', height: '1024px' }}>
+        <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '4096px', height: '4096px' }}>
             <svg viewBox="0 0 1024 1024" className="jersey-svg" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%', shapeRendering: 'geometricPrecision' }}>
                 <defs>
                     <linearGradient id="jerseyGradient" x1="0%" y1="0%" x2="0%" y2="100%">

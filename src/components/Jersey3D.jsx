@@ -20,7 +20,7 @@ const generateTextureFromSvg = async (selector, mirror = false) => {
 
         // Draw to Canvas
         const canvas = document.createElement('canvas');
-        const size = 1024; // High res
+        const size = 4096; // 4K Resolution !
         canvas.width = size;
         canvas.height = size;
         const ctx = canvas.getContext('2d');
@@ -56,23 +56,25 @@ const generateTextureFromSvg = async (selector, mirror = false) => {
 // Generate Alpha Map for V-Neck
 const generateVNeckAlphaMap = () => {
     const canvas = document.createElement('canvas');
-    canvas.width = 1024;
-    canvas.height = 1024;
+    const size = 4096;
+    canvas.width = size;
+    canvas.height = size;
     const ctx = canvas.getContext('2d');
 
     // Fill white (opaque)
     ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, 1024, 1024);
+    ctx.fillRect(0, 0, size, size);
 
     // Draw Black V-Neck shape (Transparent) based on UV mapping
-    // Center top area is neck.
-    // Approximate UV location for neck is top center.
+    // Scale coordinates from 1024 to 4096 (x4)
     ctx.fillStyle = 'black';
     ctx.beginPath();
     // Inverted V shape at top center
-    ctx.moveTo(462, 0); // Top Left
-    ctx.lineTo(512, 100); // Bottom point of V
-    ctx.lineTo(562, 0); // Top Right
+    // Original: 462, 0 -> 512, 100 -> 562, 0
+    // Times 4: 1848, 0 -> 2048, 400 -> 2248, 0
+    ctx.moveTo(1848, 0); // Top Left
+    ctx.lineTo(2048, 400); // Bottom point of V
+    ctx.lineTo(2248, 0); // Top Right
     ctx.closePath();
     ctx.fill();
 
