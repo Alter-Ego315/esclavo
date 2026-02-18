@@ -218,24 +218,11 @@ const JerseyDesigner = () => {
                                 </div>
                                 <div className="input-item">
                                     <label>Fuente</label>
-                                    <div className="custom-select-container" style={{ position: 'relative' }}>
+                                    <div className="custom-select-container">
                                         <button
                                             className="font-select-trigger"
                                             onClick={() => setShowFontDropdown(!showFontDropdown)}
-                                            style={{
-                                                width: '100%',
-                                                padding: '12px 16px',
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                background: 'var(--bg)',
-                                                border: '1px solid var(--border)',
-                                                borderRadius: '10px',
-                                                color: 'var(--text)',
-                                                cursor: 'pointer',
-                                                fontFamily: font,
-                                                fontSize: '16px'
-                                            }}
+                                            style={{ fontFamily: font }}
                                         >
                                             <span>
                                                 {[
@@ -255,19 +242,7 @@ const JerseyDesigner = () => {
                                         </button>
 
                                         {showFontDropdown && (
-                                            <div className="font-dropdown-menu" style={{
-                                                position: 'absolute',
-                                                top: '110%',
-                                                left: 0,
-                                                width: '100%',
-                                                background: 'var(--surface)',
-                                                border: '1px solid var(--border)',
-                                                borderRadius: '10px',
-                                                zIndex: 50,
-                                                maxHeight: '250px',
-                                                overflowY: 'auto',
-                                                boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
-                                            }}>
+                                            <div className="font-dropdown-menu">
                                                 {[
                                                     { name: 'Orbitron', label: 'Orbitron' },
                                                     { name: 'Impact', label: 'Impact' },
@@ -282,25 +257,12 @@ const JerseyDesigner = () => {
                                                 ].map(f => (
                                                     <button
                                                         key={f.name}
-                                                        className={`font-option ${font === f.name ? 'active' : ''}`}
+                                                        className={`font-option-item ${font === f.name ? 'active' : ''}`}
                                                         onClick={() => {
                                                             setFont(f.name);
                                                             setShowFontDropdown(false);
                                                         }}
-                                                        style={{
-                                                            fontFamily: f.name,
-                                                            width: '100%',
-                                                            padding: '12px 16px',
-                                                            textAlign: 'left',
-                                                            background: font === f.name ? 'rgba(57, 255, 20, 0.05)' : 'transparent',
-                                                            color: font === f.name ? 'var(--primary)' : 'var(--text)',
-                                                            border: 'none',
-                                                            borderBottom: '1px solid rgba(255,255,255,0.05)',
-                                                            cursor: 'pointer',
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between',
-                                                            alignItems: 'center'
-                                                        }}
+                                                        style={{ fontFamily: f.name }}
                                                     >
                                                         <span style={{ fontSize: '1.1em' }}>{f.label}</span>
                                                         {font === f.name && <Check size={16} />}
