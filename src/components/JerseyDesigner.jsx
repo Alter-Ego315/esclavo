@@ -49,6 +49,47 @@ const PRESET_COLORS = [
     { "name": "Rojo Ajax", "hex": "#d2122e" }, { "name": "Verde Ginga", "hex": "#39FF14" }
 ];
 
+const FONT_OPTIONS = [
+    // Google Fonts (Available immediatly)
+    { name: 'Orbitron', label: 'Orbitron (Tech)' },
+    { name: 'Montserrat', label: 'Montserrat (Clean)' },
+    { name: 'Oswald', label: 'Oswald (Strong)' },
+    { name: 'Anton', label: 'Anton (Bold)' },
+    { name: 'Teko', label: 'Teko (Square)' },
+    { name: 'Black Ops One', label: 'Black Ops (Military)' },
+    { name: 'Saira Condensed', label: 'Saira (Tall)' },
+    { name: 'Chakra Petch', label: 'Chakra (Futuristic)' },
+    { name: 'Goldman', label: 'Goldman (Sport)' },
+    { name: 'Roboto Condensed', label: 'Roboto Cond' },
+    { name: 'Maven Pro', label: 'Maven Pro' },
+    { name: 'Lato', label: 'Lato' },
+    { name: 'Caveat', label: 'Caveat (Hand)' },
+    { name: 'Permanent Marker', label: 'Marker' },
+    { name: 'Bungee Inline', label: 'Bungee (Retro)' },
+    { name: 'Press Start 2P', label: '8-Bit' },
+    { name: 'Fontdiner Swanky', label: 'Swanky (Funky)' },
+
+    // Special Requests (Need custom font files to work perfectly, defaulting to fallbacks)
+    { name: 'Liverpool 2022', label: 'Liverpool 2022', fallback: 'Oswald' },
+    { name: 'Real Madrid 2023', label: 'Real Madrid 23', fallback: 'Montserrat' },
+    { name: 'Barcelona 2012', label: 'Barcelona 12', fallback: 'Teko' },
+    { name: 'Adidas 2022', label: 'Adidas 2022', fallback: 'Saira Condensed' },
+    { name: 'Nike 2022', label: 'Nike 2022', fallback: 'Oswald' },
+    { name: 'Puma 2022', label: 'Puma 2022', fallback: 'Teko' },
+    { name: 'Premier League', label: 'Premier League', fallback: 'Anton' },
+    { name: 'La Liga 23-24', label: 'La Liga 23', fallback: 'Teko' },
+    { name: 'Serie A', label: 'Serie A', fallback: 'Montserrat' },
+    { name: 'Ligue 1', label: 'Ligue 1', fallback: 'Roboto Condensed' },
+    { name: 'Bundesliga', label: 'Bundesliga', fallback: 'Oswald' },
+    { name: 'World Cup 2022', label: 'World Cup 22', fallback: 'Goldman' },
+    { name: 'Euro 2020', label: 'Euro 2020', fallback: 'Chakra Petch' },
+    { name: 'American Captain', label: 'American Captain', fallback: 'Oswald' },
+    { name: 'Varsity', label: 'Varsity', fallback: 'Saira Condensed' },
+    { name: 'Bebas Neue', label: 'Bebas Neue' },
+    { name: 'Impact', label: 'Impact' },
+    { name: 'Courier New', label: 'Monospace' }
+];
+
 const JerseyDesigner = () => {
     // Default "Teo 69" State
     const [colors, setColors] = useState({
@@ -225,135 +266,114 @@ const JerseyDesigner = () => {
                                             style={{ fontFamily: font }}
                                         >
                                             <span>
-                                                {[
-                                                    { name: 'Orbitron', label: 'Orbitron' },
-                                                    { name: 'Impact', label: 'Impact' },
-                                                    { name: 'Goldman', label: 'Goldman' },
-                                                    { name: 'Roboto Condensed', label: 'Roboto' },
-                                                    { name: 'Courier New', label: 'Mono' },
-                                                    { name: 'cursive', label: 'Script' },
-                                                    { name: 'Bebas Neue', label: 'Bebas' },
-                                                    { name: 'Permanent Marker', label: 'Marker' },
-                                                    { name: 'Press Start 2P', label: '8-Bit' },
-                                                    { name: 'Audiowide', label: 'Audiowide' }
-                                                ].find(f => f.name === font)?.label || font}
+                                                {FONT_OPTIONS.find(f => f.name === font)?.label || font}
                                             </span>
                                             <Grip size={16} style={{ opacity: 0.5 }} />
                                         </button>
 
                                         {showFontDropdown && (
                                             <div className="font-dropdown-menu">
-                                                {[
-                                                    { name: 'Orbitron', label: 'Orbitron' },
-                                                    { name: 'Impact', label: 'Impact' },
-                                                    { name: 'Goldman', label: 'Goldman' },
-                                                    { name: 'Roboto Condensed', label: 'Roboto' },
-                                                    { name: 'Courier New', label: 'Mono' },
-                                                    { name: 'cursive', label: 'Script' },
-                                                    { name: 'Bebas Neue', label: 'Bebas' },
-                                                    { name: 'Permanent Marker', label: 'Marker' },
-                                                    { name: 'Press Start 2P', label: '8-Bit' },
-                                                    { name: 'Audiowide', label: 'Audiowide' }
-                                                ].map(f => (
-                                                    <button
-                                                        key={f.name}
-                                                        className={`font-option-item ${font === f.name ? 'active' : ''}`}
-                                                        onClick={() => {
-                                                            setFont(f.name);
-                                                            setShowFontDropdown(false);
-                                                        }}
-                                                        style={{ fontFamily: f.name }}
-                                                    >
-                                                        <span style={{ fontSize: '1.1em' }}>{f.label}</span>
-                                                        {font === f.name && <Check size={16} />}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* 5. SECCIÓN DISEÑO (SUB-PESTAÑAS) */}
-                        {activeTab === 'design' && (
-                            <div className="design-section-wrapper">
-                                <div className="sub-tabs">
-                                    <button className={designTab === 'templates' ? 'active' : ''} onClick={() => setDesignTab('templates')}>Plantillas</button>
-                                    <button className={designTab === 'colors' ? 'active' : ''} onClick={() => setDesignTab('colors')}>Colores</button>
-                                    <button className={designTab === 'patterns' ? 'active' : ''} onClick={() => setDesignTab('patterns')}>Patrones</button>
-                                </div>
-
-                                <div className="sub-content">
-                                    {designTab === 'templates' && (
-                                        <div className="templates-grid">
-                                            {JERSEY_TEMPLATES.map(t => (
-                                                <div key={t.id} className="template-card" onClick={() => applyTemplate(t)}>
-                                                    <div className="template-preview" style={{ background: t.colors.primary }}>
-                                                        <div className="template-stripe" style={{ background: t.colors.secondary }}></div>
-                                                    </div>
-                                                    <span>{t.name}</span>
+                                                <div className="font-dropdown-menu">
+                                                    {FONT_OPTIONS.map(f => (
+                                                        <button
+                                                            key={f.name}
+                                                            className={`font-option-item ${font === f.name ? 'active' : ''}`}
+                                                            onClick={() => {
+                                                                setFont(f.name);
+                                                                setShowFontDropdown(false);
+                                                            }}
+                                                            style={{ fontFamily: f.name === font ? f.name : (f.fallback || f.name) }}
+                                                        >
+                                                            <span style={{ fontSize: '1.1em' }}>{f.label}</span>
+                                                            {font === f.name && <Check size={16} />}
+                                                        </button>
+                                                    ))}
                                                 </div>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {designTab === 'colors' && (
-                                        <div className="control-group">
-                                            <div className="color-picker-item">
-                                                <label>Cuerpo Principal</label>
-                                                <input type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} />
+                                        )}
                                             </div>
-                                            <div className="color-picker-item">
-                                                <label>Patrón Secundario</label>
-                                                <input type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} />
-                                            </div>
-                                            <div className="color-picker-item">
-                                                <label>Mangas / Detalles</label>
-                                                <input type="color" value={colors.accent} onChange={(e) => handleColorChange('accent', e.target.value)} />
-                                            </div>
-
-                                            <div className="presets-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
-                                                {PRESET_COLORS.map(c => (
-                                                    <button
-                                                        key={c.name}
-                                                        title={c.name}
-                                                        onClick={() => handleColorChange('primary', c.hex)}
-                                                        style={{
-                                                            width: '24px',
-                                                            height: '24px',
-                                                            borderRadius: '50%',
-                                                            background: c.hex,
-                                                            border: '1px solid rgba(255,255,255,0.2)',
-                                                            cursor: 'pointer'
-                                                        }}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {designTab === 'patterns' && (
-                                        <div className="pattern-grid">
-                                            {['none', 'stripes', 'hoops', 'diagonal', 'pixels', 'gradient', 'splatter'].map(p => (
-                                                <button key={p} className={pattern === p ? 'active' : ''} onClick={() => setPattern(p)}>
-                                                    {p.charAt(0).toUpperCase() + p.slice(1)}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    )}
                                 </div>
-                            </div>
+                                </div>
                         )}
-                    </div>
+
+                                {/* 5. SECCIÓN DISEÑO (SUB-PESTAÑAS) */}
+                                {activeTab === 'design' && (
+                                    <div className="design-section-wrapper">
+                                        <div className="sub-tabs">
+                                            <button className={designTab === 'templates' ? 'active' : ''} onClick={() => setDesignTab('templates')}>Plantillas</button>
+                                            <button className={designTab === 'colors' ? 'active' : ''} onClick={() => setDesignTab('colors')}>Colores</button>
+                                            <button className={designTab === 'patterns' ? 'active' : ''} onClick={() => setDesignTab('patterns')}>Patrones</button>
+                                        </div>
+
+                                        <div className="sub-content">
+                                            {designTab === 'templates' && (
+                                                <div className="templates-grid">
+                                                    {JERSEY_TEMPLATES.map(t => (
+                                                        <div key={t.id} className="template-card" onClick={() => applyTemplate(t)}>
+                                                            <div className="template-preview" style={{ background: t.colors.primary }}>
+                                                                <div className="template-stripe" style={{ background: t.colors.secondary }}></div>
+                                                            </div>
+                                                            <span>{t.name}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+
+                                            {designTab === 'colors' && (
+                                                <div className="control-group">
+                                                    <div className="color-picker-item">
+                                                        <label>Cuerpo Principal</label>
+                                                        <input type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} />
+                                                    </div>
+                                                    <div className="color-picker-item">
+                                                        <label>Patrón Secundario</label>
+                                                        <input type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} />
+                                                    </div>
+                                                    <div className="color-picker-item">
+                                                        <label>Mangas / Detalles</label>
+                                                        <input type="color" value={colors.accent} onChange={(e) => handleColorChange('accent', e.target.value)} />
+                                                    </div>
+
+                                                    <div className="presets-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
+                                                        {PRESET_COLORS.map(c => (
+                                                            <button
+                                                                key={c.name}
+                                                                title={c.name}
+                                                                onClick={() => handleColorChange('primary', c.hex)}
+                                                                style={{
+                                                                    width: '24px',
+                                                                    height: '24px',
+                                                                    borderRadius: '50%',
+                                                                    background: c.hex,
+                                                                    border: '1px solid rgba(255,255,255,0.2)',
+                                                                    cursor: 'pointer'
+                                                                }}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {designTab === 'patterns' && (
+                                                <div className="pattern-grid">
+                                                    {['none', 'stripes', 'hoops', 'diagonal', 'pixels', 'gradient', 'splatter'].map(p => (
+                                                        <button key={p} className={pattern === p ? 'active' : ''} onClick={() => setPattern(p)}>
+                                                            {p.charAt(0).toUpperCase() + p.slice(1)}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
 
                     {/* Persistent Export Button */}
-                    <div className="controls-footer" style={{ padding: '20px', borderTop: '1px solid var(--border)', background: 'var(--surface)' }}>
-                        <button className="btn-primary" onClick={handleExport} style={{ width: '100%', justifyContent: 'center', padding: '16px' }}>
-                            <Download size={20} />
-                            <span style={{ fontSize: '16px', letterSpacing: '1px' }}>EXPORTAR DISEÑO</span>
-                        </button>
-                    </div>
+                        <div className="controls-footer" style={{ padding: '20px', borderTop: '1px solid var(--border)', background: 'var(--surface)' }}>
+                            <button className="btn-primary" onClick={handleExport} style={{ width: '100%', justifyContent: 'center', padding: '16px' }}>
+                                <Download size={20} />
+                                <span style={{ fontSize: '16px', letterSpacing: '1px' }}>EXPORTAR DISEÑO</span>
+                            </button>
+                        </div>
                 </aside>
             </main>
         </div>
