@@ -25,15 +25,16 @@ const generateNameNumberTexture = (name, number, font, color) => {
 
     // Draw Name (Top)
     // Scale font size based on length
-    let fontSizeName = 120;
-    if (name.length > 8) fontSizeName = 100;
-    if (name.length > 12) fontSizeName = 80;
+    let fontSizeName = 100; // Reduced base size
+    if (name.length > 6) fontSizeName = 80;
+    if (name.length > 8) fontSizeName = 70;
+    if (name.length > 10) fontSizeName = 60; // Aggressive scaling for max length
 
     ctx.font = `900 ${fontSizeName}px "${font}"`; // Quote font name to handle spaces
     ctx.fillText(name, size / 2, size * 0.4);
 
     // Draw Number (Bottom)
-    ctx.font = `900 350px "${font}"`;
+    ctx.font = `900 280px "${font}"`; // Reduced from 350px
     ctx.fillText(number, size / 2, size * 0.7);
 
     const tex = new THREE.CanvasTexture(canvas);

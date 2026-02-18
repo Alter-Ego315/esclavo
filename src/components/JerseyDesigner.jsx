@@ -328,7 +328,7 @@ const JerseyDesigner = () => {
                                 <h3>Personalización</h3>
                                 <div className="input-item">
                                     <label>Nombre Jugador</label>
-                                    <input type="text" value={name} maxLength={12} onChange={(e) => setName(e.target.value)} />
+                                    <input type="text" value={name} maxLength={10} onChange={(e) => setName(e.target.value)} />
                                 </div>
                                 <div className="input-item">
                                     <label>Dorsal</label>
