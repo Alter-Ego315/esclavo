@@ -100,6 +100,18 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 )}
 
                 {/* 2.5 SLEEVE STYLES (Raglan vs Normal) */}
+                {/* Regular Sleeves - Cover top corners and side strips */}
+                {colors.accent && sleeve === 'normal' && (
+                    <g fill={colors.accent}>
+                        {/* Shoulders / Top Sleeve */}
+                        <rect x="0" y="0" width="300" height="200" />
+                        <rect x="724" y="0" width="300" height="200" />
+                        {/* Side Sleeves strips (UV wrapping) */}
+                        <rect x="0" y="200" width="150" height="824" />
+                        <rect x="874" y="200" width="150" height="824" />
+                    </g>
+                )}
+
                 {/* Raglan simulates a diagonal cut from neck to underarm. 
                     Approximating on UV map: Draw diagonal patches from center-top outwards/downwards.
                 */}
@@ -109,6 +121,9 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                         <path d="M300,0 L512,200 L512,0 Z" />
                         {/* Right Raglan Shoulder */}
                         <path d="M724,0 L512,200 L512,0 Z" />
+                        {/* Side Sleeves for raglan usually full color too */}
+                        <rect x="0" y="0" width="200" height="1024" />
+                        <rect x="824" y="0" width="200" height="1024" />
                     </g>
                 )}
 

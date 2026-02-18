@@ -396,15 +396,15 @@ const JerseyDesigner = () => {
                                     {designTab === 'colors' && (
                                         <div className="control-group">
                                             <div className="color-picker-item">
-                                                <label>Cuerpo Principal</label>
+                                                <label>Color 1 (Principal)</label>
                                                 <input type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} />
                                             </div>
                                             <div className="color-picker-item">
-                                                <label>Patrón Secundario</label>
+                                                <label>Color 2 (Secundario)</label>
                                                 <input type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} />
                                             </div>
                                             <div className="color-picker-item">
-                                                <label>Mangas / Detalles</label>
+                                                <label>Mangas / Cuello</label>
                                                 <input type="color" value={colors.accent} onChange={(e) => handleColorChange('accent', e.target.value)} />
                                             </div>
 
