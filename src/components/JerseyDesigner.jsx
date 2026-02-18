@@ -400,12 +400,8 @@ const JerseyDesigner = () => {
                                                 <input type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} />
                                             </div>
                                             <div className="color-picker-item">
-                                                <label>Color 2 (Secundario)</label>
+                                                <label>Color 2 (Nombre y Número)</label>
                                                 <input type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} />
-                                            </div>
-                                            <div className="color-picker-item">
-                                                <label>Mangas / Cuello</label>
-                                                <input type="color" value={colors.accent} onChange={(e) => handleColorChange('accent', e.target.value)} />
                                             </div>
 
                                             <div className="presets-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
