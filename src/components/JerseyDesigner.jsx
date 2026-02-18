@@ -4,13 +4,94 @@ import JerseyPreview from './JerseyPreview';
 import { Palette, Layers, Type, Download, Share2, Sparkles, RotateCw, Check, Image, User, Grip } from 'lucide-react';
 import '../styles/JerseyDesigner.css';
 
+const PATTERNS_LIST = [
+    { id: 'none', label: 'Ninguno' },
+    { id: 'stripes', label: 'Rayas Vert.' },
+    { id: 'hoops', label: 'Rayas Horiz.' },
+    { id: 'diagonal', label: 'Diagonal' },
+    { id: 'checkers', label: 'Ajedrez' },
+    { id: 'diamonds', label: 'Rombos' },
+    { id: 'chevron', label: 'Chevron' },
+    { id: 'cross', label: 'Cruz' },
+    { id: 'zigzag', label: 'Zig Zag' },
+    { id: 'triangles', label: 'Triángulos' },
+    { id: 'camo', label: 'Camuflaje' },
+    { id: 'swirl', label: 'Remolino' },
+    { id: 'labyrinth', label: 'Laberinto' },
+    { id: 'arches', label: 'Arcos' },
+    { id: 'star', label: 'Estrella' },
+    { id: 'waves', label: 'Olas' },
+    { id: 'halftone', label: 'Puntos' },
+    { id: 'pixels', label: 'Pixelado' },
+    { id: 'gradient', label: 'Degradado' },
+    { id: 'center-stripe', label: 'Franja C.' },
+    { id: 'sash', label: 'Banda' },
+    { id: 'double-stripe', label: 'Doble F.' },
+];
+
 const JERSEY_TEMPLATES = [
     {
         id: 'ginga-classic',
         name: 'Ginga Classic',
         colors: { primary: '#0a0a0a', secondary: '#39FF14', accent: '#1a1a1a' },
-        pattern: 'splatter',
+        pattern: 'swirl',
         font: 'Orbitron'
+    },
+    {
+        id: 'adidas-arches',
+        name: 'Adidas Arches',
+        colors: { primary: '#000000', secondary: '#444444', accent: '#000000' },
+        pattern: 'arches',
+        font: 'Teko'
+    },
+    {
+        id: 'adidas-camo',
+        name: 'Adidas Camo',
+        colors: { primary: '#2c3e50', secondary: '#34495e', accent: '#000000' },
+        pattern: 'camo',
+        font: 'Black Ops One'
+    },
+    {
+        id: 'adidas-checkers',
+        name: 'Adidas Check',
+        colors: { primary: '#ffffff', secondary: '#000000', accent: '#000000' },
+        pattern: 'checkers',
+        font: 'Saira Condensed'
+    },
+    {
+        id: 'liquid-flames',
+        name: 'Liquid Flames',
+        colors: { primary: '#000000', secondary: '#00d2ff', accent: '#ffffff' },
+        pattern: 'swirl',
+        font: 'Rubik Glitch'
+    },
+    {
+        id: 'adidas-tri',
+        name: 'Adidas Tri',
+        colors: { primary: '#e74c3c', secondary: '#c0392b', accent: '#ffffff' },
+        pattern: 'triangles',
+        font: 'Goldman'
+    },
+    {
+        id: 'adidas-lab',
+        name: 'Adidas Lab',
+        colors: { primary: '#ffeaa7', secondary: '#fdcb6e', accent: '#2d3436' },
+        pattern: 'labyrinth',
+        font: 'Chakra Petch'
+    },
+    {
+        id: 'adidas-melange',
+        name: 'Adidas Melange',
+        colors: { primary: '#b2bec3', secondary: '#636e72', accent: '#2d3436' },
+        pattern: 'halftone',
+        font: 'Oswald'
+    },
+    {
+        id: 'psg-26',
+        name: 'PSG 26 Home',
+        colors: { primary: '#2c3e50', secondary: '#e74c3c', accent: '#ecf0f1' },
+        pattern: 'center-stripe',
+        font: 'Anton'
     },
     {
         id: 'neon-strike',
@@ -426,9 +507,9 @@ const JerseyDesigner = () => {
 
                                     {designTab === 'patterns' && (
                                         <div className="pattern-grid">
-                                            {['none', 'stripes', 'hoops', 'diagonal', 'pixels', 'gradient', 'splatter'].map(p => (
-                                                <button key={p} className={pattern === p ? 'active' : ''} onClick={() => setPattern(p)}>
-                                                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                                            {PATTERNS_LIST.map(p => (
+                                                <button key={p.id} className={pattern === p.id ? 'active' : ''} onClick={() => setPattern(p.id)}>
+                                                    {p.label}
                                                 </button>
                                             ))}
                                         </div>
