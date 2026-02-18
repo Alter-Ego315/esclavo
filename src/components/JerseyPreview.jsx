@@ -99,6 +99,92 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     </g>
                 )}
 
+                {/* --- NEW PATTERNS --- */}
+
+                {/* 1. CENTER STRIPE */}
+                {pattern === 'center-stripe' && (
+                    <rect x="462" y="0" width="100" height="1024" fill={secondary} opacity={0.8} />
+                )}
+
+                {/* 2. SASH (Diagonal) */}
+                {pattern === 'sash' && (
+                    <path d="M0,0 L200,0 L1024,824 L1024,1024 Z" fill={secondary} opacity={0.8} />
+                )}
+
+                {/* 3. CHEVRON (V-Shape on Chest) */}
+                {pattern === 'chevron' && (
+                    <g transform="translate(0, 200)">
+                        <path d="M0,0 L512,300 L1024,0 L1024,150 L512,450 L0,150 Z" fill={secondary} opacity={0.8} />
+                    </g>
+                )}
+
+                {/* 4. CROSS */}
+                {pattern === 'cross' && (
+                    <g fill={secondary} opacity={0.8}>
+                        <rect x="437" y="0" width="150" height="1024" />
+                        <rect x="0" y="350" width="1024" height="150" />
+                    </g>
+                )}
+
+                {/* 5. CHECKERS */}
+                {pattern === 'checkers' && (
+                    <g fill={secondary} opacity={0.4}>
+                        {Array.from({ length: 8 }).map((_, i) => (
+                            Array.from({ length: 8 }).map((_, j) => (
+                                ((i + j) % 2 === 0) ? <rect key={`${i}-${j}`} x={i * 128} y={j * 128} width="128" height="128" /> : null
+                            ))
+                        ))}
+                    </g>
+                )}
+
+                {/* 6. DIAMONDS (Argyle) */}
+                {pattern === 'diamonds' && (
+                    <defs>
+                        <pattern id="diamondPat" width="100" height="100" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                            <rect width="50" height="50" fill={secondary} opacity={0.3} />
+                        </pattern>
+                    </defs>
+                )}
+                {pattern === 'diamonds' && <rect width="1024" height="1024" fill="url(#diamondPat)" />}
+
+                {/* 7. WAVES */}
+                {pattern === 'waves' && (
+                    <defs>
+                        <pattern id="wavesPat" width="100" height="60" patternUnits="userSpaceOnUse">
+                            <path d="M0,30 Q25,0 50,30 T100,30" fill="none" stroke={secondary} strokeWidth="15" opacity={0.5} />
+                        </pattern>
+                    </defs>
+                )}
+                {pattern === 'waves' && <rect width="1024" height="1024" fill="url(#wavesPat)" />}
+
+                {/* 8. HALFTONE LINES */}
+                {pattern === 'halftone' && (
+                    <defs>
+                        <pattern id="halftonePat" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <circle cx="10" cy="10" r="5" fill={secondary} opacity={0.4} />
+                        </pattern>
+                    </defs>
+                )}
+                {pattern === 'halftone' && <rect width="1024" height="1024" fill="url(#halftonePat)" />}
+
+                {/* 9. DOUBLE STRIPE */}
+                {pattern === 'double-stripe' && (
+                    <g fill={secondary} opacity={0.8}>
+                        <rect x="350" y="0" width="80" height="1024" />
+                        <rect x="594" y="0" width="80" height="1024" />
+                    </g>
+                )}
+
+                {/* 10. ZIG ZAG */}
+                {pattern === 'zigzag' && (
+                    <defs>
+                        <pattern id="zigzagPat" width="100" height="100" patternUnits="userSpaceOnUse">
+                            <path d="M0,0 L25,50 L50,0 L75,50 L100,0" fill="none" stroke={secondary} strokeWidth="10" opacity={0.6} />
+                        </pattern>
+                    </defs>
+                )}
+                {pattern === 'zigzag' && <rect width="1024" height="1024" fill="url(#zigzagPat)" />}
+
                 {/* 2.5 SLEEVE STYLES (Raglan vs Normal) */}
                 {/* Regular Sleeves - Cover top corners and side strips */}
                 {/* 2.5 SLEEVE STYLES (Raglan vs Normal) */}
