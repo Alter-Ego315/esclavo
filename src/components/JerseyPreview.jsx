@@ -64,6 +64,9 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
         <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '4096px', height: '4096px' }}>
             <svg viewBox="0 0 1024 1024" className="jersey-svg" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%', shapeRendering: 'geometricPrecision' }}>
                 <defs>
+                    <style type="text/css">
+                        {`@import url('https://fonts.googleapis.com/css2?family=Anton&family=Black+Ops+One&family=Bungee+Inline&family=Caveat:wght@700&family=Chakra+Petch:wght@700&family=Cinzel:wght@400;700&family=Creepster&family=Exo:wght@400;700&family=Faster+One&family=Fontdiner+Swanky&family=Goldman:wght@700&family=Inter:wght@400;700;900&family=Lato:wght@400;700;900&family=Maven+Pro:wght@700;900&family=Monoton&family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;700&family=Orbitron:wght@700;900&family=Oswald:wght@500;700&family=Passion+One:wght@400;700&family=Permanent+Marker&family=Playfair+Display:wght@400;700&family=Press+Start+2P&family=Roboto+Condensed:wght@700&family=Rubik+Glitch&family=Saira+Condensed:wght@700;900&family=Saira+Stencil+One&family=Teko:wght@700&family=Turret+Road:wght@800&family=UnifrakturMaguntia&display=swap');`}
+                    </style>
                     <linearGradient id="jerseyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" style={{ stopColor: primary, stopOpacity: 1 }} />
                         <stop offset="100%" style={{ stopColor: secondary, stopOpacity: 1 }} />
