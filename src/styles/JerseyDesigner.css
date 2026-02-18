@@ -10,7 +10,9 @@
     height: 60px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
+    /* Center logo */
     padding: 0 24px;
     border-bottom: 1px solid var(--border);
     background: rgba(10, 10, 10, 0.8);

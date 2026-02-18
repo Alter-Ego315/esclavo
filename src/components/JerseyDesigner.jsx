@@ -130,14 +130,8 @@ const JerseyDesigner = () => {
         <div className="jersey-designer-container">
             {/* Header */}
             <header className="designer-header">
-                <div className="header-left">
-                    <img src="/ginga-logo-header.png" alt="Ginga" className="header-logo" style={{ height: '40px' }} />
-                </div>
-                <div className="header-actions">
-                    <button className="btn-primary" onClick={handleExport}>
-                        <Download size={18} />
-                        <span>EXPORTAR</span>
-                    </button>
+                <div className="header-center">
+                    <img src="/ginga-logo-header.png" alt="Ginga" className="header-logo" style={{ height: '80px' }} />
                 </div>
             </header>
 
@@ -186,7 +180,13 @@ const JerseyDesigner = () => {
 
                                 <div className="upload-item" style={{ marginTop: '20px' }}>
                                     <div className="upload-zone">
-                                        {teamLogo && <img src={teamLogo} className="upload-preview" alt="team logo" />}
+                                        {teamLogo ? (
+                                            <img src={teamLogo} className="upload-preview" alt="team logo" />
+                                        ) : (
+                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.5 }}>
+                                                <Image size={24} />
+                                            </div>
+                                        )}
                                         <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'team')} />
                                         <span>Click para Subir Imagen</span>
                                     </div>
@@ -345,6 +345,14 @@ const JerseyDesigner = () => {
                                 </div>
                             </div>
                         )}
+                    </div>
+
+                    {/* Persistent Export Button */}
+                    <div className="controls-footer" style={{ padding: '20px', borderTop: '1px solid var(--border)', background: 'var(--surface)' }}>
+                        <button className="btn-primary" onClick={handleExport} style={{ width: '100%', justifyContent: 'center', padding: '16px' }}>
+                            <Download size={20} />
+                            <span style={{ fontSize: '16px', letterSpacing: '1px' }}>EXPORTAR DISEÑO</span>
+                        </button>
                     </div>
                 </aside>
             </main>
