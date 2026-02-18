@@ -178,7 +178,7 @@ const JerseyDesigner = () => {
     const [name, setName] = useState('TEO');
     const [number, setNumber] = useState('69');
     const [font, setFont] = useState('Orbitron');
-    const [teamLogo, setTeamLogo] = useState('/logo.png'); // Default Ginga Logo
+    const [teamLogo, setTeamLogo] = useState(null);
     const [sponsorLogo, setSponsorLogo] = useState(null);
 
     const [vibrancy, setVibrancy] = useState(50);
@@ -302,7 +302,6 @@ const JerseyDesigner = () => {
                                             <img src={teamLogo} className="upload-preview" alt="team logo" />
                                         ) : (
                                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.5 }}>
-                                                <Image size={24} />
                                             </div>
                                         )}
                                         <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'team')} />
