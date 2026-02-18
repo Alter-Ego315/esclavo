@@ -38,8 +38,50 @@ const generateNameNumberTexture = (name, number, font, color) => {
 };
 
 
+// Helper to generate texture from SVG DOM
+const generateTextureFromSvg = async (selector, mirror = false) => {
+    return new Promise((resolve) => {
+        const svgElement = document.querySelector(selector);
+        if (!svgElement) {
+            resolve(null);
+            return;
+        }
 
-// ... generateTextureFromSvg ...
+        // Serialize SVG and create Blob
+        const svgString = new XMLSerializer().serializeToString(svgElement);
+        const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+
+        // Draw to Canvas
+        const canvas = document.createElement('canvas');
+        const size = 4096; // 4K Resolution !
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        const img = new Image();
+        img.onload = () => {
+            ctx.clearRect(0, 0, size, size);
+
+            if (mirror) {
+                ctx.translate(size, 0);
+                ctx.scale(-1, 1);
+            }
+
+            ctx.drawImage(img, 0, 0, size, size);
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.colorSpace = THREE.SRGBColorSpace;
+
+            // Texture settings
+            tex.minFilter = THREE.LinearFilter;
+            tex.magFilter = THREE.LinearFilter;
+
+            URL.revokeObjectURL(url);
+            resolve(tex);
+        };
+        img.src = url;
+    });
+};
 
 // Generate Alpha Map for V-Neck
 const generateVNeckAlphaMap = () => {
