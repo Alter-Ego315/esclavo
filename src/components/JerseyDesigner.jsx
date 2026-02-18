@@ -350,107 +350,106 @@ const JerseyDesigner = () => {
 
                                         {showFontDropdown && (
                                             <div className="font-dropdown-menu">
-                                                <div className="font-dropdown-menu">
-                                                    {FONT_OPTIONS.map(f => (
-                                                        <button
-                                                            key={f.name}
-                                                            className={`font-option-item ${font === f.name ? 'active' : ''}`}
-                                                            onClick={() => {
-                                                                setFont(f.name);
-                                                                setShowFontDropdown(false);
-                                                            }}
-                                                            style={{ fontFamily: f.name === font ? f.name : (f.fallback || f.name) }}
-                                                        >
-                                                            <span style={{ fontSize: '1.1em' }}>{f.label}</span>
-                                                            {font === f.name && <Check size={16} />}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                        )}
+                                                {FONT_OPTIONS.map(f => (
+                                                    <button
+                                                        key={f.name}
+                                                        className={`font-option-item ${font === f.name ? 'active' : ''}`}
+                                                        onClick={() => {
+                                                            setFont(f.name);
+                                                            setShowFontDropdown(false);
+                                                        }}
+                                                        style={{ fontFamily: f.name === font ? f.name : (f.fallback || f.name) }}
+                                                    >
+                                                        <span style={{ fontSize: '1.1em' }}>{f.label}</span>
+                                                        {font === f.name && <Check size={16} />}
+                                                    </button>
+                                                ))}
                                             </div>
+                                        )}
+                                    </div>
                                 </div>
-                                </div>
+                            </div>
                         )}
 
-                                {/* 5. SECCIÓN DISEÑO (SUB-PESTAÑAS) */}
-                                {activeTab === 'design' && (
-                                    <div className="design-section-wrapper">
-                                        <div className="sub-tabs">
-                                            <button className={designTab === 'templates' ? 'active' : ''} onClick={() => setDesignTab('templates')}>Plantillas</button>
-                                            <button className={designTab === 'colors' ? 'active' : ''} onClick={() => setDesignTab('colors')}>Colores</button>
-                                            <button className={designTab === 'patterns' ? 'active' : ''} onClick={() => setDesignTab('patterns')}>Patrones</button>
+                        {/* 5. SECCIÓN DISEÑO (SUB-PESTAÑAS) */}
+                        {activeTab === 'design' && (
+                            <div className="design-section-wrapper">
+                                <div className="sub-tabs">
+                                    <button className={designTab === 'templates' ? 'active' : ''} onClick={() => setDesignTab('templates')}>Plantillas</button>
+                                    <button className={designTab === 'colors' ? 'active' : ''} onClick={() => setDesignTab('colors')}>Colores</button>
+                                    <button className={designTab === 'patterns' ? 'active' : ''} onClick={() => setDesignTab('patterns')}>Patrones</button>
+                                </div>
+
+                                <div className="sub-content">
+                                    {designTab === 'templates' && (
+                                        <div className="templates-grid">
+                                            {JERSEY_TEMPLATES.map(t => (
+                                                <div key={t.id} className="template-card" onClick={() => applyTemplate(t)}>
+                                                    <div className="template-preview" style={{ background: t.colors.primary }}>
+                                                        <div className="template-stripe" style={{ background: t.colors.secondary }}></div>
+                                                    </div>
+                                                    <span>{t.name}</span>
+                                                </div>
+                                            ))}
                                         </div>
+                                    )}
 
-                                        <div className="sub-content">
-                                            {designTab === 'templates' && (
-                                                <div className="templates-grid">
-                                                    {JERSEY_TEMPLATES.map(t => (
-                                                        <div key={t.id} className="template-card" onClick={() => applyTemplate(t)}>
-                                                            <div className="template-preview" style={{ background: t.colors.primary }}>
-                                                                <div className="template-stripe" style={{ background: t.colors.secondary }}></div>
-                                                            </div>
-                                                            <span>{t.name}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
+                                    {designTab === 'colors' && (
+                                        <div className="control-group">
+                                            <div className="color-picker-item">
+                                                <label>Cuerpo Principal</label>
+                                                <input type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} />
+                                            </div>
+                                            <div className="color-picker-item">
+                                                <label>Patrón Secundario</label>
+                                                <input type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} />
+                                            </div>
+                                            <div className="color-picker-item">
+                                                <label>Mangas / Detalles</label>
+                                                <input type="color" value={colors.accent} onChange={(e) => handleColorChange('accent', e.target.value)} />
+                                            </div>
 
-                                            {designTab === 'colors' && (
-                                                <div className="control-group">
-                                                    <div className="color-picker-item">
-                                                        <label>Cuerpo Principal</label>
-                                                        <input type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} />
-                                                    </div>
-                                                    <div className="color-picker-item">
-                                                        <label>Patrón Secundario</label>
-                                                        <input type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} />
-                                                    </div>
-                                                    <div className="color-picker-item">
-                                                        <label>Mangas / Detalles</label>
-                                                        <input type="color" value={colors.accent} onChange={(e) => handleColorChange('accent', e.target.value)} />
-                                                    </div>
-
-                                                    <div className="presets-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
-                                                        {PRESET_COLORS.map(c => (
-                                                            <button
-                                                                key={c.name}
-                                                                title={c.name}
-                                                                onClick={() => handleColorChange('primary', c.hex)}
-                                                                style={{
-                                                                    width: '24px',
-                                                                    height: '24px',
-                                                                    borderRadius: '50%',
-                                                                    background: c.hex,
-                                                                    border: '1px solid rgba(255,255,255,0.2)',
-                                                                    cursor: 'pointer'
-                                                                }}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {designTab === 'patterns' && (
-                                                <div className="pattern-grid">
-                                                    {['none', 'stripes', 'hoops', 'diagonal', 'pixels', 'gradient', 'splatter'].map(p => (
-                                                        <button key={p} className={pattern === p ? 'active' : ''} onClick={() => setPattern(p)}>
-                                                            {p.charAt(0).toUpperCase() + p.slice(1)}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            )}
+                                            <div className="presets-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
+                                                {PRESET_COLORS.map(c => (
+                                                    <button
+                                                        key={c.name}
+                                                        title={c.name}
+                                                        onClick={() => handleColorChange('primary', c.hex)}
+                                                        style={{
+                                                            width: '24px',
+                                                            height: '24px',
+                                                            borderRadius: '50%',
+                                                            background: c.hex,
+                                                            border: '1px solid rgba(255,255,255,0.2)',
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
+
+                                    {designTab === 'patterns' && (
+                                        <div className="pattern-grid">
+                                            {['none', 'stripes', 'hoops', 'diagonal', 'pixels', 'gradient', 'splatter'].map(p => (
+                                                <button key={p} className={pattern === p ? 'active' : ''} onClick={() => setPattern(p)}>
+                                                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
+                        )}
+                    </div>
 
                     {/* Persistent Export Button */}
-                        <div className="controls-footer" style={{ padding: '20px', borderTop: '1px solid var(--border)', background: 'var(--surface)' }}>
-                            <button className="btn-primary" onClick={handleExport} style={{ width: '100%', justifyContent: 'center', padding: '16px' }}>
-                                <Download size={20} />
-                                <span style={{ fontSize: '16px', letterSpacing: '1px' }}>EXPORTAR DISEÑO</span>
-                            </button>
-                        </div>
+                    <div className="controls-footer" style={{ padding: '20px', borderTop: '1px solid var(--border)', background: 'var(--surface)' }}>
+                        <button className="btn-primary" onClick={handleExport} style={{ width: '100%', justifyContent: 'center', padding: '16px' }}>
+                            <Download size={20} />
+                            <span style={{ fontSize: '16px', letterSpacing: '1px' }}>EXPORTAR DISEÑO</span>
+                        </button>
+                    </div>
                 </aside>
             </main>
         </div>
