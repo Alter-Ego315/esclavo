@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Jersey3D from './Jersey3D';
 import JerseyPreview from './JerseyPreview';
-import { Palette, Layers, Type, Download, Share2, Sparkles, RotateCw, Check, Image, User, Grip } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Upload, Shirt, RotateCcw, Share2, Download, Eye, Layers, Type, Palette, Scissors, Binary, Grip, RotateCw, Image, ArrowLeftRight, Move } from 'lucide-react';
 import '../styles/JerseyDesigner.css';
 
 const PATTERNS_LIST = [
@@ -572,9 +572,25 @@ const JerseyDesigner = () => {
                                         className={`control-btn ${viewLocked ? 'active' : ''}`}
                                         onClick={() => setViewLocked(!viewLocked)}
                                         title={viewLocked ? "Desbloquear Vista" : "Bloquear Vista"}
-                                        style={{ padding: '10px', borderRadius: '50%', border: 'none', background: viewLocked ? '#39FF14' : 'rgba(255,255,255,0.2)', color: viewLocked ? '#000' : '#fff', cursor: 'pointer', backdropFilter: 'blur(5px)' }}
+                                        style={{ padding: '10px', borderRadius: '50%', border: 'none', background: viewLocked ? '#39FF14' : 'rgba(255,255,255,0.2)', color: viewLocked ? '#000' : '#fff', cursor: 'pointer', backdropFilter: 'blur(5px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                     >
-                                        {viewLocked ? <Grip size={24} /> : <RotateCw size={24} />}
+                                        {viewLocked ? (
+                                            /* LOCKED: Shirt + Horizontal Arrow only */
+                                            <div style={{ position: 'relative', width: '24px', height: '24px' }}>
+                                                <Shirt size={20} style={{ opacity: 0.5 }} />
+                                                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'rgba(57, 255, 20, 0.8)', borderRadius: '4px', padding: '0px' }}>
+                                                    <ArrowLeftRight size={16} strokeWidth={3} color="black" />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            /* UNLOCKED: Shirt + 4-way Arrow */
+                                            <div style={{ position: 'relative', width: '24px', height: '24px' }}>
+                                                <Shirt size={20} style={{ opacity: 0.8 }} />
+                                                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '1px' }}>
+                                                    <Move size={14} color="white" strokeWidth={2.5} />
+                                                </div>
+                                            </div>
+                                        )}
                                     </button>
                                 </div>
                             </div>
