@@ -547,20 +547,50 @@ const JerseyDesigner = () => {
             <main className="designer-layout">
                 <section className="preview-section">
                     <React.Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'white' }}>Cargando Modelo 3D...</div>}>
-                        <Jersey3D
-                            ref={jersey3DRef}
-                            colors={colors}
-                            pattern={pattern}
-                            name={name}
-                            number={number}
-                            font={font}
-                            teamLogo={teamLogo}
-                            sponsorLogo={sponsorLogo}
-                            vibrancy={vibrancy}
-                            view={view}
-                            collar={collar}
-                            sleeve={sleeve}
-                        />
+                        {show3D ? (
+                            <div className="canvas-container">
+                                <Jersey3D
+                                    ref={jersey3DRef}
+                                    colors={colors}
+                                    pattern={pattern}
+                                    name={name}
+                                    number={number}
+                                    font={font}
+                                    teamLogo={teamLogo}
+                                    sponsorLogo={sponsorLogo}
+                                    vibrancy={vibrancy}
+                                    view={view}
+                                    collar={collar}
+                                    sleeve={sleeve}
+                                    viewLocked={viewLocked} // NEW: Pass locked state
+                                />
+
+                                {/* View Controls Overlay */}
+                                <div className="view-controls" style={{ position: 'absolute', bottom: '20px', right: '20px', display: 'flex', gap: '10px', zIndex: 10 }}>
+                                    <button
+                                        className={`control-btn ${viewLocked ? 'active' : ''}`}
+                                        onClick={() => setViewLocked(!viewLocked)}
+                                        title={viewLocked ? "Desbloquear Vista" : "Bloquear Vista"}
+                                        style={{ padding: '10px', borderRadius: '50%', border: 'none', background: viewLocked ? '#39FF14' : 'rgba(255,255,255,0.2)', color: viewLocked ? '#000' : '#fff', cursor: 'pointer', backdropFilter: 'blur(5px)' }}
+                                    >
+                                        {viewLocked ? <Grip size={24} /> : <RotateCw size={24} />}
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <JerseyPreview
+                                colors={colors}
+                                pattern={pattern}
+                                name={name}
+                                number={number}
+                                font={font}
+                                teamLogo={teamLogo}
+                                sponsorLogo={sponsorLogo}
+                                vibrancy={vibrancy}
+                                collar={collar}
+                                sleeve={sleeve}
+                            />
+                        )}
                     </React.Suspense>
                 </section>
 

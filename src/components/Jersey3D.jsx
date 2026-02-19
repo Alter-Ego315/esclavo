@@ -365,8 +365,11 @@ const Jersey3D = forwardRef((props, ref) => {
                     ref={controlsRef}
                     target={[0, 0.12, 0]}
                     enablePan={false}
-                    minDistance={0.5}
-                    maxDistance={3}
+                    enableZoom={!props.viewLocked} // Disable zoom if locked
+                    minDistance={props.viewLocked ? 1.2 : 0.5}
+                    maxDistance={props.viewLocked ? 1.2 : 3}
+                    minPolarAngle={props.viewLocked ? Math.PI / 2 : 0} // Lock vertical angle
+                    maxPolarAngle={props.viewLocked ? Math.PI / 2 : Math.PI} // Lock vertical angle
                     makeDefault
                 />
             </Canvas>
