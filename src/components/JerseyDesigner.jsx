@@ -24,7 +24,6 @@ const PATTERNS_LIST = [
     { id: 'triangles', label: 'Triángulos' },
     { id: 'camo', label: 'Camuflaje' },
     { id: 'swirl', label: 'Remolino' },
-    { id: 'labyrinth', label: 'Laberinto' },
     { id: 'arches', label: 'Arcos' },
     { id: 'star', label: 'Estrella' },
     { id: 'pixels', label: 'Pixelado' },
@@ -398,8 +397,56 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                             <rect x="57" y="0" width="8" height="100" fill={color2} opacity={0.9} />
                         </g>
                     )}
+
+                    {/* NEW MISSING PATTERNS */}
+                    {pattern === 'triangles' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <path d="M0,0 L10,20 L20,0 Z M30,0 L40,20 L50,0 Z M60,0 L70,20 L80,0 Z" fill={color2} opacity={0.6} transform="scale(1.5)" />
+                        </g>
+                    )}
+                    {pattern === 'camo' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <circle cx="20" cy="20" r="15" fill={color2} opacity={0.5} />
+                            <circle cx="60" cy="50" r="20" fill={color2} opacity={0.5} />
+                            <circle cx="30" cy="80" r="18" fill={color2} opacity={0.5} />
+                            <circle cx="80" cy="20" r="12" fill={color2} opacity={0.5} />
+                        </g>
+                    )}
+                    {pattern === 'swirl' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <path d="M50,50 m-40,0 a40,40 0 1,0 80,0 a40,40 0 1,0 -80,0" fill="none" stroke={color2} strokeWidth="5" opacity={0.6} />
+                            <path d="M50,50 m-20,0 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0" fill="none" stroke={color2} strokeWidth="5" opacity={0.6} />
+                        </g>
+                    )}
+                    {pattern === 'arches' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <circle cx="50" cy="100" r="40" fill="none" stroke={color2} strokeWidth="4" opacity={0.6} />
+                            <circle cx="50" cy="100" r="25" fill="none" stroke={color2} strokeWidth="4" opacity={0.6} />
+                        </g>
+                    )}
+                    {pattern === 'star' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <polygon points="50,15 61,35 85,35 66,50 75,75 50,60 25,75 34,50 15,35 39,35" fill={color2} opacity={0.6} />
+                        </g>
+                    )}
+                    {pattern === 'pixels' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <rect x="10" y="10" width="10" height="10" fill={color2} opacity={0.7} />
+                            <rect x="30" y="30" width="10" height="10" fill={color2} opacity={0.7} />
+                            <rect x="50" y="10" width="10" height="10" fill={color2} opacity={0.7} />
+                            <rect x="70" y="50" width="10" height="10" fill={color2} opacity={0.7} />
+                            <rect x="20" y="60" width="10" height="10" fill={color2} opacity={0.7} />
+                        </g>
+                    )}
+
                     {/* Default fallback for undefined patterns in thumbnail - just show color1 base */}
-                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe'].includes(pattern) && pattern !== 'none' && (
+                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'swirl', 'arches', 'star', 'pixels'].includes(pattern) && pattern !== 'none' && (
                         <text x="50" y="60" textAnchor="middle" fill={color2} fontSize="30" fontWeight="bold">?</text>
                     )}
                 </g>
