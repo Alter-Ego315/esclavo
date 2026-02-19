@@ -669,7 +669,7 @@ const JerseyDesigner = () => {
                                     )}
 
                                     {designTab === 'patterns' && (
-                                        <div className="pattern-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '15px' }}>
+                                        <div className="pattern-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '25px', padding: '10px' }}>
                                             {PATTERNS_LIST.map(p => (
                                                 <button
                                                     key={p.id}
@@ -679,16 +679,20 @@ const JerseyDesigner = () => {
                                                         display: 'flex',
                                                         flexDirection: 'column',
                                                         alignItems: 'center',
-                                                        padding: '15px',
+                                                        padding: '20px 10px',
                                                         background: 'var(--surface)',
                                                         border: pattern === p.id ? '2px solid var(--accent)' : '1px solid var(--border)',
-                                                        borderRadius: '12px',
+                                                        borderRadius: '16px',
                                                         cursor: 'pointer',
                                                         transition: 'transform 0.2s',
+                                                        minHeight: '180px',
+                                                        justifyContent: 'space-between'
                                                     }}
                                                 >
-                                                    <PatternThumbnail pattern={p.id} color1={colors.primary} color2={colors.secondary} />
-                                                    <span style={{ marginTop: '12px', fontSize: '14px', fontWeight: '500', textAlign: 'center' }}>{p.label}</span>
+                                                    <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '15px' }}>
+                                                        <PatternThumbnail pattern={p.id} color1={colors.primary} color2={colors.secondary} />
+                                                    </div>
+                                                    <span style={{ fontSize: '13px', fontWeight: '500', textAlign: 'center', color: 'var(--text-primary)', width: '100%' }}>{p.label}</span>
                                                 </button>
                                             ))}
                                         </div>
