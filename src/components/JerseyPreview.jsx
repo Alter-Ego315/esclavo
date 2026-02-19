@@ -342,6 +342,9 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     {/* COMPANY LOGO (Green Player) - Right Chest (Wearer's Right - Image Left) */}
                     {companyLogoB64 && <image href={companyLogoB64} x="-170" y="-325" width="60" height="60" />}
 
+                    {/* TEST ELEMENT (Requested by User) */}
+                    <text x="-300" y="-325" fill="red" fontSize="60" fontWeight="bold">A</text>
+
                     {/* Team Logo - Left Chest (Wearer's Left - Image Right) */}
                     {teamLogoB64 && (
                         <image href={teamLogoB64} x="-342" y="-325" width="60" height="60" />
