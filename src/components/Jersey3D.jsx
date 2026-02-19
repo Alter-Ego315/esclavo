@@ -266,6 +266,7 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                             polygonOffsetFactor={-1}
                             depthWrite={false} // Prevent depth writing issues
                             roughness={1}
+                            map={decalTexture} // CRITICAL: Must assign map here too for custom material!
                         />
                     </Decal>
                 )}
