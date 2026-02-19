@@ -6,24 +6,28 @@ import '../styles/JerseyDesigner.css';
 
 const PATTERNS_LIST = [
     { id: 'none', label: 'Ninguno' },
+    { id: 'gradient', label: 'Degradado' },
+    { id: 'gradient-multi', label: 'Deg. Multi' },
+    { id: 'halftone-lines', label: 'Líneas' }, // Halftone gradient (lines)
+    { id: 'halftone-dots', label: 'Puntos' }, // Halftone gradient (dots)
+    { id: 'checkers', label: 'Ajedrez' },
+    { id: 'stepped-gradient', label: 'Deg. Escal.' }, // Stepped Gradient
+    { id: 'zigzag', label: 'Zig Zag' }, // Vertical Zigzag
+    { id: 'waves', label: 'Olas' },
+    { id: 'cross', label: 'Cruz' },
+    { id: 'cross-offset', label: 'Cruz Nordic' },
     { id: 'stripes', label: 'Rayas Vert.' },
     { id: 'hoops', label: 'Rayas Horiz.' },
     { id: 'diagonal', label: 'Diagonal' },
-    { id: 'checkers', label: 'Ajedrez' },
     { id: 'diamonds', label: 'Rombos' },
     { id: 'chevron', label: 'Chevron' },
-    { id: 'cross', label: 'Cruz' },
-    { id: 'zigzag', label: 'Zig Zag' },
     { id: 'triangles', label: 'Triángulos' },
     { id: 'camo', label: 'Camuflaje' },
     { id: 'swirl', label: 'Remolino' },
     { id: 'labyrinth', label: 'Laberinto' },
     { id: 'arches', label: 'Arcos' },
     { id: 'star', label: 'Estrella' },
-    { id: 'waves', label: 'Olas' },
-    { id: 'halftone', label: 'Puntos' },
     { id: 'pixels', label: 'Pixelado' },
-    { id: 'gradient', label: 'Degradado' },
     { id: 'center-stripe', label: 'Franja C.' },
     { id: 'sash', label: 'Banda' },
     { id: 'double-stripe', label: 'Doble F.' },
