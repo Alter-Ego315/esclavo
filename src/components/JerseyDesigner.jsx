@@ -254,10 +254,16 @@ const FONT_OPTIONS = [
 
 // Helper component for pattern thumbnails
 const PatternThumbnail = ({ pattern, color1, color2 }) => {
+    // T-shirt path for clipping
+    const shirtPath = "M26 6C30 6 34 8 36 11C38 14 42 18 50 18C58 18 62 14 64 11C66 8 70 6 74 6L95 24L82 38L74 30V94H26V30L18 38L5 24L26 6Z";
+
     return (
-        <div style={{ width: '100%', height: '40px', borderRadius: '4px', overflow: 'hidden', border: '1px solid #333', background: color1, position: 'relative' }}>
-            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }} preserveAspectRatio="none">
+        <div style={{ width: '100%', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))' }} preserveAspectRatio="xMidYMid meet">
                 <defs>
+                    <clipPath id="shirt-clip">
+                        <path d={shirtPath} />
+                    </clipPath>
                     <linearGradient id="gradSoftThumb" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stopColor={color1} />
                         <stop offset="100%" stopColor={color2} />
@@ -275,89 +281,131 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     </linearGradient>
                 </defs>
 
-                {/* Patterns */}
-                {pattern === 'gradient' && <rect width="100" height="100" fill="url(#gradSoftThumb)" />}
-                {pattern === 'gradient-multi' && <rect width="100" height="100" fill="url(#gradMultiThumb)" />}
-                {pattern === 'stepped-gradient' && <rect width="100" height="100" fill="url(#gradSteppedThumb)" />}
+                {/* Base Layer (Solid Color to ensure shape visibility) */}
+                <path d={shirtPath} fill={color1} />
 
-                {pattern === 'checkers' && (
-                    <g fill={color2} opacity={0.6}>
-                        <rect x="0" y="0" width="50" height="50" />
-                        <rect x="50" y="50" width="50" height="50" />
-                    </g>
-                )}
-                {pattern === 'halftone-lines' && (
-                    <g fill={color2} opacity={0.6}>
-                        {[10, 30, 50, 70, 90].map(y => <rect key={y} x="0" y={y} width="100" height="5" />)}
-                    </g>
-                )}
-                {pattern === 'halftone-dots' && (
-                    <g fill={color2} opacity={0.6}>
-                        <circle cx="25" cy="25" r="10" />
-                        <circle cx="75" cy="25" r="10" />
-                        <circle cx="25" cy="75" r="10" />
-                        <circle cx="75" cy="75" r="10" />
-                    </g>
-                )}
-                {pattern === 'zigzag' && (
-                    <path d="M0,0 L25,50 L50,0 L75,50 L100,0 L100,100 L0,100 Z" fill="none" stroke={color2} strokeWidth="5" />
-                )}
-                {pattern === 'waves' && (
-                    <path d="M0,50 Q25,25 50,50 T100,50" fill="none" stroke={color2} strokeWidth="5" />
-                )}
-                {pattern === 'cross' && (
-                    <g fill={color2} opacity={0.8}>
-                        <rect x="40" y="0" width="20" height="100" />
-                        <rect x="0" y="40" width="100" height="20" />
-                    </g>
-                )}
-                {pattern === 'cross-offset' && (
-                    <g fill={color2} opacity={0.8}>
-                        <rect x="30" y="0" width="20" height="100" />
-                        <rect x="0" y="30" width="100" height="20" />
-                    </g>
-                )}
-                {pattern === 'stripes' && (
-                    <g fill={color2} opacity={0.6}>
-                        <rect x="25" y="0" width="15" height="100" />
-                        <rect x="60" y="0" width="15" height="100" />
-                    </g>
-                )}
-                {pattern === 'hoops' && (
-                    <g fill={color2} opacity={0.6}>
-                        <rect x="0" y="25" width="100" height="15" />
-                        <rect x="0" y="60" width="100" height="15" />
-                    </g>
-                )}
-                {pattern === 'diagonal' && (
-                    <g fill={color2} opacity={0.6} transform="rotate(45 50 50)">
-                        <rect x="40" y="-50" width="20" height="200" />
-                    </g>
-                )}
-                {pattern === 'diamonds' && (
-                    <g fill={color2} opacity={0.4}>
-                        <rect x="50" y="50" width="30" height="30" transform="rotate(45 50 50)" />
-                    </g>
-                )}
-                {pattern === 'chevron' && (
-                    <path d="M0,50 L50,80 L100,50" fill="none" stroke={color2} strokeWidth="10" />
-                )}
-                {pattern === 'center-stripe' && (
-                    <rect x="40" y="0" width="20" height="100" fill={color2} opacity={0.8} />
-                )}
-                {pattern === 'sash' && (
-                    <path d="M0,0 L20,0 L100,80 L80,100 Z" fill={color2} opacity={0.8} />
-                )}
-                {pattern === 'double-stripe' && (
-                    <g fill={color2} opacity={0.8}>
-                        <rect x="35" y="0" width="10" height="100" />
-                        <rect x="55" y="0" width="10" height="100" />
-                    </g>
-                )}
-                {/* Default fallback for undefined patterns in thumbnail */}
-                {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe'].includes(pattern) && pattern !== 'none' && (
-                    <text x="50" y="60" textAnchor="middle" fill={color2} fontSize="40" fontWeight="bold">?</text>
-                )}
+                {/* Pattern Layer (Clipped to Shirt) */}
+                <g clipPath="url(#shirt-clip)">
+                    {pattern === 'gradient' && <rect width="100" height="100" fill="url(#gradSoftThumb)" />}
+                    {pattern === 'gradient-multi' && <rect width="100" height="100" fill="url(#gradMultiThumb)" />}
+                    {pattern === 'stepped-gradient' && <rect width="100" height="100" fill="url(#gradSteppedThumb)" />}
+
+                    {pattern === 'checkers' && (
+                        <g fill={color2} opacity={0.6}>
+                            <rect x="0" y="0" width="100" height="100" fill={color1} />
+                            <pattern id="checkers-thumb" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                                <rect x="0" y="0" width="10" height="10" fill={color2} />
+                                <rect x="10" y="10" width="10" height="10" fill={color2} />
+                            </pattern>
+                            <rect width="100" height="100" fill="url(#checkers-thumb)" />
+                        </g>
+                    )}
+                    {pattern === 'halftone-lines' && (
+                        <g fill={color2} opacity={0.6}>
+                            <rect width="100" height="100" fill={color1} />
+                            {[10, 20, 30, 40, 50, 60, 70, 80, 90].map(y => <rect key={y} x="0" y={y} width="100" height="4" opacity={1 - y / 100} />)}
+                        </g>
+                    )}
+                    {pattern === 'halftone-dots' && (
+                        <g fill={color2} opacity={0.6}>
+                            <rect width="100" height="100" fill={color1} />
+                            {[10, 30, 50, 70, 90].map(y => [10, 30, 50, 70, 90].map(x => (
+                                <circle key={`${x}-${y}`} cx={x} cy={y} r={4 * (1 - y / 100)} />
+                            )))}
+                        </g>
+                    )}
+                    {pattern === 'zigzag' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <path d="M0,0 L12,25 L25,0 L37,25 L50,0 L62,25 L75,0 L87,25 L100,0 V100 H0 Z" fill="none" stroke={color2} strokeWidth="2" opacity={0.8} />
+                            <path d="M0,50 L12,75 L25,50 L37,75 L50,50 L62,75 L75,50 L87,75 L100,50" fill="none" stroke={color2} strokeWidth="2" opacity={0.8} />
+                        </g>
+                    )}
+                    {pattern === 'waves' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <path d="M0,20 Q25,5 50,20 T100,20" fill="none" stroke={color2} strokeWidth="4" opacity={0.7} />
+                            <path d="M0,50 Q25,35 50,50 T100,50" fill="none" stroke={color2} strokeWidth="4" opacity={0.7} />
+                            <path d="M0,80 Q25,65 50,80 T100,80" fill="none" stroke={color2} strokeWidth="4" opacity={0.7} />
+                        </g>
+                    )}
+                    {pattern === 'cross' && (
+                        <g fill={color2} opacity={0.8}>
+                            <rect width="100" height="100" fill={color1} />
+                            <rect x="42" y="0" width="16" height="100" />
+                            <rect x="0" y="42" width="100" height="16" />
+                        </g>
+                    )}
+                    {pattern === 'cross-offset' && (
+                        <g fill={color2} opacity={0.8}>
+                            <rect width="100" height="100" fill={color1} />
+                            <rect x="35" y="0" width="16" height="100" />
+                            <rect x="0" y="35" width="100" height="16" />
+                        </g>
+                    )}
+                    {pattern === 'stripes' && (
+                        <g fill={color2} opacity={0.8}>
+                            <rect width="100" height="100" fill={color1} />
+                            <rect x="20" y="0" width="15" height="100" />
+                            <rect x="65" y="0" width="15" height="100" />
+                        </g>
+                    )}
+                    {pattern === 'hoops' && (
+                        <g fill={color2} opacity={0.8}>
+                            <rect width="100" height="100" fill={color1} />
+                            <rect x="0" y="30" width="100" height="15" />
+                            <rect x="0" y="65" width="100" height="15" />
+                        </g>
+                    )}
+                    {pattern === 'diagonal' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <path d="M-20,120 L120,-20" stroke={color2} strokeWidth="20" opacity={0.8} />
+                        </g>
+                    )}
+                    {pattern === 'diamonds' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <pattern id="diamonds-thumb" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+                                <rect x="15" y="0" width="15" height="15" transform="rotate(45 15 0)" fill={color2} opacity={0.8} />
+                            </pattern>
+                            <rect width="100" height="100" fill="url(#diamonds-thumb)" />
+                        </g>
+                    )}
+                    {pattern === 'chevron' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <path d="M0,40 L50,70 L100,40" fill="none" stroke={color2} strokeWidth="12" opacity={0.9} />
+                            <path d="M0,70 L50,100 L100,70" fill="none" stroke={color2} strokeWidth="12" opacity={0.9} />
+                        </g>
+                    )}
+                    {pattern === 'center-stripe' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <rect x="40" y="0" width="20" height="100" fill={color2} opacity={0.9} />
+                        </g>
+                    )}
+                    {pattern === 'sash' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <path d="M0,0 L25,0 L100,75 L100,100 L75,100 L0,25 Z" fill={color2} opacity={0.9} />
+                        </g>
+                    )}
+                    {pattern === 'double-stripe' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <rect x="35" y="0" width="8" height="100" fill={color2} opacity={0.9} />
+                            <rect x="57" y="0" width="8" height="100" fill={color2} opacity={0.9} />
+                        </g>
+                    )}
+                    {/* Default fallback for undefined patterns in thumbnail - just show color1 base */}
+                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe'].includes(pattern) && pattern !== 'none' && (
+                        <text x="50" y="60" textAnchor="middle" fill={color2} fontSize="30" fontWeight="bold">?</text>
+                    )}
+                </g>
+
+                {/* Collar Detail */}
+                <path d="M26 6C30 6 34 8 36 11C38 14 42 18 50 18C58 18 62 14 64 11C66 8 70 6 74 6" fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
             </svg>
         </div>
     );
@@ -621,7 +669,7 @@ const JerseyDesigner = () => {
                                     )}
 
                                     {designTab === 'patterns' && (
-                                        <div className="pattern-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                                        <div className="pattern-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '15px' }}>
                                             {PATTERNS_LIST.map(p => (
                                                 <button
                                                     key={p.id}
@@ -631,15 +679,16 @@ const JerseyDesigner = () => {
                                                         display: 'flex',
                                                         flexDirection: 'column',
                                                         alignItems: 'center',
-                                                        padding: '10px',
-                                                        background: 'var(--surface-hover)',
+                                                        padding: '15px',
+                                                        background: 'var(--surface)',
                                                         border: pattern === p.id ? '2px solid var(--accent)' : '1px solid var(--border)',
-                                                        borderRadius: '8px',
-                                                        cursor: 'pointer'
+                                                        borderRadius: '12px',
+                                                        cursor: 'pointer',
+                                                        transition: 'transform 0.2s',
                                                     }}
                                                 >
                                                     <PatternThumbnail pattern={p.id} color1={colors.primary} color2={colors.secondary} />
-                                                    <span style={{ marginTop: '8px', fontSize: '11px', textAlign: 'center' }}>{p.label}</span>
+                                                    <span style={{ marginTop: '12px', fontSize: '14px', fontWeight: '500', textAlign: 'center' }}>{p.label}</span>
                                                 </button>
                                             ))}
                                         </div>
