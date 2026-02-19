@@ -183,14 +183,14 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 {/* 7. CROSS VARIANTS */}
                 {pattern === 'cross' && (
                     <g fill={secondary}>
-                        <rect x="412" y="0" width="200" height="1024" /> {/* Vertical Center */}
+                        <rect x="152" y="0" width="200" height="1024" /> {/* Vertical Center (252 - 100) */}
                         <rect x="0" y="300" width="1024" height="200" /> {/* Horizontal */}
                     </g>
                 )}
 
                 {pattern === 'cross-offset' && (
                     <g fill={secondary}>
-                        <rect x="300" y="0" width="150" height="1024" /> {/* Offset Vertical */}
+                        <rect x="252" y="0" width="150" height="1024" /> {/* Offset Vertical (Starts at center) */}
                         <rect x="0" y="300" width="1024" height="150" /> {/* Horizontal */}
                     </g>
                 )}
@@ -207,7 +207,8 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
 
                 {pattern === 'stripes' && (
                     <g fill={secondary}>
-                        {[100, 300, 500, 700, 900].map(x => <rect key={x} x={x} y="0" width="100" height="1024" />)}
+                        {/* Centered around 252 */}
+                        {[52, 252, 452, 652, 852].map(x => <rect key={x} x={x} y="0" width="100" height="1024" />)}
                     </g>
                 )}
                 {pattern === 'hoops' && (
@@ -227,23 +228,26 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
 
                 {/* 9. RESTORED STANDARD PATTERNS */}
                 {pattern === 'center-stripe' && (
-                    <rect x="462" y="0" width="100" height="1024" fill={secondary} opacity={0.9} />
+                    <rect x="202" y="0" width="100" height="1024" fill={secondary} opacity={0.9} /> /* 252 - 50 */
                 )}
 
                 {pattern === 'sash' && (
-                    <path d="M0,0 L200,0 L1024,824 L1024,1024 Z" fill={secondary} opacity={0.9} />
+                    // Needs to cross through roughly 252,512. 
+                    // Adjusted coordinates to cross visual center
+                    <path d="M0,0 L200,0 L800,1024 L600,1024 Z" fill={secondary} opacity={0.9} />
                 )}
 
                 {pattern === 'chevron' && (
-                    <g transform="translate(0, 300)" fill={secondary} opacity={0.9}>
+                    <g transform="translate(-260, 300)" fill={secondary} opacity={0.9}>
+                        {/* Shifted by -260 to align V-point to new center */}
                         <path d="M0,0 L512,250 L1024,0 L1024,150 L512,400 L0,150 Z" />
                     </g>
                 )}
 
                 {pattern === 'double-stripe' && (
                     <g fill={secondary} opacity={0.9}>
-                        <rect x="380" y="0" width="60" height="1024" />
-                        <rect x="584" y="0" width="60" height="1024" />
+                        <rect x="182" y="0" width="60" height="1024" /> {/* 252 - 10 - 60 = 182 */}
+                        <rect x="262" y="0" width="60" height="1024" /> {/* 252 + 10 = 262 */}
                     </g>
                 )}
 
@@ -259,9 +263,10 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
 
                 {/* 10. EXTRA SHAPES */}
                 {pattern === 'triangles' && (
-                    <g fill={secondary} opacity={0.2}>
-                        {Array.from({ length: 10 }).map((_, y) => (
-                            Array.from({ length: 10 }).map((_, x) => (
+                    <g fill={secondary} opacity={0.2} transform="translate(-100, 0)">
+                        {/* Shifted pattern slightly left to align grid with center */}
+                        {Array.from({ length: 12 }).map((_, y) => (
+                            Array.from({ length: 12 }).map((_, x) => (
                                 <path key={`${x}-${y}`} d={`M${x * 100 + 50},${y * 100} L${x * 100 + 100},${y * 100 + 100} L${x * 100},${y * 100 + 100} Z`} />
                             ))
                         ))}
@@ -281,15 +286,25 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
 
                 {pattern === 'swirl' && (
                     <g stroke={secondary} strokeWidth="10" fill="none" opacity="0.4">
+                        {/* Centered at 252, 512 */}
                         {Array.from({ length: 10 }).map((_, i) => (
-                            <circle key={i} cx="512" cy="512" r={i * 60 + 20} strokeDasharray="100 50" />
+                            <circle key={i} cx="252" cy="512" r={i * 60 + 20} strokeDasharray="100 50" />
                         ))}
                     </g>
                 )}
 
                 {pattern === 'star' && (
-                    <g fill={secondary} opacity={0.2} transform="translate(512,400) scale(3)">
+                    <g fill={secondary} opacity={0.2} transform="translate(252,400) scale(3)">
                         <path d="M0,-100 L25,-30 L100,-30 L40,15 L60,90 L0,50 L-60,90 L-40,15 L-100,-30 L-25,-30 Z" />
+                    </g>
+                )}
+
+                {pattern === 'arches' && (
+                    <g fill="none" stroke={secondary} strokeWidth="15" opacity="0.6">
+                        {/* Centered at 252, bottom (1024) */}
+                        {Array.from({ length: 8 }).map((_, i) => (
+                            <circle key={i} cx="252" cy="1024" r={i * 100 + 100} />
+                        ))}
                     </g>
                 )}
 
@@ -303,18 +318,18 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 */}
                 {colors.accent && sleeve === 'raglan' && (
                     <g fill={colors.accent}>
-                        {/* Left Raglan Shoulder */}
-                        <path d="M300,0 L512,200 L512,0 Z" />
+                        {/* Left Raglan Shoulder (Adjusted for new center) */}
+                        <path d="M40,0 L252,200 L252,0 Z" />
                         {/* Right Raglan Shoulder */}
-                        <path d="M724,0 L512,200 L512,0 Z" />
+                        <path d="M464,0 L252,200 L252,0 Z" />
                         {/* Side Sleeves for raglan usually full color too */}
-                        <rect x="0" y="0" width="200" height="1024" />
-                        <rect x="824" y="0" width="200" height="1024" />
+                        <rect x="0" y="0" width="100" height="1024" />
+                        <rect x="750" y="0" width="274" height="1024" />
                     </g>
                 )}
 
                 {/* 2.6 COLLAR STYLES */}
-                <g transform="translate(512, 50)">
+                <g transform="translate(252, 50)"> {/* Centered at 252 */}
                     {/* V-NECK */}
                     {colors.accent && collar === 'v-neck' && (
                         <path d="M-50,0 L0,80 L50,0 L50,-20 L-50,-20 Z" fill={colors.accent} stroke="none" />
@@ -342,17 +357,14 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     {/* COMPANY LOGO (Green Player) - Right Chest (Wearer's Right - Image Left) */}
                     {companyLogoB64 && <image href={companyLogoB64} x="-170" y="-325" width="60" height="60" />}
 
-                    {/* TEST ELEMENT (Requested by User) */}
-                    <text x="-260" y="-325" fill="red" fontSize="60" fontWeight="bold">A</text>
-
                     {/* Team Logo - Left Chest (Wearer's Left - Image Right) */}
                     {teamLogoB64 && (
                         <image href={teamLogoB64} x="-342" y="-325" width="60" height="60" />
                     )}
 
-                    {/* Sponsor Logo - Center Chest */}
+                    {/* Sponsor Logo - Center Chest (Aligned to user center -260) */}
                     {sponsorLogoB64 && (
-                        <image href={sponsorLogoB64} x="-456" y="-200" width="400" height="150" preserveAspectRatio="xMidYMid meet" />
+                        <image href={sponsorLogoB64} x="-460" y="-200" width="400" height="150" preserveAspectRatio="xMidYMid meet" />
                     )}
                 </g>
 
