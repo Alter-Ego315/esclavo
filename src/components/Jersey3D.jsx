@@ -257,7 +257,7 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                     <Decal
                         position={[0, 0.2, -0.15]}
                         rotation={[0, Math.PI, 0]}
-                        scale={[0.3, 0.3, 1]}
+                        scale={[0.6, 0.6, 0.2]} // Reduced Z-scale (depth) to prevent bleed-through
                         map={decalTexture}
                     >
                         <meshStandardMaterial
