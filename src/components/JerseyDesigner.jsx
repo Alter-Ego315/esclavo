@@ -7,17 +7,17 @@ import '../styles/JerseyDesigner.css';
 const PATTERNS_LIST = [
     { id: 'none', label: 'Ninguno' },
     { id: 'gradient', label: 'Degradado' },
-    { id: 'gradient-multi', label: 'Deg. Multi' },
-    { id: 'halftone-lines', label: 'Líneas' }, // Halftone gradient (lines)
-    { id: 'halftone-dots', label: 'Puntos' }, // Halftone gradient (dots)
+    { id: 'gradient-multi', label: 'Degradado Multi' },
+    { id: 'halftone-lines', label: 'Líneas' },
+    { id: 'halftone-dots', label: 'Puntos' },
     { id: 'checkers', label: 'Ajedrez' },
-    { id: 'stepped-gradient', label: 'Deg. Escal.' }, // Stepped Gradient
-    { id: 'zigzag', label: 'Zig Zag' }, // Vertical Zigzag
+    { id: 'stepped-gradient', label: 'Degradado Escalonado' },
+    { id: 'zigzag', label: 'Zig Zag' },
     { id: 'waves', label: 'Olas' },
     { id: 'cross', label: 'Cruz' },
-    { id: 'cross-offset', label: 'Cruz Nordic' },
-    { id: 'stripes', label: 'Rayas Vert.' },
-    { id: 'hoops', label: 'Rayas Horiz.' },
+    { id: 'cross-offset', label: 'Cruz Nórdica' },
+    { id: 'stripes', label: 'Rayas Verticales' },
+    { id: 'hoops', label: 'Rayas Horizontales' },
     { id: 'diagonal', label: 'Diagonal' },
     { id: 'diamonds', label: 'Rombos' },
     { id: 'chevron', label: 'Chevron' },
@@ -28,9 +28,9 @@ const PATTERNS_LIST = [
     { id: 'arches', label: 'Arcos' },
     { id: 'star', label: 'Estrella' },
     { id: 'pixels', label: 'Pixelado' },
-    { id: 'center-stripe', label: 'Franja C.' },
+    { id: 'center-stripe', label: 'Franja Central' },
     { id: 'sash', label: 'Banda' },
-    { id: 'double-stripe', label: 'Doble F.' },
+    { id: 'double-stripe', label: 'Doble Franja' },
 ];
 
 const JERSEY_TEMPLATES = [
