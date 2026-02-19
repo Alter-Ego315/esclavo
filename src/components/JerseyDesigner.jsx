@@ -485,6 +485,7 @@ const JerseyDesigner = () => {
 
     const [view, setView] = useState('front');
     const [show3D, setShow3D] = useState(true);
+    const [viewLocked, setViewLocked] = useState(false);
 
     const handleColorChange = (key, value) => {
         setColors(prev => ({ ...prev, [key]: value }));
