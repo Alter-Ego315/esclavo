@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Jersey3D from './Jersey3D';
 import JerseyPreview from './JerseyPreview';
-import { ChevronRight, ChevronLeft, Upload, Shirt, RotateCcw, Share2, Download, Eye, Layers, Type, Palette, Scissors, Binary, Grip, RotateCw, Image, ArrowLeftRight, Move } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Upload, Shirt, RotateCcw, Share2, Download, Eye, Layers, Type, Palette, Scissors, Binary, Grip, RotateCw, Image, ArrowLeftRight, Move, Check } from 'lucide-react';
 import '../styles/JerseyDesigner.css';
 
 const PATTERNS_LIST = [
