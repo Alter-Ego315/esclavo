@@ -4,6 +4,27 @@ import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture, Decal 
 import * as THREE from 'three';
 import JerseyPreview from './JerseyPreview';
 
+// Helper component to adjust camera
+const CameraAdjuster = ({ viewLocked, controlsRef }) => {
+    useEffect(() => {
+        if (viewLocked && controlsRef.current) {
+            const controls = controlsRef.current;
+            const camera = controls.object;
+            const target = controls.target;
+
+            // Calculate direction from target to camera
+            const direction = new THREE.Vector3().subVectors(camera.position, target).normalize();
+
+            // Set new position at distance 0.25
+            const newPos = target.clone().add(direction.multiplyScalar(0.25));
+
+            camera.position.copy(newPos);
+            controls.update();
+        }
+    }, [viewLocked, controlsRef]);
+    return null;
+};
+
 const generateNameNumberTexture = (name, number, font, color) => {
     const canvas = document.createElement('canvas');
     const size = 1024; // High res
@@ -372,6 +393,7 @@ const Jersey3D = forwardRef((props, ref) => {
                     maxPolarAngle={Math.PI} // Allow full vertical rotation
                     makeDefault
                 />
+                <CameraAdjuster viewLocked={props.viewLocked} controlsRef={controlsRef} />
             </Canvas>
 
             {/* Hidden DOM element for centralized texture generation */}
@@ -380,7 +402,7 @@ const Jersey3D = forwardRef((props, ref) => {
                 <div className="full-view"><JerseyPreview {...props} view="full" /></div>
                 <div className="text-decal-view"><JerseyPreview {...props} view="text-decal" /></div>
             </div>
-        </div>
+        </div >
     );
 });
 
