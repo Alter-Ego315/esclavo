@@ -479,9 +479,31 @@ const JerseyDesigner = () => {
     const [sleeve, setSleeve] = useState('normal'); // normal, raglan
     const [showFontDropdown, setShowFontDropdown] = useState(false);
 
-    // Logo Position State
-    const [teamLogoPos, setTeamLogoPos] = useState({ x: 0, y: 0, scale: 1 });
-    const [sponsorLogoPos, setSponsorLogoPos] = useState({ x: 0, y: 0, scale: 1 });
+    // Logo Position State - Now 3D
+    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [0.08, 0.22, 0.14], rot: 0, scale: 0.15 });
+    const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, 0.15, 0.16], rot: 0, scale: 0.3 });
+    const [selectedLogo, setSelectedLogo] = useState(null); // 'team' or 'sponsor'
+
+    // Handlers for 3D Decal Updates
+    const handleTeamLogoUpdate = (newState) => {
+        if (!newState) {
+            setTeamLogo(null);
+            setSelectedLogo(null);
+        } else {
+            setTeamLogoPos(prev => ({ ...prev, ...newState }));
+        }
+    };
+
+    const handleSponsorLogoUpdate = (newState) => {
+        if (!newState) {
+            setSponsorLogo(null);
+            setSelectedLogo(null);
+        } else {
+            setSponsorLogoPos(prev => ({ ...prev, ...newState }));
+        }
+    };
+
+    // Navigation State
 
     // Navigation State
     const [activeTab, setActiveTab] = useState('shield'); // shield, neck, sleeves, text, design
@@ -567,9 +589,15 @@ const JerseyDesigner = () => {
                                     view={view}
                                     collar={collar}
                                     sleeve={sleeve}
-                                    viewLocked={viewLocked} // NEW: Pass locked state
-                                    teamLogoPos={teamLogoPos}
-                                    sponsorLogoPos={sponsorLogoPos}
+                                    viewLocked={viewLocked}
+
+                                    // Interactive Decal Props
+                                    teamLogoState={teamLogoPos}
+                                    sponsorLogoState={sponsorLogoPos}
+                                    onTeamLogoUpdate={handleTeamLogoUpdate}
+                                    onSponsorLogoUpdate={handleSponsorLogoUpdate}
+                                    selectedLogo={selectedLogo}
+                                    onSelectLogo={setSelectedLogo}
                                 />
 
                                 {/* View Controls Overlay */}
@@ -662,29 +690,13 @@ const JerseyDesigner = () => {
                                         <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>POSICIÓN ESCUDO</h3>
 
                                         <div className="input-item">
-                                            <label style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                Horizontal (X) <span>{teamLogoPos.x}</span>
+                                            <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                Posición y Tamaño
+                                                <span style={{ fontSize: '0.7em', color: '#39FF14' }}>INTERACTIVO</span>
                                             </label>
-                                            <input
-                                                type="range"
-                                                min="-200"
-                                                max="200"
-                                                value={teamLogoPos.x}
-                                                onChange={(e) => setTeamLogoPos(prev => ({ ...prev, x: parseInt(e.target.value) }))}
-                                            />
-                                        </div>
-
-                                        <div className="input-item">
-                                            <label style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                Vertical (Y) <span>{teamLogoPos.y}</span>
-                                            </label>
-                                            <input
-                                                type="range"
-                                                min="-200"
-                                                max="200"
-                                                value={teamLogoPos.y}
-                                                onChange={(e) => setTeamLogoPos(prev => ({ ...prev, y: parseInt(e.target.value) }))}
-                                            />
+                                            <div style={{ fontSize: '0.8rem', color: '#aaa', padding: '5px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
+                                                Haz clic en el logo sobre la camiseta para moverlo, rotarlo o cambiar su tamaño.
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -709,29 +721,13 @@ const JerseyDesigner = () => {
                                         <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>POSICIÓN PATROCINADOR</h3>
 
                                         <div className="input-item">
-                                            <label style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                Horizontal (X) <span>{sponsorLogoPos.x}</span>
+                                            <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                Posición y Tamaño
+                                                <span style={{ fontSize: '0.7em', color: '#39FF14' }}>INTERACTIVO</span>
                                             </label>
-                                            <input
-                                                type="range"
-                                                min="-300"
-                                                max="300"
-                                                value={sponsorLogoPos.x}
-                                                onChange={(e) => setSponsorLogoPos(prev => ({ ...prev, x: parseInt(e.target.value) }))}
-                                            />
-                                        </div>
-
-                                        <div className="input-item">
-                                            <label style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                Vertical (Y) <span>{sponsorLogoPos.y}</span>
-                                            </label>
-                                            <input
-                                                type="range"
-                                                min="-300"
-                                                max="300"
-                                                value={sponsorLogoPos.y}
-                                                onChange={(e) => setSponsorLogoPos(prev => ({ ...prev, y: parseInt(e.target.value) }))}
-                                            />
+                                            <div style={{ fontSize: '0.8rem', color: '#aaa', padding: '5px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
+                                                Haz clic en el logo sobre la camiseta para moverlo, rotarlo o cambiar su tamaño.
+                                            </div>
                                         </div>
                                     </div>
                                 )}

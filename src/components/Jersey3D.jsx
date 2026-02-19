@@ -163,9 +163,10 @@ const PoloCollar = ({ color }) => {
     );
 };
 
-const ShirtModel = ({ texture, decalTexture, color, collar, accentColor }) => {
-    const { nodes } = useGLTF('/shirt_baked.glb');
+const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffColor, seamColor, teamLogo, sponsorLogo, teamLogoState, sponsorLogoState, onTeamLogoUpdate, onSponsorLogoUpdate, selectedLogo, onSelectLogo }) => {
+    const { nodes, materials } = useGLTF('/shirt_baked.glb');
     const [material, setMaterial] = useState(null);
+    const meshRef = useRef();
 
     // V-Neck Alpha Map
     const vNeckAlphaMap = useMemo(() => {
@@ -178,8 +179,8 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor }) => {
             const newMat = new THREE.MeshStandardMaterial({
                 map: texture || null,
                 color: texture ? 0xffffff : new THREE.Color(color),
-                roughness: 0.7,
-                metalness: 0.0,
+                roughness: 0.5,
+                metalness: 0.1,
                 side: THREE.DoubleSide,
                 alphaMap: vNeckAlphaMap,
                 transparent: !!vNeckAlphaMap,
@@ -196,26 +197,74 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor }) => {
         }
     }, [texture, color, nodes, vNeckAlphaMap]);
 
+    // Force texture update when changed
+    useEffect(() => {
+        if (texture) {
+            texture.flipY = false;
+            texture.needsUpdate = true;
+        }
+    }, [texture]);
+
     if (!nodes.T_Shirt_male) return null;
 
     return (
         <group dispose={null}>
             <mesh
+                ref={meshRef}
                 castShadow
                 receiveShadow
                 geometry={nodes.T_Shirt_male.geometry}
-                material={material || nodes.T_Shirt_male.material}
+                material={material || materials.lambert1}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    if (onSelectLogo) onSelectLogo(null); // Deselect on background click
+                }}
             >
+                {/* 3D Decals for Interactive Logos */}
+                {/* Team Logo */}
+                {teamLogo && teamLogoState && (
+                    <MovableDecal
+                        position={teamLogoState.pos}
+                        rotation={teamLogoState.rot}
+                        scale={teamLogoState.scale}
+                        textureUrl={teamLogo}
+                        isSelected={selectedLogo === 'team'}
+                        onSelect={() => onSelectLogo && onSelectLogo('team')}
+                        onUpdate={onTeamLogoUpdate}
+                        onDelete={() => onTeamLogoUpdate && onTeamLogoUpdate(null)}
+                        meshRef={meshRef}
+                    />
+                )}
+
+                {/* Sponsor Logo */}
+                {sponsorLogo && sponsorLogoState && (
+                    <MovableDecal
+                        position={sponsorLogoState.pos}
+                        rotation={sponsorLogoState.rot}
+                        scale={sponsorLogoState.scale}
+                        textureUrl={sponsorLogo}
+                        isSelected={selectedLogo === 'sponsor'}
+                        onSelect={() => onSelectLogo && onSelectLogo('sponsor')}
+                        onUpdate={onSponsorLogoUpdate}
+                        onDelete={() => onSponsorLogoUpdate && onSponsorLogoUpdate(null)}
+                        meshRef={meshRef}
+                    />
+                )}
+
+                {/* Back Number/Name Decal */}
                 {decalTexture && (
                     <Decal
-                        debug={false}
-                        position={[0, 0.05, -0.2]}
-                        rotation={[0, 0, 0]}
-                        scale={[0.6, 0.6, 0.3]}
+                        position={[0, 0.2, -0.15]}
+                        rotation={[0, Math.PI, 0]}
+                        scale={[0.3, 0.3, 1]}
                         map={decalTexture}
-                        depthTest={true} // Changed to true to respect alpha?
-                        renderOrder={1}
-                    />
+                    >
+                        <meshStandardMaterial
+                            transparent
+                            polygonOffset
+                            polygonOffsetFactor={-1}
+                        />
+                    </Decal>
                 )}
             </mesh>
             {collar === 'polo' && <PoloCollar color={accentColor || color} />}
@@ -376,11 +425,22 @@ const Jersey3D = forwardRef((props, ref) => {
                         texture={texture}
                         decalTexture={decalTexture}
                         color={props.colors.primary}
-                        collar={props.collar}
-                        accentColor={props.colors.accent}
+                        collar={props.collar} // Pass collar type (polo, v-neck)
+                        accentColor={props.colors.accent} // Pass accent color for collar
+                        cuffColor={props.colors.secondary}
+                        seamColor={props.colors.secondary}
+
+                        // New Props for Interactive Decals
+                        teamLogo={props.teamLogo}
+                        sponsorLogo={props.sponsorLogo}
+                        teamLogoState={props.teamLogoState}
+                        sponsorLogoState={props.sponsorLogoState}
+                        onTeamLogoUpdate={props.onTeamLogoUpdate}
+                        onSponsorLogoUpdate={props.onSponsorLogoUpdate}
+                        selectedLogo={props.selectedLogo}
+                        onSelectLogo={props.onSelectLogo}
                     />
                 </group>
-
                 {/* Controls */}
                 <OrbitControls
                     ref={controlsRef}

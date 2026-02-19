@@ -1,10 +1,6 @@
 import React from 'react';
 
-const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, brandLogo, font = 'Orbitron', view = 'full', vibrancy = 50, sleeve, collar, teamLogoPos, sponsorLogoPos }) => {
-    // Default positions if undefined
-    const finalTeamLogoPos = teamLogoPos || { x: 0, y: 0 };
-    const finalSponsorLogoPos = sponsorLogoPos || { x: 0, y: 0 };
-
+const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, brandLogo, font = 'Orbitron', view = 'full', vibrancy = 50, sleeve, collar }) => {
     const { primary, secondary, accent } = colors;
 
     // Based on the standard shirt_baked.glb UV mapping:
@@ -354,35 +350,13 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     )}
                 </g>
 
-                {/* 3. FRONT CHEST AREA (Approximation for standard UVs) */}
-                {/* The front is typically the center ~40-60% width of the texture */}
+                {/* 3. FRONT CHEST AREA */}
+                {/* Logos are now handled by 3D Decals in Jersey3D.jsx for better quality and interactivity. */}
+                {/* We keep this group structure in case we want to add baked-in elements later. */}
                 <g transform="translate(512, 512)">
 
                     {/* COMPANY LOGO (Green Player) - Right Chest (Wearer's Right - Image Left) */}
                     {companyLogoB64 && <image href={companyLogoB64} x="-170" y="-325" width="60" height="60" />}
-
-                    {/* Team Logo - Left Chest (Wearer's Left - Image Right) */}
-                    {teamLogoB64 && (
-                        <image
-                            href={teamLogoB64}
-                            x={-342 + finalTeamLogoPos.x}
-                            y={-325 + finalTeamLogoPos.y}
-                            width="60"
-                            height="60"
-                        />
-                    )}
-
-                    {/* Sponsor Logo - Center Chest (Aligned to user center -260) */}
-                    {sponsorLogoB64 && (
-                        <image
-                            href={sponsorLogoB64}
-                            x={-460 + finalSponsorLogoPos.x}
-                            y={-200 + finalSponsorLogoPos.y}
-                            width="400"
-                            height="150"
-                            preserveAspectRatio="xMidYMid meet"
-                        />
-                    )}
                 </g>
 
                 {/* 4. BACK AREA */}
