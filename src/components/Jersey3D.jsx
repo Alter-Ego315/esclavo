@@ -366,8 +366,8 @@ const Jersey3D = forwardRef((props, ref) => {
                     target={[0, 0.12, 0]}
                     enablePan={false}
                     enableZoom={!props.viewLocked} // Disable zoom if locked
-                    minDistance={props.viewLocked ? 0.45 : 0.5}
-                    maxDistance={props.viewLocked ? 0.45 : 3}
+                    minDistance={props.viewLocked ? 0.35 : 0.5}
+                    maxDistance={props.viewLocked ? 0.35 : 3}
                     minPolarAngle={0} // Allow full vertical rotation even when locked, per user request to "remove limits"
                     maxPolarAngle={Math.PI} // Allow full vertical rotation
                     makeDefault
