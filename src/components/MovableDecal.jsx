@@ -68,6 +68,7 @@ const MovableDecal = ({
     return (
         <group>
             <Decal
+                mesh={meshRef} // Explicitly pass the parent mesh
                 ref={decalRef}
                 position={position}
                 rotation={[0, 0, rotation]} // Z-axis rotation for 2D feel on surface
