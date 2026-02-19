@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture, Decal } from '@react-three/drei';
 import * as THREE from 'three';
 import JerseyPreview from './JerseyPreview';
+import MovableDecal from './MovableDecal'; // Import the new component
 
 // Helper component to adjust camera
 const CameraAdjuster = ({ viewLocked, controlsRef }) => {
