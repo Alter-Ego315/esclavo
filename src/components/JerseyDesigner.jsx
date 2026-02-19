@@ -479,6 +479,10 @@ const JerseyDesigner = () => {
     const [sleeve, setSleeve] = useState('normal'); // normal, raglan
     const [showFontDropdown, setShowFontDropdown] = useState(false);
 
+    // Logo Position State
+    const [teamLogoPos, setTeamLogoPos] = useState({ x: 0, y: 0, scale: 1 });
+    const [sponsorLogoPos, setSponsorLogoPos] = useState({ x: 0, y: 0, scale: 1 });
+
     // Navigation State
     const [activeTab, setActiveTab] = useState('shield'); // shield, neck, sleeves, text, design
     const [designTab, setDesignTab] = useState('templates'); // templates, colors, patterns
@@ -564,6 +568,8 @@ const JerseyDesigner = () => {
                                     collar={collar}
                                     sleeve={sleeve}
                                     viewLocked={viewLocked} // NEW: Pass locked state
+                                    teamLogoPos={teamLogoPos}
+                                    sponsorLogoPos={sponsorLogoPos}
                                 />
 
                                 {/* View Controls Overlay */}
@@ -637,7 +643,10 @@ const JerseyDesigner = () => {
                                 <div className="upload-item" style={{ marginTop: '20px' }}>
                                     <div className="upload-zone">
                                         {teamLogo ? (
-                                            <img src={teamLogo} className="upload-preview" alt="team logo" />
+                                            <div className="upload-preview-container" style={{ marginTop: '10px', textAlign: 'center' }}>
+                                                <img src={teamLogo} alt="Team Logo" style={{ height: '60px', objectFit: 'contain' }} />
+                                                <button onClick={() => setTeamLogo(null)} style={{ display: 'block', margin: '5px auto', fontSize: '10px', color: 'red', background: 'none', border: 'none', cursor: 'pointer' }}>Eliminar</button>
+                                            </div>
                                         ) : (
                                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.5 }}>
                                             </div>
@@ -646,14 +655,86 @@ const JerseyDesigner = () => {
                                         <span>Click para Subir Imagen</span>
                                     </div>
                                 </div>
+
+                                {/* Team Logo Controls */}
+                                {teamLogo && (
+                                    <div className="control-group" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
+                                        <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>POSICIÓN ESCUDO</h3>
+
+                                        <div className="input-item">
+                                            <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                Horizontal (X) <span>{teamLogoPos.x}</span>
+                                            </label>
+                                            <input
+                                                type="range"
+                                                min="-200"
+                                                max="200"
+                                                value={teamLogoPos.x}
+                                                onChange={(e) => setTeamLogoPos(prev => ({ ...prev, x: parseInt(e.target.value) }))}
+                                            />
+                                        </div>
+
+                                        <div className="input-item">
+                                            <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                Vertical (Y) <span>{teamLogoPos.y}</span>
+                                            </label>
+                                            <input
+                                                type="range"
+                                                min="-200"
+                                                max="200"
+                                                value={teamLogoPos.y}
+                                                onChange={(e) => setTeamLogoPos(prev => ({ ...prev, y: parseInt(e.target.value) }))}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
                                 <div className="upload-item" style={{ marginTop: '20px' }}>
                                     <label>Patrocinador (Opcional)</label>
                                     <div className="upload-zone">
-                                        {sponsorLogo && <img src={sponsorLogo} className="upload-preview" alt="sponsor logo" />}
-                                        <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'sponsor')} />
-                                        <span>Click para Subir</span>
+                                        {sponsorLogo ? (
+                                            <div className="upload-preview-container" style={{ marginTop: '10px', textAlign: 'center' }}>
+                                                <img src={sponsorLogo} alt="Sponsor Logo" style={{ height: '40px', objectFit: 'contain' }} />
+                                                <button onClick={() => setSponsorLogo(null)} style={{ display: 'block', margin: '5px auto', fontSize: '10px', color: 'red', background: 'none', border: 'none', cursor: 'pointer' }}>Eliminar</button>
+                                            </div>
+                                        ) : (
+                                            <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'sponsor')} />
+                                        )}
+                                        {!sponsorLogo && <span>Click para Subir</span>}
                                     </div>
                                 </div>
+
+                                {/* Sponsor Logo Controls */}
+                                {sponsorLogo && (
+                                    <div className="control-group" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
+                                        <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>POSICIÓN PATROCINADOR</h3>
+
+                                        <div className="input-item">
+                                            <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                Horizontal (X) <span>{sponsorLogoPos.x}</span>
+                                            </label>
+                                            <input
+                                                type="range"
+                                                min="-300"
+                                                max="300"
+                                                value={sponsorLogoPos.x}
+                                                onChange={(e) => setSponsorLogoPos(prev => ({ ...prev, x: parseInt(e.target.value) }))}
+                                            />
+                                        </div>
+
+                                        <div className="input-item">
+                                            <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                Vertical (Y) <span>{sponsorLogoPos.y}</span>
+                                            </label>
+                                            <input
+                                                type="range"
+                                                min="-300"
+                                                max="300"
+                                                value={sponsorLogoPos.y}
+                                                onChange={(e) => setSponsorLogoPos(prev => ({ ...prev, y: parseInt(e.target.value) }))}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         )}
 

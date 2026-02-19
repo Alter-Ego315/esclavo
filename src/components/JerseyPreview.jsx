@@ -1,6 +1,41 @@
 import React from 'react';
 
-const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, brandLogo, font = 'Orbitron', view = 'full', vibrancy = 50, sleeve, collar }) => {
+const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, brandLogo, font = 'Orbitron', view = 'full', vibrancy = 50, sleeve, collar, teamLogoPos, sponsorLogoPos }) => {
+    teamLogoPos = teamLogoPos || { x: 0, y: 0 };
+    sponsorLogoPos = sponsorLogoPos || { x: 0, y: 0 };
+    // ... (start of component)
+
+    // ... (inside SVG)
+    {/* 3. FRONT CHEST AREA (Approximation for standard UVs) */ }
+    {/* The front is typically the center ~40-60% width of the texture */ }
+    <g transform="translate(512, 512)">
+
+        {/* COMPANY LOGO (Green Player) - Right Chest (Wearer's Right - Image Left) */}
+        {companyLogoB64 && <image href={companyLogoB64} x="-170" y="-325" width="60" height="60" />}
+
+        {/* Team Logo - Left Chest (Wearer's Left - Image Right) */}
+        {teamLogoB64 && (
+            <image
+                href={teamLogoB64}
+                x={-342 + teamLogoPos.x}
+                y={-325 + teamLogoPos.y}
+                width="60"
+                height="60"
+            />
+        )}
+
+        {/* Sponsor Logo - Center Chest (Aligned to user center -260) */}
+        {sponsorLogoB64 && (
+            <image
+                href={sponsorLogoB64}
+                x={-460 + sponsorLogoPos.x}
+                y={-200 + sponsorLogoPos.y}
+                width="400"
+                height="150"
+                preserveAspectRatio="xMidYMid meet"
+            />
+        )}
+    </g>
     const { primary, secondary, accent } = colors;
 
     // Based on the standard shirt_baked.glb UV mapping:
@@ -61,11 +96,11 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
     const sponsorLogoB64 = useBase64Image(sponsorLogo);
 
     return (
-        <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '4096px', height: '4096px' }}>
+        <div className={`jersey - preview - container ${view} -view`} style={{ background: 'transparent', width: '4096px', height: '4096px' }}>
             <svg viewBox="0 0 1024 1024" className="jersey-svg" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%', shapeRendering: 'geometricPrecision' }}>
                 <defs>
                     <style type="text/css">
-                        {`@import url('https://fonts.googleapis.com/css2?family=Anton&family=Black+Ops+One&family=Bungee+Inline&family=Caveat:wght@700&family=Chakra+Petch:wght@700&family=Cinzel:wght@400;700&family=Creepster&family=Exo:wght@400;700&family=Faster+One&family=Fontdiner+Swanky&family=Goldman:wght@700&family=Inter:wght@400;700;900&family=Lato:wght@400;700;900&family=Maven+Pro:wght@700;900&family=Monoton&family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;700&family=Orbitron:wght@700;900&family=Oswald:wght@500;700&family=Passion+One:wght@400;700&family=Permanent+Marker&family=Playfair+Display:wght@400;700&family=Press+Start+2P&family=Roboto+Condensed:wght@700&family=Rubik+Glitch&family=Saira+Condensed:wght@700;900&family=Saira+Stencil+One&family=Teko:wght@700&family=Turret+Road:wght@800&family=UnifrakturMaguntia&display=swap');`}
+                        {`@import url('https://fonts.googleapis.com/css2?family=Anton&family=Black+Ops+One&family=Bungee+Inline&family=Caveat:wght@700&family=Chakra+Petch:wght@700&family=Cinzel:wght@400;700&family=Creepster&family=Exo:wght@400;700&family=Faster+One&family=Fontdiner+Swanky&family=Goldman:wght@700&family=Inter:wght@400;700;900&family=Lato:wght@400;700;900&family=Maven+Pro:wght@700;900&family=Monoton&family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;700&family=Orbitron:wght@700;900&family=Oswald:wght@500;700&family=Passion+One:wght@400;700&family=Permanent+Marker&family=Playfair+Display:wght@400;700&family=Press+Start+2P&family=Roboto+Condensed:wght@700&family=Rubik+Glitch&family=Saira+Condensed:wght@700;900&family=Saira+Stencil+One&family=Teko:wght@700&family=Turret+Road:wght@800&family=UnifrakturMaguntia&display=swap'); `}
                     </style>
                     <linearGradient id="jerseyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" style={{ stopColor: primary, stopOpacity: 1 }} />
@@ -145,7 +180,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     <g fill={secondary} mask="url(#halftoneFade)">
                         {Array.from({ length: 40 }).map((_, y) => (
                             Array.from({ length: 40 }).map((_, x) => (
-                                <circle key={`${x}-${y}`} cx={x * 25 + 12} cy={y * 25 + 12} r="8" />
+                                <circle key={`${x} -${y} `} cx={x * 25 + 12} cy={y * 25 + 12} r="8" />
                             ))
                         ))}
                     </g>
@@ -156,7 +191,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     <g fill={secondary}>
                         {Array.from({ length: 8 }).map((_, y) => (
                             Array.from({ length: 8 }).map((_, x) => (
-                                (x + y) % 2 === 1 ? <rect key={`${x}-${y}`} x={x * 128} y={y * 128} width="128" height="128" /> : null
+                                (x + y) % 2 === 1 ? <rect key={`${x} -${y} `} x={x * 128} y={y * 128} width="128" height="128" /> : null
                             ))
                         ))}
                     </g>
@@ -166,7 +201,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 {pattern === 'zigzag' && (
                     <g stroke={secondary} strokeWidth="20" fill="none">
                         {Array.from({ length: 20 }).map((_, i) => (
-                            <path key={i} d={`M${i * 100},0 L${i * 100 + 50},50 L${i * 100},100 L${i * 100 - 50},150 L${i * 100},200 L${i * 100 + 50},250 L${i * 100},300 L${i * 100 - 50},350 L${i * 100},400 L${i * 100 + 50},450 L${i * 100},500 L${i * 100 - 50},550 L${i * 100},600 L${i * 100 + 50},650 L${i * 100},700 L${i * 100 - 50},750 L${i * 100},800 L${i * 100 + 50},850 L${i * 100},900 L${i * 100 - 50},950 L${i * 100},1000`} transform="translate(-100,0)" />
+                            <path key={i} d={`M${i * 100}, 0 L${i * 100 + 50}, 50 L${i * 100}, 100 L${i * 100 - 50}, 150 L${i * 100}, 200 L${i * 100 + 50}, 250 L${i * 100}, 300 L${i * 100 - 50}, 350 L${i * 100}, 400 L${i * 100 + 50}, 450 L${i * 100}, 500 L${i * 100 - 50}, 550 L${i * 100}, 600 L${i * 100 + 50}, 650 L${i * 100}, 700 L${i * 100 - 50}, 750 L${i * 100}, 800 L${i * 100 + 50}, 850 L${i * 100}, 900 L${i * 100 - 50}, 950 L${i * 100}, 1000`} transform="translate(-100,0)" />
                         ))}
                     </g>
                 )}
@@ -175,7 +210,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                 {pattern === 'waves' && (
                     <g stroke={secondary} strokeWidth="15" fill="none" opacity="0.6">
                         {Array.from({ length: 20 }).map((_, i) => (
-                            <path key={i} d={`M0,${i * 60} Q256,${i * 60 - 50} 512,${i * 60} T1024,${i * 60}`} />
+                            <path key={i} d={`M0, ${i * 60} Q256, ${i * 60 - 50} 512, ${i * 60} T1024, ${i * 60} `} />
                         ))}
                     </g>
                 )}
@@ -255,7 +290,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     <g fill={secondary} opacity={0.3}>
                         {Array.from({ length: 32 }).map((_, y) => (
                             Array.from({ length: 32 }).map((_, x) => (
-                                Math.random() > 0.7 ? <rect key={`${x}-${y}`} x={x * 32} y={y * 32} width="32" height="32" /> : null
+                                Math.random() > 0.7 ? <rect key={`${x} -${y} `} x={x * 32} y={y * 32} width="32" height="32" /> : null
                             ))
                         ))}
                     </g>
@@ -267,7 +302,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                         {/* Shifted pattern slightly left to align grid with center */}
                         {Array.from({ length: 12 }).map((_, y) => (
                             Array.from({ length: 12 }).map((_, x) => (
-                                <path key={`${x}-${y}`} d={`M${x * 100 + 50},${y * 100} L${x * 100 + 100},${y * 100 + 100} L${x * 100},${y * 100 + 100} Z`} />
+                                <path key={`${x} -${y} `} d={`M${x * 100 + 50},${y * 100} L${x * 100 + 100},${y * 100 + 100} L${x * 100},${y * 100 + 100} Z`} />
                             ))
                         ))}
                     </g>
@@ -359,12 +394,25 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
 
                     {/* Team Logo - Left Chest (Wearer's Left - Image Right) */}
                     {teamLogoB64 && (
-                        <image href={teamLogoB64} x="-342" y="-325" width="60" height="60" />
+                        <image
+                            href={teamLogoB64}
+                            x={-342 + (teamLogoPos?.x || 0)}
+                            y={-325 + (teamLogoPos?.y || 0)}
+                            width="60"
+                            height="60"
+                        />
                     )}
 
                     {/* Sponsor Logo - Center Chest (Aligned to user center -260) */}
                     {sponsorLogoB64 && (
-                        <image href={sponsorLogoB64} x="-460" y="-200" width="400" height="150" preserveAspectRatio="xMidYMid meet" />
+                        <image
+                            href={sponsorLogoB64}
+                            x={-460 + (sponsorLogoPos?.x || 0)}
+                            y={-200 + (sponsorLogoPos?.y || 0)}
+                            width="400"
+                            height="150"
+                            preserveAspectRatio="xMidYMid meet"
+                        />
                     )}
                 </g>
 
