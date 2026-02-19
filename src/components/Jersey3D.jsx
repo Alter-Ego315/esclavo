@@ -371,7 +371,7 @@ const Jersey3D = forwardRef((props, ref) => {
                 <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow />
 
                 {/* Raised model to center it - Positioned to sit nicely above the bottom button */}
-                <group position={[0, 0.12, 0]}>
+                <group position={[0, 0.22, 0]}> {/* Moved UP from 0.12 to 0.22 */}
                     <ShirtModel
                         texture={texture}
                         decalTexture={decalTexture}
