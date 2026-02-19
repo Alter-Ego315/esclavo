@@ -257,13 +257,15 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                     <Decal
                         position={[0, 0.2, -0.15]}
                         rotation={[0, Math.PI, 0]}
-                        scale={[0.6, 0.6, 0.2]} // Reduced Z-scale (depth) to prevent bleed-through
+                        scale={[0.6, 0.6, 0.15]} // Further reduced depth
                         map={decalTexture}
                     >
                         <meshStandardMaterial
                             transparent
                             polygonOffset
                             polygonOffsetFactor={-1}
+                            depthWrite={false} // Prevent depth writing issues
+                            roughness={1}
                         />
                     </Decal>
                 )}
