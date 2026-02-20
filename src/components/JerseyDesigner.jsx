@@ -602,25 +602,7 @@ const JerseyDesigner = () => {
                                     onSelectLogo={setSelectedLogo}
                                 />
 
-                                {viewLocked && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: '20px',
-                                        left: '50%',
-                                        transform: 'translateX(-50%)',
-                                        background: 'rgba(57, 255, 20, 0.9)',
-                                        color: '#000',
-                                        padding: '5px 15px',
-                                        borderRadius: '20px',
-                                        fontSize: '12px',
-                                        fontWeight: 'Bold',
-                                        zIndex: 100,
-                                        pointerEvents: 'none',
-                                        boxShadow: '0 0 15px rgba(57, 255, 20, 0.5)'
-                                    }}>
-                                        VISTA BLOQUEADA ACTIVADA
-                                    </div>
-                                )}
+                                {/* View Controls Overlay */}
                                 <div className="view-controls" style={{ position: 'absolute', bottom: '20px', right: '20px', display: 'flex', gap: '10px', zIndex: 10 }}>
                                     <button
                                         className={`control-btn ${viewLocked ? 'active' : ''}`}
@@ -718,6 +700,31 @@ const JerseyDesigner = () => {
                                                 Haz clic en el logo sobre la camiseta para moverlo, rotarlo o cambiar su tamaño.
                                             </div>
                                         </div>
+
+                                        <button
+                                            onClick={() => setTeamLogo(null)}
+                                            className="delete-item-btn"
+                                            style={{
+                                                marginTop: '15px',
+                                                width: '100%',
+                                                padding: '10px',
+                                                background: 'rgba(255, 68, 68, 0.1)',
+                                                border: '1px solid rgba(255, 68, 68, 0.3)',
+                                                borderRadius: '8px',
+                                                color: '#ff4444',
+                                                cursor: 'pointer',
+                                                fontSize: '12px',
+                                                fontWeight: 'Bold',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: '8px',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                        >
+                                            <Trash2 size={16} />
+                                            Eliminar Escudo
+                                        </button>
                                     </div>
                                 )}
                                 <div className="upload-item" style={{ marginTop: '20px' }}>
@@ -749,6 +756,31 @@ const JerseyDesigner = () => {
                                                 Haz clic en el logo sobre la camiseta para moverlo, rotarlo o cambiar su tamaño.
                                             </div>
                                         </div>
+
+                                        <button
+                                            onClick={() => setSponsorLogo(null)}
+                                            className="delete-item-btn"
+                                            style={{
+                                                marginTop: '15px',
+                                                width: '100%',
+                                                padding: '10px',
+                                                background: 'rgba(255, 68, 68, 0.1)',
+                                                border: '1px solid rgba(255, 68, 68, 0.3)',
+                                                borderRadius: '8px',
+                                                color: '#ff4444',
+                                                cursor: 'pointer',
+                                                fontSize: '12px',
+                                                fontWeight: 'Bold',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: '8px',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                        >
+                                            <Trash2 size={16} />
+                                            Eliminar Patrocinador
+                                        </button>
                                     </div>
                                 )}
                             </div>

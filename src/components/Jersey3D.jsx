@@ -20,7 +20,6 @@ const CameraAdjuster = ({ viewLocked, controlsRef }) => {
             // Distance increased to 1.1 for less zoom
             const newPos = target.clone().add(direction.multiplyScalar(1.1));
             camera.position.copy(newPos);
-            console.log("Locked View Camera Adjusted. Target:", target, "Distance:", 1.1);
             controls.update();
         }
     }, [viewLocked, controlsRef]);
