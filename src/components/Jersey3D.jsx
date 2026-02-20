@@ -12,8 +12,13 @@ const CameraAdjuster = ({ viewLocked, controlsRef }) => {
             const controls = controlsRef.current;
             const camera = controls.object;
             const target = controls.target;
+
+            // Set specific target for locked view (higher Y = shirt lower)
+            target.set(0, 0.25, 0);
+
             const direction = new THREE.Vector3().subVectors(camera.position, target).normalize();
-            const newPos = target.clone().add(direction.multiplyScalar(0.25));
+            // Distance increased to 1.1 for less zoom
+            const newPos = target.clone().add(direction.multiplyScalar(1.1));
             camera.position.copy(newPos);
             controls.update();
         }
@@ -351,12 +356,12 @@ const Jersey3D = forwardRef((props, ref) => {
                 </group>
                 <OrbitControls
                     ref={controlsRef}
-                    target={[0, 0.12, 0]}
+                    target={[0, props.viewLocked ? 0.25 : 0.12, 0]}
                     enablePan={false}
                     enabled={!isDraggingAny}
                     enableZoom={!props.viewLocked}
-                    minDistance={props.viewLocked ? 0.85 : 0.5}
-                    maxDistance={props.viewLocked ? 0.85 : 3}
+                    minDistance={props.viewLocked ? 1.1 : 0.5}
+                    maxDistance={props.viewLocked ? 1.1 : 3}
                     minPolarAngle={props.viewLocked ? Math.PI / 2 : 0}
                     maxPolarAngle={props.viewLocked ? Math.PI / 2 : Math.PI}
                     makeDefault
