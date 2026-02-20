@@ -29,7 +29,7 @@ const CameraAdjuster = ({ viewLocked, controlsRef }) => {
 const generateNameNumberTexture = (name, number, font, color) => {
     const canvas = document.createElement('canvas');
     const width = 1024;
-    const height = 1280; // Taller canvas so name + number fit well
+    const height = 1536; // Tall canvas: name in top 30%, number in bottom 70%
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
@@ -37,26 +37,28 @@ const generateNameNumberTexture = (name, number, font, color) => {
     // Clear to transparent
     ctx.clearRect(0, 0, width, height);
 
-    // DO NOT mirror — Three.js Decal renders back of shirt correctly
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = color;
 
-    // -- NAME (top third) --
-    let fontSizeName = 110;
-    if (name && name.length > 6) fontSizeName = 90;
-    if (name && name.length > 8) fontSizeName = 75;
-    if (name && name.length > 10) fontSizeName = 60;
+    // -- NAME (upper area) --
+    const displayName = String(name || '');
+    if (displayName) {
+        let fontSizeName = 130;
+        if (displayName.length > 6) fontSizeName = 110;
+        if (displayName.length > 8) fontSizeName = 90;
+        if (displayName.length > 10) fontSizeName = 75;
 
-    if (name) {
         ctx.font = `900 ${fontSizeName}px "${font}"`;
-        ctx.fillText(name, width / 2, height * 0.2); // top 20% of canvas
+        ctx.fillText(displayName, width / 2, height * 0.22); // 22% from top
     }
 
-    // -- NUMBER (center) --
-    ctx.font = `900 420px "${font}"`;
+    // -- NUMBER (center-lower area) --
     const displayNumber = String(number || '');
-    ctx.fillText(displayNumber, width / 2, height * 0.6); // center-ish
+    if (displayNumber) {
+        ctx.font = `900 500px "${font}"`;
+        ctx.fillText(displayNumber, width / 2, height * 0.62); // 62% from top
+    }
 
     const tex = new THREE.CanvasTexture(canvas);
     tex.colorSpace = THREE.SRGBColorSpace;
@@ -254,9 +256,9 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                 {/* Back Number/Name Decal */}
                 {decalTexture && (
                     <Decal
-                        position={[0, 0.05, -0.15]} // Moved down from 0.2 to center on back
+                        position={[0, 0.12, -0.15]} // Center on shirt back vertically
                         rotation={[0, Math.PI, 0]}
-                        scale={[0.6, 0.75, 0.15]} // Slightly taller to match new canvas ratio
+                        scale={[0.6, 0.85, 0.15]} // Taller scale to show name + number
                         map={decalTexture}
                     >
                         <meshStandardMaterial
