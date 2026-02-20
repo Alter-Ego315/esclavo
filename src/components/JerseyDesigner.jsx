@@ -602,7 +602,25 @@ const JerseyDesigner = () => {
                                     onSelectLogo={setSelectedLogo}
                                 />
 
-                                {/* View Controls Overlay */}
+                                {viewLocked && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '20px',
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        background: 'rgba(57, 255, 20, 0.9)',
+                                        color: '#000',
+                                        padding: '5px 15px',
+                                        borderRadius: '20px',
+                                        fontSize: '12px',
+                                        fontWeight: 'Bold',
+                                        zIndex: 100,
+                                        pointerEvents: 'none',
+                                        boxShadow: '0 0 15px rgba(57, 255, 20, 0.5)'
+                                    }}>
+                                        VISTA BLOQUEADA ACTIVADA
+                                    </div>
+                                )}
                                 <div className="view-controls" style={{ position: 'absolute', bottom: '20px', right: '20px', display: 'flex', gap: '10px', zIndex: 10 }}>
                                     <button
                                         className={`control-btn ${viewLocked ? 'active' : ''}`}
