@@ -40,9 +40,9 @@ const generateNameNumberTexture = (name, number, font, color) => {
 
     const displayName = String(name || '').toUpperCase();
     if (displayName) {
-        let fontSizeName = 150;
-        if (displayName.length > 6) fontSizeName = 130;
-        if (displayName.length > 8) fontSizeName = 110;
+        let fontSizeName = 180;
+        if (displayName.length > 6) fontSizeName = 160;
+        if (displayName.length > 8) fontSizeName = 140;
         ctx.font = `900 ${fontSizeName}px "${font}"`;
         ctx.strokeText(displayName, width / 2, height * 0.30);
         ctx.fillText(displayName, width / 2, height * 0.30);

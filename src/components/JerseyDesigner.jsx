@@ -481,7 +481,8 @@ const JerseyDesigner = () => {
 
     // Logo Position State - Now 3D
     // Crest (Escudo): Viewer's Right (wearer's left), high on chest
-    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [0.1, 0.18, 0.15], rot: 0, scale: 0.1 });
+    // Maps to SVG y=-325 x=300 approx
+    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [-0.1, 0.18, 0.15], rot: 0, scale: 0.08 });
     // Sponsor: Center
     const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, 0.05, 0.16], rot: 0, scale: 0.25 });
     const [selectedLogo, setSelectedLogo] = useState(null); // 'team' or 'sponsor'
