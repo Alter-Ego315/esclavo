@@ -675,7 +675,6 @@ const JerseyDesigner = () => {
                                         {teamLogo ? (
                                             <div className="upload-preview-container" style={{ marginTop: '10px', textAlign: 'center' }}>
                                                 <img src={teamLogo} alt="Team Logo" style={{ height: '60px', objectFit: 'contain' }} />
-                                                <button onClick={() => setTeamLogo(null)} style={{ display: 'block', margin: '5px auto', fontSize: '10px', color: 'red', background: 'none', border: 'none', cursor: 'pointer' }}>Eliminar</button>
                                             </div>
                                         ) : (
                                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.5 }}>
@@ -733,7 +732,6 @@ const JerseyDesigner = () => {
                                         {sponsorLogo ? (
                                             <div className="upload-preview-container" style={{ marginTop: '10px', textAlign: 'center' }}>
                                                 <img src={sponsorLogo} alt="Sponsor Logo" style={{ height: '40px', objectFit: 'contain' }} />
-                                                <button onClick={() => setSponsorLogo(null)} style={{ display: 'block', margin: '5px auto', fontSize: '10px', color: 'red', background: 'none', border: 'none', cursor: 'pointer' }}>Eliminar</button>
                                             </div>
                                         ) : (
                                             <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'sponsor')} />
