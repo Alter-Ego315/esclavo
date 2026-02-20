@@ -47,26 +47,26 @@ const generateNameNumberTexture = (name, number, font, color) => {
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 2; // Thinner stroke
 
-    // -- NAME (top area, but moved down to be safe) --
+    // -- NAME (upper area) --
     const displayName = String(name || '').toUpperCase();
     if (displayName) {
-        let fontSizeName = 100; // Smaller base size
-        if (displayName.length > 6) fontSizeName = 85;
-        if (displayName.length > 8) fontSizeName = 70;
+        let fontSizeName = 120; // Increased from 100
+        if (displayName.length > 6) fontSizeName = 100;
+        if (displayName.length > 8) fontSizeName = 85;
 
         ctx.font = `900 ${fontSizeName}px "${font}"`;
-        // Positioned at 35% of height
-        ctx.strokeText(displayName, width / 2, height * 0.35);
-        ctx.fillText(displayName, width / 2, height * 0.35);
+        // Positioned at 30% of height (slightly higher)
+        ctx.strokeText(displayName, width / 2, height * 0.30);
+        ctx.fillText(displayName, width / 2, height * 0.30);
     }
 
     // -- NUMBER (middle area) --
     const displayNumber = String(number || '');
     if (displayNumber) {
-        ctx.font = `900 380px "${font}"`; // Smaller number
-        // Constrain width to 550px for "numero mas pequeño a lo ancho"
-        ctx.strokeText(displayNumber, width / 2, height * 0.65, 550);
-        ctx.fillText(displayNumber, width / 2, height * 0.65, 550);
+        ctx.font = `900 440px "${font}"`; // Increased from 380px
+        // Constrain width to 580px
+        ctx.strokeText(displayNumber, width / 2, height * 0.58, 580); // Raised from 0.65 to 0.58
+        ctx.fillText(displayNumber, width / 2, height * 0.58, 580);
     }
 
     const tex = new THREE.CanvasTexture(canvas);
