@@ -649,15 +649,15 @@ const JerseyDesigner = () => {
 
                 <aside className="controls-section">
                     <nav className="controls-nav">
-                        <button className={activeTab === 'shield' ? 'active' : ''} onClick={() => setActiveTab('shield')}>
+                        <button className={activeTab === 'shield' ? 'active' : ''} onClick={() => { setActiveTab('shield'); setSelectedLogo(null); }}>
                             <Image size={20} />
                             <span>ESCUDO</span>
                         </button>
-                        <button className={activeTab === 'text' ? 'active' : ''} onClick={() => setActiveTab('text')}>
+                        <button className={activeTab === 'text' ? 'active' : ''} onClick={() => { setActiveTab('text'); setSelectedLogo(null); }}>
                             <Type size={20} />
                             <span>TEXTO</span>
                         </button>
-                        <button className={activeTab === 'design' ? 'active' : ''} onClick={() => setActiveTab('design')}>
+                        <button className={activeTab === 'design' ? 'active' : ''} onClick={() => { setActiveTab('design'); setSelectedLogo(null); }}>
                             <Palette size={20} />
                             <span>DISEÑO</span>
                         </button>

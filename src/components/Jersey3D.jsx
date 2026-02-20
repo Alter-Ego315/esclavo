@@ -422,6 +422,7 @@ const Jersey3D = forwardRef((props, ref) => {
                 gl={{ preserveDrawingBuffer: true }}
                 ref={canvasRef}
                 onCreated={({ gl }) => { canvasRef.current = gl.domElement; }}
+                onPointerMissed={() => props.onSelectLogo && props.onSelectLogo(null)}
             >
                 <ambientLight intensity={0.7} />
                 <Environment preset="city" />
@@ -455,7 +456,7 @@ const Jersey3D = forwardRef((props, ref) => {
                 <OrbitControls
                     ref={controlsRef}
                     target={[0, 0.12, 0]}
-                    enablePan={false}
+                    enablePan={true} // Enabled panning as requested
                     enableZoom={!props.viewLocked} // Disable zoom if locked
                     minDistance={props.viewLocked ? 0.85 : 0.5}
                     maxDistance={props.viewLocked ? 0.85 : 3}
