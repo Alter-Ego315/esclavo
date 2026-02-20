@@ -29,7 +29,7 @@ const CameraAdjuster = ({ viewLocked, controlsRef }) => {
 const generateNameNumberTexture = (name, number, font, color) => {
     const canvas = document.createElement('canvas');
     const width = 1024;
-    const height = 1536; // Tall canvas: name in top 30%, number in bottom 70%
+    const height = 1536; // Increased height for better vertical room
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
@@ -41,23 +41,31 @@ const generateNameNumberTexture = (name, number, font, color) => {
     ctx.textBaseline = 'middle';
     ctx.fillStyle = color;
 
-    // -- NAME (upper area) --
-    const displayName = String(name || '');
+    // Visibility fallback (stroke)
+    ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+    ctx.shadowBlur = 4;
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3;
+
+    // -- NAME (top area) --
+    const displayName = String(name || '').toUpperCase();
     if (displayName) {
-        let fontSizeName = 120; // Slightly smaller
-        if (displayName.length > 6) fontSizeName = 100;
-        if (displayName.length > 8) fontSizeName = 85;
-        if (displayName.length > 10) fontSizeName = 70;
+        let fontSizeName = 110;
+        if (displayName.length > 6) fontSizeName = 90;
+        if (displayName.length > 8) fontSizeName = 75;
 
         ctx.font = `900 ${fontSizeName}px "${font}"`;
-        ctx.fillText(displayName, width / 2, height * 0.15); // Higher up in canvas (15% from top)
+        ctx.strokeText(displayName, width / 2, height * 0.28);
+        ctx.fillText(displayName, width / 2, height * 0.28);
     }
 
-    // -- NUMBER (center area) --
+    // -- NUMBER (middle area) --
     const displayNumber = String(number || '');
     if (displayNumber) {
-        ctx.font = `900 380px "${font}"`; // Reduced from 500px as requested
-        ctx.fillText(displayNumber, width / 2, height * 0.55); // centered vertically (55% from top)
+        ctx.font = `900 420px "${font}"`;
+        // Draw number with constrained width (narrower)
+        ctx.strokeText(displayNumber, width / 2, height * 0.65, 600);
+        ctx.fillText(displayNumber, width / 2, height * 0.65, 600);
     }
 
     const tex = new THREE.CanvasTexture(canvas);
@@ -253,12 +261,11 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                     />
                 )}
 
-                {/* Back Number/Name Decal */}
                 {decalTexture && (
                     <Decal
-                        position={[0, 0, -0.15]} // Lowered to 0.0 to move number down
+                        position={[0, 0.1, -0.15]} // Slightly higher vs 0.0 to fit name on shoulders
                         rotation={[0, Math.PI, 0]}
-                        scale={[0.6, 0.7, 0.15]} // Reduced height to 0.7
+                        scale={[0.5, 0.8, 0.15]} // Narrower (0.5) as requested
                         map={decalTexture}
                     >
                         <meshStandardMaterial
