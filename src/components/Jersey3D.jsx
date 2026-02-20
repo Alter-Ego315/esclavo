@@ -1,24 +1,19 @@
 import React, { useEffect, useState, useRef, useMemo, forwardRef, useImperativeHandle } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture, Decal } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Environment, useGLTF, Decal } from '@react-three/drei';
 import * as THREE from 'three';
 import JerseyPreview from './JerseyPreview';
-import MovableDecal from './MovableDecal'; // Import the new component
+import MovableDecal from './MovableDecal';
 
-// Helper component to adjust camera
+// Helper component to adjust camera zoom/position when locked
 const CameraAdjuster = ({ viewLocked, controlsRef }) => {
     useEffect(() => {
         if (viewLocked && controlsRef.current) {
             const controls = controlsRef.current;
             const camera = controls.object;
             const target = controls.target;
-
-            // Calculate direction from target to camera
             const direction = new THREE.Vector3().subVectors(camera.position, target).normalize();
-
-            // Set new position at distance 0.25
             const newPos = target.clone().add(direction.multiplyScalar(0.25));
-
             camera.position.copy(newPos);
             controls.update();
         }
@@ -29,43 +24,34 @@ const CameraAdjuster = ({ viewLocked, controlsRef }) => {
 const generateNameNumberTexture = (name, number, font, color) => {
     const canvas = document.createElement('canvas');
     const width = 1024;
-    const height = 1536; // Increased height for better vertical room
+    const height = 1536;
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
-
-    // Clear to transparent
     ctx.clearRect(0, 0, width, height);
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = color;
-
-    // Visibility fallback (stroke)
     ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
     ctx.shadowBlur = 4;
     ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2; // Thinner stroke
+    ctx.lineWidth = 2;
 
-    // -- NAME (upper area) --
     const displayName = String(name || '').toUpperCase();
     if (displayName) {
-        let fontSizeName = 120; // Increased from 100
+        let fontSizeName = 120;
         if (displayName.length > 6) fontSizeName = 100;
         if (displayName.length > 8) fontSizeName = 85;
-
         ctx.font = `900 ${fontSizeName}px "${font}"`;
-        // Positioned at 30% of height (slightly higher)
         ctx.strokeText(displayName, width / 2, height * 0.30);
         ctx.fillText(displayName, width / 2, height * 0.30);
     }
 
-    // -- NUMBER (middle area) --
     const displayNumber = String(number || '');
     if (displayNumber) {
-        ctx.font = `900 440px "${font}"`; // Increased from 380px
-        // Constrain width to 580px
-        ctx.strokeText(displayNumber, width / 2, height * 0.58, 580); // Raised from 0.65 to 0.58
+        ctx.font = `900 440px "${font}"`;
+        ctx.strokeText(displayNumber, width / 2, height * 0.58, 580);
         ctx.fillText(displayNumber, width / 2, height * 0.58, 580);
     }
 
@@ -74,24 +60,17 @@ const generateNameNumberTexture = (name, number, font, color) => {
     return tex;
 };
 
-
-// Helper to generate texture from SVG DOM
 const generateTextureFromSvg = async (selector, mirror = false) => {
     return new Promise((resolve) => {
         const svgElement = document.querySelector(selector);
-        if (!svgElement) {
-            resolve(null);
-            return;
-        }
+        if (!svgElement) { resolve(null); return; }
 
-        // Serialize SVG and create Blob
         const svgString = new XMLSerializer().serializeToString(svgElement);
         const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
         const url = URL.createObjectURL(svgBlob);
 
-        // Draw to Canvas
         const canvas = document.createElement('canvas');
-        const size = 4096; // 4K Resolution !
+        const size = 4096;
         canvas.width = size;
         canvas.height = size;
         const ctx = canvas.getContext('2d');
@@ -99,20 +78,15 @@ const generateTextureFromSvg = async (selector, mirror = false) => {
         const img = new Image();
         img.onload = () => {
             ctx.clearRect(0, 0, size, size);
-
             if (mirror) {
                 ctx.translate(size, 0);
                 ctx.scale(-1, 1);
             }
-
             ctx.drawImage(img, 0, 0, size, size);
             const tex = new THREE.CanvasTexture(canvas);
             tex.colorSpace = THREE.SRGBColorSpace;
-
-            // Texture settings
             tex.minFilter = THREE.LinearFilter;
             tex.magFilter = THREE.LinearFilter;
-
             URL.revokeObjectURL(url);
             resolve(tex);
         };
@@ -120,70 +94,54 @@ const generateTextureFromSvg = async (selector, mirror = false) => {
     });
 };
 
-// Generate Alpha Map for V-Neck
 const generateVNeckAlphaMap = () => {
     const canvas = document.createElement('canvas');
     const size = 4096;
     canvas.width = size;
     canvas.height = size;
     const ctx = canvas.getContext('2d');
-
-    // Fill white (opaque)
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, size, size);
-
-    // Draw Black V-Neck shape (Transparent) based on UV mapping
-    // Scale coordinates from 1024 to 4096 (x4)
     ctx.fillStyle = 'black';
     ctx.beginPath();
-    // Inverted V shape at top center
-    // Original: 462, 0 -> 512, 100 -> 562, 0
-    // Times 4: 1848, 0 -> 2048, 400 -> 2248, 0
-    ctx.moveTo(1848, 0); // Top Left
-    ctx.lineTo(2048, 400); // Bottom point of V
-    ctx.lineTo(2248, 0); // Top Right
+    ctx.moveTo(1848, 0);
+    ctx.lineTo(2048, 400);
+    ctx.lineTo(2248, 0);
     ctx.closePath();
     ctx.fill();
-
     const tex = new THREE.CanvasTexture(canvas);
-    tex.colorSpace = THREE.SRGBColorSpace; // Non-color data usually, but this matches map
+    tex.colorSpace = THREE.SRGBColorSpace;
     return tex;
 };
 
-const PoloCollar = ({ color }) => {
-    // A simplified Polo collar using 3D primitives
-    // Positioned relative to the shirt neck
-    return (
-        <group position={[0, 0.46, 0.05]} rotation={[0.2, 0, 0]} scale={[1, 1, 1]}>
-            {/* Left Flap */}
-            <mesh position={[-0.08, 0, 0]} rotation={[0, 0, 0.3]}>
-                <boxGeometry args={[0.18, 0.08, 0.01]} />
-                <meshStandardMaterial color={color} roughness={0.8} />
-            </mesh>
-            {/* Right Flap */}
-            <mesh position={[0.08, 0, 0]} rotation={[0, 0, -0.3]}>
-                <boxGeometry args={[0.18, 0.08, 0.01]} />
-                <meshStandardMaterial color={color} roughness={0.8} />
-            </mesh>
-            {/* Back part */}
-            <mesh position={[0, 0.03, -0.06]} rotation={[Math.PI / 2 - 0.2, 0, 0]}>
-                <cylinderGeometry args={[0.13, 0.13, 0.08, 32, 1, true, Math.PI, Math.PI]} />
-                <meshStandardMaterial color={color} side={THREE.DoubleSide} roughness={0.8} />
-            </mesh>
-        </group>
-    );
-};
+const PoloCollar = ({ color }) => (
+    <group position={[0, 0.46, 0.05]} rotation={[0.2, 0, 0]} scale={[1, 1, 1]}>
+        <mesh position={[-0.08, 0, 0]} rotation={[0, 0, 0.3]}>
+            <boxGeometry args={[0.18, 0.08, 0.01]} />
+            <meshStandardMaterial color={color} roughness={0.8} />
+        </mesh>
+        <mesh position={[0.08, 0, 0]} rotation={[0, 0, -0.3]}>
+            <boxGeometry args={[0.18, 0.08, 0.01]} />
+            <meshStandardMaterial color={color} roughness={0.8} />
+        </mesh>
+        <mesh position={[0, 0.03, -0.06]} rotation={[Math.PI / 2 - 0.2, 0, 0]}>
+            <cylinderGeometry args={[0.13, 0.13, 0.08, 32, 1, true, Math.PI, Math.PI]} />
+            <meshStandardMaterial color={color} side={THREE.DoubleSide} roughness={0.8} />
+        </mesh>
+    </group>
+);
 
-const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffColor, seamColor, teamLogo, sponsorLogo, teamLogoState, sponsorLogoState, onTeamLogoUpdate, onSponsorLogoUpdate, selectedLogo, onSelectLogo }) => {
+const ShirtModel = ({
+    texture, decalTexture, color, collar, accentColor,
+    teamLogo, sponsorLogo, teamLogoState, sponsorLogoState,
+    onTeamLogoUpdate, onSponsorLogoUpdate, selectedLogo, onSelectLogo,
+    isDraggingAny, onDragChange
+}) => {
     const { nodes, materials } = useGLTF('/shirt_baked.glb');
     const [material, setMaterial] = useState(null);
     const meshRef = useRef();
 
-    // V-Neck Alpha Map
-    const vNeckAlphaMap = useMemo(() => {
-        if (collar === 'v-neck') return generateVNeckAlphaMap();
-        return null; // Round view has no cut
-    }, [collar]);
+    const vNeckAlphaMap = useMemo(() => collar === 'v-neck' ? generateVNeckAlphaMap() : null, [collar]);
 
     useEffect(() => {
         if (nodes.T_Shirt_male) {
@@ -195,26 +153,31 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                 side: THREE.DoubleSide,
                 alphaMap: vNeckAlphaMap,
                 transparent: !!vNeckAlphaMap,
-                alphaTest: 0.5 // Cutoff
+                alphaTest: 0.5
             });
-
             if (texture) {
                 texture.flipY = false;
                 texture.colorSpace = THREE.SRGBColorSpace;
                 newMat.map = texture;
             }
-
             setMaterial(newMat);
         }
     }, [texture, color, nodes, vNeckAlphaMap]);
 
-    // Force texture update when changed
-    useEffect(() => {
-        if (texture) {
-            texture.flipY = false;
-            texture.needsUpdate = true;
+    const handleMeshPointerMove = (e) => {
+        if (isDraggingAny && selectedLogo && meshRef.current) {
+            e.stopPropagation();
+            const intersects = e.intersections.filter(i => i.object === meshRef.current);
+            if (intersects.length > 0) {
+                const point = intersects[0].point;
+                const updateFn = selectedLogo === 'team' ? onTeamLogoUpdate : onSponsorLogoUpdate;
+                const prevState = selectedLogo === 'team' ? teamLogoState : sponsorLogoState;
+                if (updateFn && prevState) {
+                    updateFn({ ...prevState, pos: [point.x, point.y, point.z] });
+                }
+            }
         }
-    }, [texture]);
+    };
 
     if (!nodes.T_Shirt_male) return null;
 
@@ -226,10 +189,8 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                 receiveShadow
                 geometry={nodes.T_Shirt_male.geometry}
                 material={material || materials.lambert1}
-            // Removed onClick to prevent selection flicker
+                onPointerMove={handleMeshPointerMove}
             >
-                {/* 3D Decals for Interactive Logos */}
-                {/* Team Logo */}
                 {teamLogo && teamLogoState && (
                     <MovableDecal
                         position={teamLogoState.pos}
@@ -241,10 +202,9 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                         onUpdate={onTeamLogoUpdate}
                         onDelete={() => onTeamLogoUpdate && onTeamLogoUpdate(null)}
                         meshRef={meshRef}
+                        onDragChange={onDragChange}
                     />
                 )}
-
-                {/* Sponsor Logo */}
                 {sponsorLogo && sponsorLogoState && (
                     <MovableDecal
                         position={sponsorLogoState.pos}
@@ -256,24 +216,17 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                         onUpdate={onSponsorLogoUpdate}
                         onDelete={() => onSponsorLogoUpdate && onSponsorLogoUpdate(null)}
                         meshRef={meshRef}
+                        onDragChange={onDragChange}
                     />
                 )}
-
                 {decalTexture && (
                     <Decal
-                        position={[0, 0.0, -0.15]} // Centered on back
+                        position={[0, 0.0, -0.15]}
                         rotation={[0, Math.PI, 0]}
-                        scale={[0.45, 0.7, 0.15]} // Narrower and more compact
+                        scale={[0.45, 0.7, 0.15]}
                         map={decalTexture}
                     >
-                        <meshStandardMaterial
-                            transparent
-                            polygonOffset
-                            polygonOffsetFactor={-1}
-                            depthWrite={false}
-                            roughness={1}
-                            map={decalTexture}
-                        />
+                        <meshStandardMaterial transparent polygonOffset polygonOffsetFactor={-1} depthWrite={false} roughness={1} map={decalTexture} />
                     </Decal>
                 )}
             </mesh>
@@ -282,106 +235,52 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
     );
 };
 
-// ... usage in Jersey3D ...
-// <ShirtModel ... collar={props.collar} accentColor={props.colors.accent} />
-
-// Preload to avoid loading delay
 useGLTF.preload('/shirt_baked.glb');
-
-
 
 const Jersey3D = forwardRef((props, ref) => {
     const [texture, setTexture] = useState(null);
     const [decalTexture, setDecalTexture] = useState(null);
+    const [isDraggingAny, setIsDraggingAny] = useState(false);
     const containerRef = useRef();
     const controlsRef = useRef();
     const canvasRef = useRef();
 
-    // Expose capture method to parent
     useImperativeHandle(ref, () => ({
         captureViews: async () => {
             const canvas = canvasRef.current;
             const controls = controlsRef.current;
-            const gl = canvasRef.current.getContext('webgl2') || canvasRef.current.getContext('webgl'); // Get GL context
-
+            const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
             if (!canvas || !controls) return null;
 
-            // 1. Save original size
             const originalWidth = canvas.width;
             const originalHeight = canvas.height;
-            const originalPixelRatio = window.devicePixelRatio;
-
-            // 2. Force High-Res (e.g., 2048x2048)
             const exportSize = 2048;
 
-            // We need to resize the renderer, not just the canvas style
-            // This is tricky with R3F as it manages sizing.
-            // A safer hack: Resize the canvas, force a render, then restore.
-            // leveraging the 'gl' instance from useThree would be better, but we don't have it here directly without a hook.
-            // However, we can access it via canvasRef if we are careful, or just rely on window size if we want screen capture.
-            // BUT user wants HIGH RES.
-
-            // Let's try attempting to resize the canvas DOM and notify three.js (if possible)
-            // Or simpler: Just maximize the pixel ratio for the capture momentarily.
-
-            // Better approach for stability:
-            // Just use the current size but boost PixelRatio if on mobile?
-            // No, user specifically said "images are too small". 
-            // So we MUST resize.
-
             const setSize = (w, h) => {
-                canvas.width = w;
-                canvas.height = h;
-                canvas.style.width = `${w}px`;
-                canvas.style.height = `${h}px`;
-                // We also need to tell the GL context to resize viewport
+                canvas.width = w; canvas.height = h;
+                canvas.style.width = `${w}px`; canvas.style.height = `${h}px`;
                 if (gl) gl.viewport(0, 0, w, h);
             };
 
-            // Capture helper
-            const capture = () => {
-                return new Promise(resolve => {
-                    requestAnimationFrame(() => {
-                        setTimeout(() => {
-                            // Force render if not inside loop? OrbitControls change triggers it.
-                            const dataUrl = canvas.toDataURL('image/png', 1.0); // Max quality
-                            resolve(dataUrl);
-                        }, 250);
-                    });
-                });
-            };
+            const capture = () => new Promise(resolve => {
+                requestAnimationFrame(() => { setTimeout(() => resolve(canvas.toDataURL('image/png', 1.0)), 250); });
+            });
 
-            // --- START CAPTURE SEQUENCE ---
-
-            // Store current style to restore later
-            const savedStyleWidth = canvas.style.width;
-            const savedStyleHeight = canvas.style.height;
-
-            // Force canvas to high res
+            const savedWidth = canvas.style.width;
+            const savedHeight = canvas.style.height;
             setSize(exportSize, exportSize);
 
-            // 1. FRONT VIEW
             controls.object.position.set(0, 0, 0.9);
             controls.target.set(0, 0.12, 0);
             controls.update();
-
-            // Wait for resize and render
             const frontImage = await capture();
 
-            // 2. BACK VIEW
             controls.object.position.set(0, 0, -0.9);
             controls.update();
-
             const backImage = await capture();
 
-            // --- RESTORE ---
-            // Restore original size (this might glitch for a frame, but it's fine)
-            // Ideally R3F Resizer observer will pick this up if we just reset style to 100%
-            canvas.style.width = savedStyleWidth || '100%';
-            canvas.style.height = savedStyleHeight || '100%';
-            // Let the browser/R3F handle the exact pixel/canvas size restoration on next frame
-
-            // Reset Camera
+            canvas.style.width = savedWidth || '100%';
+            canvas.style.height = savedHeight || '100%';
             controls.object.position.set(0, 0, 0.9);
             controls.update();
 
@@ -389,91 +288,59 @@ const Jersey3D = forwardRef((props, ref) => {
         }
     }));
 
-    // Texture generation logic
     useEffect(() => {
         const updateTextures = async () => {
-            // Generate Main Texture (Patterns/Colors - still uses SVG as it works fine)
             const mainTex = await generateTextureFromSvg(`.hidden-previews .full-view svg`, false);
             if (mainTex) setTexture(mainTex);
-
-            // Generate Decal Texture (Name/Number - use Canvas for fonts)
-            // Wait for fonts to be ready (optional but recommended)
-            try {
-                await document.fonts.load(`100px "${props.font}"`);
-            } catch (e) {
-                console.warn('Font load warning:', e);
-            }
-
+            try { await document.fonts.load(`100px "${props.font}"`); } catch (e) { }
             const decalTex = generateNameNumberTexture(props.name, props.number, props.font, props.colors.secondary);
             if (decalTex) setDecalTexture(decalTex);
         };
-
-        // Increase timeout slightly to allow React to paint the hidden SVG
         const timer = setTimeout(updateTextures, 300);
         return () => clearTimeout(timer);
-    }, [props.colors, props.pattern, props.name, props.number, props.font, props.teamLogo, props.sponsorLogo, props.brandLogo, props.vibrancy, props.collar, props.sleeve]);
+    }, [props.colors, props.pattern, props.name, props.number, props.font, props.collar]);
 
     return (
         <div className="jersey-3d-wrapper studio-mode" ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
             <Canvas
-                shadows
-                dpr={[1, 2]}
+                shadows dpr={[1, 2]}
                 camera={{ position: [0, 0, 0.9], fov: 45 }}
                 gl={{ preserveDrawingBuffer: true }}
-                ref={canvasRef}
                 onCreated={({ gl }) => { canvasRef.current = gl.domElement; }}
                 onPointerMissed={() => props.onSelectLogo && props.onSelectLogo(null)}
             >
                 <ambientLight intensity={0.7} />
                 <Environment preset="city" />
-
-                {/* Spotlights for dramatic effect */}
                 <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow />
-
-                {/* Raised model to center it - Positioned to sit nicely above the bottom button */}
-                <group position={[0, 0.22, 0]}> {/* Moved UP from 0.12 to 0.22 */}
+                <group position={[0, 0.22, 0]}>
                     <ShirtModel
+                        {...props}
                         texture={texture}
                         decalTexture={decalTexture}
                         color={props.colors.primary}
-                        collar={props.collar} // Pass collar type (polo, v-neck)
-                        accentColor={props.colors.accent} // Pass accent color for collar
-                        cuffColor={props.colors.secondary}
-                        seamColor={props.colors.secondary}
-
-                        // New Props for Interactive Decals
-                        teamLogo={props.teamLogo}
-                        sponsorLogo={props.sponsorLogo}
-                        teamLogoState={props.teamLogoState}
-                        sponsorLogoState={props.sponsorLogoState}
-                        onTeamLogoUpdate={props.onTeamLogoUpdate}
-                        onSponsorLogoUpdate={props.onSponsorLogoUpdate}
-                        selectedLogo={props.selectedLogo}
-                        onSelectLogo={props.onSelectLogo}
+                        accentColor={props.colors.accent}
+                        isDraggingAny={isDraggingAny}
+                        onDragChange={setIsDraggingAny}
                     />
                 </group>
-                {/* Controls */}
                 <OrbitControls
                     ref={controlsRef}
                     target={[0, 0.12, 0]}
-                    enablePan={true} // Enabled panning as requested
-                    enableZoom={!props.viewLocked} // Disable zoom if locked
+                    enablePan={false}
+                    enabled={!isDraggingAny}
+                    enableZoom={!props.viewLocked}
                     minDistance={props.viewLocked ? 0.85 : 0.5}
                     maxDistance={props.viewLocked ? 0.85 : 3}
-                    minPolarAngle={props.viewLocked ? Math.PI / 2 : 0} // Lock vertical angle
-                    maxPolarAngle={props.viewLocked ? Math.PI / 2 : Math.PI} // Lock vertical angle
+                    minPolarAngle={props.viewLocked ? Math.PI / 2 : 0}
+                    maxPolarAngle={props.viewLocked ? Math.PI / 2 : Math.PI}
                     makeDefault
                 />
                 <CameraAdjuster viewLocked={props.viewLocked} controlsRef={controlsRef} />
             </Canvas>
-
-            {/* Hidden DOM element for centralized texture generation */}
-            {/* We only need ONE view that wraps the whole shirt for this model usually */}
             <div className="hidden-previews" style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', top: 0, left: 0, zIndex: -1 }}>
                 <div className="full-view"><JerseyPreview {...props} view="full" /></div>
-                <div className="text-decal-view"><JerseyPreview {...props} view="text-decal" /></div>
             </div>
-        </div >
+        </div>
     );
 });
 
