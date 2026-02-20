@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo, forwardRef, useImperativeHandle } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, useGLTF, Decal } from '@react-three/drei';
+import { OrbitControls, Environment, useGLTF, Decal, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import JerseyPreview from './JerseyPreview';
 import MovableDecal from './MovableDecal';
@@ -140,6 +140,18 @@ const ShirtModel = ({
     const { nodes, materials } = useGLTF('/shirt_baked.glb');
     const [material, setMaterial] = useState(null);
     const meshRef = useRef();
+    const gingaTexture = useTexture('/ginga-green.png');
+
+    // Setup ginga texture once loaded
+    useEffect(() => {
+        if (gingaTexture) {
+            gingaTexture.colorSpace = THREE.SRGBColorSpace;
+            gingaTexture.anisotropy = 16;
+            gingaTexture.minFilter = THREE.LinearFilter;
+            gingaTexture.magFilter = THREE.LinearFilter;
+            gingaTexture.flipY = false;
+        }
+    }, [gingaTexture]);
 
     const vNeckAlphaMap = useMemo(() => collar === 'v-neck' ? generateVNeckAlphaMap() : null, [collar]);
 
@@ -229,6 +241,20 @@ const ShirtModel = ({
                         <meshStandardMaterial transparent polygonOffset polygonOffsetFactor={-1} depthWrite={false} roughness={1} map={decalTexture} />
                     </Decal>
                 )}
+                <Decal
+                    position={[0.08, 0.15, 0.15]}
+                    rotation={[0, 0, 0]}
+                    scale={[-0.06, 0.06, 0.2]}
+                    map={gingaTexture}
+                >
+                    <meshStandardMaterial
+                        transparent
+                        polygonOffset
+                        polygonOffsetFactor={-20}
+                        depthWrite={false}
+                        map={gingaTexture}
+                    />
+                </Decal>
             </mesh>
             {collar === 'polo' && <PoloCollar color={accentColor || color} />}
         </group>
