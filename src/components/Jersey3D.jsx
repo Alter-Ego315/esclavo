@@ -28,36 +28,35 @@ const CameraAdjuster = ({ viewLocked, controlsRef }) => {
 
 const generateNameNumberTexture = (name, number, font, color) => {
     const canvas = document.createElement('canvas');
-    const size = 1024; // High res
-    canvas.width = size;
-    canvas.height = size;
+    const width = 1024;
+    const height = 1280; // Taller canvas so name + number fit well
+    canvas.width = width;
+    canvas.height = height;
     const ctx = canvas.getContext('2d');
 
-    // Clear
-    ctx.clearRect(0, 0, size, size);
+    // Clear to transparent
+    ctx.clearRect(0, 0, width, height);
 
-    // MIRROR TEXTURE (Back of shirt needs flipped texture)
-    ctx.translate(size, 0);
-    ctx.scale(-1, 1);
-
-    // Text Settings
+    // DO NOT mirror — Three.js Decal renders back of shirt correctly
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = color;
 
-    // Draw Name (Top)
-    // Scale font size based on length
-    let fontSizeName = 100; // Reduced base size
-    if (name.length > 6) fontSizeName = 80;
-    if (name.length > 8) fontSizeName = 70;
-    if (name.length > 10) fontSizeName = 60; // Aggressive scaling for max length
+    // -- NAME (top third) --
+    let fontSizeName = 110;
+    if (name && name.length > 6) fontSizeName = 90;
+    if (name && name.length > 8) fontSizeName = 75;
+    if (name && name.length > 10) fontSizeName = 60;
 
-    ctx.font = `900 ${fontSizeName}px "${font}"`; // Quote font name to handle spaces
-    ctx.fillText(name, size / 2, size * 0.4);
+    if (name) {
+        ctx.font = `900 ${fontSizeName}px "${font}"`;
+        ctx.fillText(name, width / 2, height * 0.2); // top 20% of canvas
+    }
 
-    // Draw Number (Bottom)
-    ctx.font = `900 280px "${font}"`; // Reduced from 350px
-    ctx.fillText(number, size / 2, size * 0.7);
+    // -- NUMBER (center) --
+    ctx.font = `900 420px "${font}"`;
+    const displayNumber = String(number || '');
+    ctx.fillText(displayNumber, width / 2, height * 0.6); // center-ish
 
     const tex = new THREE.CanvasTexture(canvas);
     tex.colorSpace = THREE.SRGBColorSpace;
@@ -255,18 +254,18 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                 {/* Back Number/Name Decal */}
                 {decalTexture && (
                     <Decal
-                        position={[0, 0.2, -0.15]}
+                        position={[0, 0.05, -0.15]} // Moved down from 0.2 to center on back
                         rotation={[0, Math.PI, 0]}
-                        scale={[0.6, 0.6, 0.15]} // Further reduced depth
+                        scale={[0.6, 0.75, 0.15]} // Slightly taller to match new canvas ratio
                         map={decalTexture}
                     >
                         <meshStandardMaterial
                             transparent
                             polygonOffset
                             polygonOffsetFactor={-1}
-                            depthWrite={false} // Prevent depth writing issues
+                            depthWrite={false}
                             roughness={1}
-                            map={decalTexture} // CRITICAL: Must assign map here too for custom material!
+                            map={decalTexture}
                         />
                     </Decal>
                 )}
