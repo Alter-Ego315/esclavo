@@ -70,7 +70,7 @@ const MovableDecal = ({
                 ref={decalRef}
                 position={position}
                 rotation={[0, 0, rotation]}
-                scale={[scale, scale, 0.1]}
+                scale={[scale, scale, 0.2]} // Increased depth to 0.2
                 map={texture}
                 onPointerDown={handlePointerDown}
                 onPointerUp={handlePointerUp}
@@ -91,46 +91,46 @@ const MovableDecal = ({
                         className="logo-gizmo"
                         style={{
                             display: 'flex',
-                            gap: '10px',
+                            gap: '6px', // Reduced 
                             background: 'rgba(0,0,0,0.85)',
-                            padding: '10px 15px',
-                            borderRadius: '30px',
+                            padding: '6px 10px', // Reduced
+                            borderRadius: '20px', // Reduced
                             border: '1px solid rgba(255,255,255,0.3)',
-                            boxShadow: '0 8px 25px rgba(0,0,0,0.5)',
+                            boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
                             pointerEvents: 'auto',
                             userSelect: 'none',
-                            backdropFilter: 'blur(5px)',
+                            backdropFilter: 'blur(4px)',
                             alignItems: 'center'
                         }}
                     >
                         <button
                             onClick={handleRotate}
-                            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex' }}
+                            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', padding: '4px' }}
                             title="Rotate"
                         >
-                            <RotateCw size={20} />
+                            <RotateCw size={14} /> {/* Smaller icon */}
                         </button>
                         <button
                             onClick={handleScaleUp}
-                            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex' }}
+                            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', padding: '4px' }}
                             title="Size Up"
                         >
-                            <Plus size={20} />
+                            <Plus size={14} /> {/* Smaller icon */}
                         </button>
                         <button
                             onClick={handleScaleDown}
-                            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex' }}
+                            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex', padding: '4px' }}
                             title="Size Down"
                         >
-                            <Minus size={20} />
+                            <Minus size={14} /> {/* Smaller icon */}
                         </button>
-                        <div style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.2)', margin: '0 5px' }} />
+                        <div style={{ width: '1px', height: '14px', background: 'rgba(255,255,255,0.2)', margin: '0 4px' }} />
                         <button
                             onClick={(e) => { e.stopPropagation(); onDelete(); }}
-                            style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer', display: 'flex' }}
+                            style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer', display: 'flex', padding: '4px' }}
                             title="Delete"
                         >
-                            <Trash2 size={20} />
+                            <Trash2 size={14} /> {/* Smaller icon */}
                         </button>
                     </div>
                 </Html>
