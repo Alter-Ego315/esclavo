@@ -482,8 +482,8 @@ const JerseyDesigner = () => {
     // Logo Position State - Now 3D
     // Crest (Escudo): Positioned to match the Iron Man reference, now smaller and higher quality
     const [teamLogoPos, setTeamLogoPos] = useState({ pos: [-0.06, 0.08, 0.15], rot: Math.PI, scale: 0.07 });
-    // Sponsor: Center
-    const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, 0.05, 0.16], rot: 0, scale: 0.25 });
+    // Sponsor: Center, lowered and rotated 180deg to appear upright
+    const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, -0.10, 0.16], rot: Math.PI, scale: 0.25 });
     const [selectedLogo, setSelectedLogo] = useState(null); // 'team' or 'sponsor'
 
     // Handlers for 3D Decal Updates
