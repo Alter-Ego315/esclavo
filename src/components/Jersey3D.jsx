@@ -42,30 +42,31 @@ const generateNameNumberTexture = (name, number, font, color) => {
     ctx.fillStyle = color;
 
     // Visibility fallback (stroke)
-    ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+    ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
     ctx.shadowBlur = 4;
     ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2; // Thinner stroke
 
-    // -- NAME (top area) --
+    // -- NAME (top area, but moved down to be safe) --
     const displayName = String(name || '').toUpperCase();
     if (displayName) {
-        let fontSizeName = 110;
-        if (displayName.length > 6) fontSizeName = 90;
-        if (displayName.length > 8) fontSizeName = 75;
+        let fontSizeName = 100; // Smaller base size
+        if (displayName.length > 6) fontSizeName = 85;
+        if (displayName.length > 8) fontSizeName = 70;
 
         ctx.font = `900 ${fontSizeName}px "${font}"`;
-        ctx.strokeText(displayName, width / 2, height * 0.28);
-        ctx.fillText(displayName, width / 2, height * 0.28);
+        // Positioned at 35% of height
+        ctx.strokeText(displayName, width / 2, height * 0.35);
+        ctx.fillText(displayName, width / 2, height * 0.35);
     }
 
     // -- NUMBER (middle area) --
     const displayNumber = String(number || '');
     if (displayNumber) {
-        ctx.font = `900 420px "${font}"`;
-        // Draw number with constrained width (narrower)
-        ctx.strokeText(displayNumber, width / 2, height * 0.65, 600);
-        ctx.fillText(displayNumber, width / 2, height * 0.65, 600);
+        ctx.font = `900 380px "${font}"`; // Smaller number
+        // Constrain width to 550px for "numero mas pequeño a lo ancho"
+        ctx.strokeText(displayNumber, width / 2, height * 0.65, 550);
+        ctx.fillText(displayNumber, width / 2, height * 0.65, 550);
     }
 
     const tex = new THREE.CanvasTexture(canvas);
@@ -263,9 +264,9 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
 
                 {decalTexture && (
                     <Decal
-                        position={[0, 0.1, -0.15]} // Slightly higher vs 0.0 to fit name on shoulders
+                        position={[0, 0.0, -0.15]} // Centered on back
                         rotation={[0, Math.PI, 0]}
-                        scale={[0.5, 0.8, 0.15]} // Narrower (0.5) as requested
+                        scale={[0.45, 0.7, 0.15]} // Narrower and more compact
                         map={decalTexture}
                     >
                         <meshStandardMaterial
