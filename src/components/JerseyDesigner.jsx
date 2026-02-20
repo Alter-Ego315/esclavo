@@ -480,8 +480,8 @@ const JerseyDesigner = () => {
     const [showFontDropdown, setShowFontDropdown] = useState(false);
 
     // Logo Position State - Now 3D
-    // Crest (Escudo): Initial position on chest with 180-degree rotation to appear upright
-    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [-0.1, 0.22, 0.15], rot: Math.PI, scale: 0.1 });
+    // Crest (Escudo): Initial position on chest, lowered per user request
+    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [-0.1, 0.15, 0.15], rot: Math.PI, scale: 0.1 });
     // Sponsor: Center
     const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, 0.05, 0.16], rot: 0, scale: 0.25 });
     const [selectedLogo, setSelectedLogo] = useState(null); // 'team' or 'sponsor'
