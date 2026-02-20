@@ -480,8 +480,8 @@ const JerseyDesigner = () => {
     const [showFontDropdown, setShowFontDropdown] = useState(false);
 
     // Logo Position State - Now 3D
-    // Crest (Escudo): Lowered more and shifted slightly closer to center per user request
-    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [-0.06, 0.08, 0.15], rot: Math.PI, scale: 0.12 });
+    // Crest (Escudo): Positioned to match the Iron Man reference, now smaller and higher quality
+    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [-0.06, 0.08, 0.15], rot: Math.PI, scale: 0.07 });
     // Sponsor: Center
     const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, 0.05, 0.16], rot: 0, scale: 0.25 });
     const [selectedLogo, setSelectedLogo] = useState(null); // 'team' or 'sponsor'

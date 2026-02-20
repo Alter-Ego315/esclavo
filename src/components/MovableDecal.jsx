@@ -14,6 +14,9 @@ const MovableDecal = ({
     if (texture) {
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.flipY = false;
+        texture.anisotropy = 16;
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
     }
 
     const handlePointerDown = (e) => {
