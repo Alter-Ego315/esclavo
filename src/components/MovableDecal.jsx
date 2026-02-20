@@ -59,7 +59,7 @@ const MovableDecal = ({
             <Decal
                 mesh={meshRef}
                 position={position}
-                rotation={[0, 0, rotation]}
+                rotation={[0, 0, rotation + Math.PI]}
                 scale={[scale, scale, 0.2]}
                 map={texture}
                 onPointerDown={handlePointerDown}
