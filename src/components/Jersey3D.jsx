@@ -44,20 +44,20 @@ const generateNameNumberTexture = (name, number, font, color) => {
     // -- NAME (upper area) --
     const displayName = String(name || '');
     if (displayName) {
-        let fontSizeName = 130;
-        if (displayName.length > 6) fontSizeName = 110;
-        if (displayName.length > 8) fontSizeName = 90;
-        if (displayName.length > 10) fontSizeName = 75;
+        let fontSizeName = 120; // Slightly smaller
+        if (displayName.length > 6) fontSizeName = 100;
+        if (displayName.length > 8) fontSizeName = 85;
+        if (displayName.length > 10) fontSizeName = 70;
 
         ctx.font = `900 ${fontSizeName}px "${font}"`;
-        ctx.fillText(displayName, width / 2, height * 0.22); // 22% from top
+        ctx.fillText(displayName, width / 2, height * 0.15); // Higher up in canvas (15% from top)
     }
 
-    // -- NUMBER (center-lower area) --
+    // -- NUMBER (center area) --
     const displayNumber = String(number || '');
     if (displayNumber) {
-        ctx.font = `900 500px "${font}"`;
-        ctx.fillText(displayNumber, width / 2, height * 0.62); // 62% from top
+        ctx.font = `900 380px "${font}"`; // Reduced from 500px as requested
+        ctx.fillText(displayNumber, width / 2, height * 0.55); // centered vertically (55% from top)
     }
 
     const tex = new THREE.CanvasTexture(canvas);
@@ -256,9 +256,9 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                 {/* Back Number/Name Decal */}
                 {decalTexture && (
                     <Decal
-                        position={[0, 0.12, -0.15]} // Center on shirt back vertically
+                        position={[0, 0, -0.15]} // Lowered to 0.0 to move number down
                         rotation={[0, Math.PI, 0]}
-                        scale={[0.6, 0.85, 0.15]} // Taller scale to show name + number
+                        scale={[0.6, 0.7, 0.15]} // Reduced height to 0.7
                         map={decalTexture}
                     >
                         <meshStandardMaterial
