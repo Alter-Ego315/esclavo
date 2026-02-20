@@ -242,9 +242,9 @@ const ShirtModel = ({
                     </Decal>
                 )}
                 <Decal
-                    position={[0.034, 0.08, 0.15]}
+                    position={[0.06, 0.08, 0.15]}
                     rotation={[0, 0, 0]}
-                    scale={[-0.06, 0.06, 0.2]}
+                    scale={[0.06, 0.06, 0.2]}
                     map={gingaTexture}
                 >
                     <meshStandardMaterial
