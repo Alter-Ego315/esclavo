@@ -244,7 +244,7 @@ const ShirtModel = ({
                 <Decal
                     position={[0.08, 0.08, 0.15]}
                     rotation={[0, 0, 0]}
-                    scale={[0.06, 0.06, 0.2]}
+                    scale={[0.045, 0.045, 0.2]}
                     map={gingaTexture}
                 >
                     <meshStandardMaterial
