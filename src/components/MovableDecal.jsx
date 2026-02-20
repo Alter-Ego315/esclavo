@@ -1,8 +1,8 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { Decal, Html, useTexture } from '@react-three/drei';
-import { useThree, useFrame } from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { Trash2, RotateCw, Maximize, Copy } from 'lucide-react'; // Using Lucide icons for handles
+import { Trash2, RotateCw, Maximize, Minus, Plus } from 'lucide-react';
 
 const MovableDecal = ({
     position,
@@ -13,35 +13,31 @@ const MovableDecal = ({
     onSelect,
     onUpdate,
     onDelete,
-    meshRef // Reference to the parent mesh (shirt) for raycasting
+    meshRef
 }) => {
     const decalRef = useRef();
     const texture = useTexture(textureUrl);
-    const { camera, raycaster, gl } = useThree();
     const [isDragging, setIsDragging] = useState(false);
 
-    // Helper to converting 3D position to screen coordinates for HTML overlay
-    const [screenPos, setScreenPos] = useState({ x: 0, y: 0 });
-
-    // Drag Logic
+    // dragging logic
     const handlePointerDown = (e) => {
         e.stopPropagation();
         onSelect();
         setIsDragging(true);
+        e.target.setPointerCapture(e.pointerId);
     };
 
     const handlePointerUp = (e) => {
         setIsDragging(false);
+        e.target.releasePointerCapture(e.pointerId);
     };
 
     const handlePointerMove = (e) => {
         if (isDragging && isSelected && meshRef.current) {
             e.stopPropagation();
-            // Raycast against the shirt mesh to find point on surface
             const intersects = e.intersections.filter(i => i.object === meshRef.current);
             if (intersects.length > 0) {
                 const point = intersects[0].point;
-                // Update position
                 onUpdate({
                     pos: [point.x, point.y, point.z],
                     rot: rotation,
@@ -51,28 +47,30 @@ const MovableDecal = ({
         }
     };
 
-    // Handlers for Gizmo Buttons
+    // Gizmo button handlers
     const handleRotate = (e) => {
         e.stopPropagation();
-        // Simple 90 degree rotation or enter rotation mode (simplified for now to 45 deg increments)
-        onUpdate({ pos: position, rot: rotation + Math.PI / 4, scale });
+        onUpdate({ pos: position, rot: rotation + Math.PI / 8, scale });
     };
 
-    const handleScale = (e) => {
+    const handleScaleUp = (e) => {
         e.stopPropagation();
-        // Simple scale up (cycle)
-        const newScale = scale >= 0.3 ? 0.1 : scale + 0.05;
-        onUpdate({ pos: position, rot: rotation, scale: newScale });
+        onUpdate({ pos: position, rot: rotation, scale: Math.min(0.5, scale + 0.02) });
+    };
+
+    const handleScaleDown = (e) => {
+        e.stopPropagation();
+        onUpdate({ pos: position, rot: rotation, scale: Math.max(0.05, scale - 0.02) });
     };
 
     return (
-        <group>
+        <group onPointerMissed={() => isSelected && onSelect(null)}>
             <Decal
-                mesh={meshRef} // Explicitly pass the parent mesh
+                mesh={meshRef}
                 ref={decalRef}
                 position={position}
-                rotation={[0, 0, rotation]} // Z-axis rotation for 2D feel on surface
-                scale={[scale, scale, 0.15]} // Further reduced depth
+                rotation={[0, 0, rotation]}
+                scale={[scale, scale, 0.1]}
                 map={texture}
                 onPointerDown={handlePointerDown}
                 onPointerUp={handlePointerUp}
@@ -81,80 +79,64 @@ const MovableDecal = ({
                 <meshStandardMaterial
                     transparent
                     polygonOffset
-                    polygonOffsetFactor={-1} // Draw on top of shirt
-                    map={texture}
-                    roughness={1}
-                    clearcoat={0}
-                    metalness={0}
-                    depthTest={true}
+                    polygonOffsetFactor={-10}
                     depthWrite={false}
+                    map={texture}
                 />
             </Decal>
 
             {isSelected && (
-                <Html position={position} center zIndexRange={[100, 0]}>
+                <Html position={position} center distanceFactor={1.5}>
                     <div
-                        className="decal-gizmo"
+                        className="logo-gizmo"
                         style={{
-                            width: `${scale * 1000}px`, // Approximate px size based on scale
-                            height: `${scale * 1000 * (texture.image ? texture.image.height / texture.image.width : 1)}px`,
-                            border: '2px dashed #0099ff',
-                            position: 'relative',
                             display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            pointerEvents: 'none', // Let clicks pass through context
-                            transform: `rotate(${-rotation}rad)` // Counter-rotate container to keep handles upright? No, rotate with it.
+                            gap: '10px',
+                            background: 'rgba(0,0,0,0.85)',
+                            padding: '10px 15px',
+                            borderRadius: '30px',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            boxShadow: '0 8px 25px rgba(0,0,0,0.5)',
+                            pointerEvents: 'auto',
+                            userSelect: 'none',
+                            backdropFilter: 'blur(5px)',
+                            alignItems: 'center'
                         }}
                     >
-                        {/* Handles - Pointer events re-enabled */}
-                        <div style={{ pointerEvents: 'auto' }}>
-                            {/* Delete - Bottom Left */}
-                            <button
-                                onClick={(e) => { e.stopPropagation(); onDelete(); }}
-                                style={handleStyle('bottom', 'left')}
-                            >
-                                <Trash2 size={12} />
-                            </button>
-
-                            {/* Rotate - Top Right */}
-                            <button
-                                onClick={handleRotate}
-                                style={handleStyle('top', 'right')}
-                            >
-                                <RotateCw size={12} />
-                            </button>
-
-                            {/* Scale - Bottom Right */}
-                            <button
-                                onClick={handleScale}
-                                style={handleStyle('bottom', 'right')}
-                            >
-                                <Maximize size={12} />
-                            </button>
-                        </div>
+                        <button
+                            onClick={handleRotate}
+                            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex' }}
+                            title="Rotate"
+                        >
+                            <RotateCw size={20} />
+                        </button>
+                        <button
+                            onClick={handleScaleUp}
+                            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex' }}
+                            title="Size Up"
+                        >
+                            <Plus size={20} />
+                        </button>
+                        <button
+                            onClick={handleScaleDown}
+                            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex' }}
+                            title="Size Down"
+                        >
+                            <Minus size={20} />
+                        </button>
+                        <div style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.2)', margin: '0 5px' }} />
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                            style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer', display: 'flex' }}
+                            title="Delete"
+                        >
+                            <Trash2 size={20} />
+                        </button>
                     </div>
                 </Html>
             )}
         </group>
     );
 };
-
-const handleStyle = (v, h) => ({
-    position: 'absolute',
-    [v]: '-12px',
-    [h]: '-12px',
-    width: '24px',
-    height: '24px',
-    borderRadius: '50%',
-    background: 'white',
-    border: '1px solid #ccc',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    color: '#333',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-});
 
 export default MovableDecal;

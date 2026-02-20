@@ -226,10 +226,7 @@ const ShirtModel = ({ texture, decalTexture, color, collar, accentColor, cuffCol
                 receiveShadow
                 geometry={nodes.T_Shirt_male.geometry}
                 material={material || materials.lambert1}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    if (onSelectLogo) onSelectLogo(null); // Deselect on background click
-                }}
+            // Removed onClick to prevent selection flicker
             >
                 {/* 3D Decals for Interactive Logos */}
                 {/* Team Logo */}

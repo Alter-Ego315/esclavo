@@ -480,8 +480,10 @@ const JerseyDesigner = () => {
     const [showFontDropdown, setShowFontDropdown] = useState(false);
 
     // Logo Position State - Now 3D
-    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [0.08, 0.22, 0.14], rot: 0, scale: 0.15 });
-    const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, 0.15, 0.16], rot: 0, scale: 0.3 });
+    // Crest (Escudo): Viewer's Right (wearer's left), high on chest
+    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [0.07, 0.25, 0.15], rot: 0, scale: 0.1 });
+    // Sponsor: Center
+    const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, 0.1, 0.16], rot: 0, scale: 0.25 });
     const [selectedLogo, setSelectedLogo] = useState(null); // 'team' or 'sponsor'
 
     // Handlers for 3D Decal Updates
