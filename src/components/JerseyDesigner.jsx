@@ -569,7 +569,9 @@ const JerseyDesigner = () => {
             {/* Header */}
             <header className="designer-header">
                 <div className="header-center">
-                    <img src="/ginga-logo-header.png" alt="Ginga" className="header-logo" style={{ height: '120px' }} />
+                    <a href="https://ginga.es" target="_blank" rel="noopener noreferrer">
+                        <img src="/ginga-logo-header.png" alt="Ginga" className="header-logo" style={{ height: '120px' }} />
+                    </a>
                 </div>
             </header>
 
