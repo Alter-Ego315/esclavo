@@ -58,9 +58,8 @@ const MovableDecal = ({
     const gizmoPosition = [position[0], position[1] - (scale * 0.6) - 0.08, position[2]];
 
     return (
-        <group>
+        <>
             <Decal
-                mesh={meshRef}
                 position={position}
                 rotation={[0, 0, rotation]}
                 scale={[-scale, scale, 0.2]}
@@ -129,7 +128,7 @@ const MovableDecal = ({
                     </div>
                 </Html>
             )}
-        </group>
+        </>
     );
 };
 

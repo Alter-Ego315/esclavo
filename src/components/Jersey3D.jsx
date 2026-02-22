@@ -26,7 +26,19 @@ const CameraAdjuster = ({ viewLocked, controlsRef }) => {
     return null;
 };
 
-const generateNameNumberTexture = (name, number, font, color) => {
+const getContrastingHex = (hex) => {
+    if (!hex) return '#ffffff';
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    // Relative luminance formula per W3C
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    // If background is bright (like Ginga Green or White), use Black outline
+    // If background is dark (Black), use White outline
+    return luminance > 0.5 ? '#000000' : '#ffffff';
+};
+
+const generateNameNumberTexture = (name, number, font, color, bgColor) => {
     const canvas = document.createElement('canvas');
     const width = 1024;
     const height = 1536;
@@ -35,13 +47,15 @@ const generateNameNumberTexture = (name, number, font, color) => {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, width, height);
 
+    const outlineColor = getContrastingHex(bgColor);
+
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = color;
-    ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
     ctx.shadowBlur = 4;
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = outlineColor;
+    ctx.lineWidth = 4; // Slightly thicker for better visibility
 
     const displayName = String(name || '').toUpperCase();
     if (displayName) {
@@ -136,6 +150,45 @@ const PoloCollar = ({ color }) => (
     </group>
 );
 
+const GINGA_LOGOS = [
+    { name: 'blanco', color: [255, 255, 255], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (blanco).png' },
+    { name: 'negro', color: [0, 0, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (negro).png' },
+    { name: 'verde', color: [57, 255, 20], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (verde).png' },
+    { name: 'rojo', color: [255, 0, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (rojo).png' },
+    { name: 'azul claro', color: [0, 204, 255], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (azul claro).png' },
+    { name: 'azul oscuro', color: [0, 0, 51], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (azul oscuro).png' },
+    { name: 'amarillo', color: [255, 255, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (amarillo).png' },
+    { name: 'naranja', color: [255, 153, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (orange).png' },
+    { name: 'rosa', color: [255, 51, 204], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (rosa).png' },
+    { name: 'morado', color: [102, 0, 204], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (morado).png' }
+];
+
+const getContrastingLogo = (hex) => {
+    if (!hex) return GINGA_LOGOS[0].path;
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+
+    // Goal: Maximum visibility. Inverted color is a good heuristic.
+    const target = [255 - r, 255 - g, 255 - b];
+
+    let bestLogo = GINGA_LOGOS[0];
+    let minDist = Infinity;
+
+    GINGA_LOGOS.forEach(logo => {
+        const dist = Math.sqrt(
+            Math.pow(target[0] - logo.color[0], 2) +
+            Math.pow(target[1] - logo.color[1], 2) +
+            Math.pow(target[2] - logo.color[2], 2)
+        );
+        if (dist < minDist) {
+            minDist = dist;
+            bestLogo = logo;
+        }
+    });
+    return bestLogo.path;
+};
+
 const ShirtModel = ({
     texture, decalTexture, color, collar, accentColor,
     teamLogo, sponsorLogo, teamLogoState, sponsorLogoState,
@@ -145,18 +198,18 @@ const ShirtModel = ({
     const { nodes, materials } = useGLTF('/shirt_baked.glb');
     const [material, setMaterial] = useState(null);
     const meshRef = useRef();
-    const gingaTexture = useTexture('/ginga-green.png');
 
-    // Setup ginga texture once loaded
+    const brandTexture = useTexture(getContrastingLogo(color));
+
     useEffect(() => {
-        if (gingaTexture) {
-            gingaTexture.colorSpace = THREE.SRGBColorSpace;
-            gingaTexture.anisotropy = 16;
-            gingaTexture.minFilter = THREE.LinearFilter;
-            gingaTexture.magFilter = THREE.LinearFilter;
-            gingaTexture.flipY = false;
+        if (brandTexture) {
+            brandTexture.colorSpace = THREE.SRGBColorSpace;
+            brandTexture.anisotropy = 16;
+            brandTexture.minFilter = THREE.LinearFilter;
+            brandTexture.magFilter = THREE.LinearFilter;
+            brandTexture.flipY = false;
         }
-    }, [gingaTexture]);
+    }, [brandTexture]);
 
     const vNeckAlphaMap = useMemo(() => collar === 'v-neck' ? generateVNeckAlphaMap() : null, [collar]);
 
@@ -250,14 +303,14 @@ const ShirtModel = ({
                     position={[0.08, 0.08, 0.15]}
                     rotation={[0, 0, 0]}
                     scale={[0.045, 0.045, 0.2]}
-                    map={gingaTexture}
+                    map={brandTexture}
                 >
                     <meshStandardMaterial
                         transparent
                         polygonOffset
                         polygonOffsetFactor={-20}
                         depthWrite={false}
-                        map={gingaTexture}
+                        map={brandTexture}
                     />
                 </Decal>
             </mesh>
@@ -324,7 +377,7 @@ const Jersey3D = forwardRef((props, ref) => {
             const mainTex = await generateTextureFromSvg(`.hidden-previews .full-view svg`, false);
             if (mainTex) setTexture(mainTex);
             try { await document.fonts.load(`100px "${props.font}"`); } catch (e) { }
-            const decalTex = generateNameNumberTexture(props.name, props.number, props.font, props.colors.secondary);
+            const decalTex = generateNameNumberTexture(props.name, props.number, props.font, props.colors.textColor || props.colors.secondary, props.colors.primary);
             if (decalTex) setDecalTexture(decalTex);
         };
         const timer = setTimeout(updateTextures, 300);

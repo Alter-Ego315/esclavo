@@ -1,6 +1,0 @@
-Triggering fresh deployment at 2026-02-20T21:30:00. 
-Commits since last seen:
-- 052859f: Reduce Ginga logo size
-- 8581959: Adjust locked view camera
-- f687544: Debug logs
-- 70470a7: Visual marker

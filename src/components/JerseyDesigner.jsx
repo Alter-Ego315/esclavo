@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Jersey3D from './Jersey3D';
 import JerseyPreview from './JerseyPreview';
 import { ChevronRight, ChevronLeft, Upload, Shirt, RotateCcw, Share2, Download, Eye, Layers, Type, Palette, Scissors, Binary, Grip, RotateCw, Image, ArrowLeftRight, Move, Check, Trash2 } from 'lucide-react';
@@ -7,17 +7,18 @@ import '../styles/JerseyDesigner.css';
 const PATTERNS_LIST = [
     { id: 'none', label: 'Ninguno' },
     { id: 'gradient', label: 'Degradado' },
-    { id: 'gradient-multi', label: 'Degradado Multi' },
+    { id: 'gradient-multi', label: 'Degradado multi' },
     { id: 'halftone-lines', label: 'Líneas' },
     { id: 'halftone-dots', label: 'Puntos' },
     { id: 'checkers', label: 'Ajedrez' },
-    { id: 'stepped-gradient', label: 'Degradado Escalonado' },
-    { id: 'zigzag', label: 'Zig Zag' },
-    { id: 'waves', label: 'Olas' },
+    { id: 'stepped-gradient', label: 'Degradado escalonado' },
+    { id: 'zigzag', label: 'Zig zag' },
+    { id: 'hoops-thin', label: 'Rayas finas' },
+    { id: 'ocean-waves', label: 'Olas' },
     { id: 'cross', label: 'Cruz' },
-    { id: 'cross-offset', label: 'Cruz Nórdica' },
-    { id: 'stripes', label: 'Rayas Verticales' },
-    { id: 'hoops', label: 'Rayas Horizontales' },
+    { id: 'cross-offset', label: 'Cruz nórdica' },
+    { id: 'stripes', label: 'Rayas verticales' },
+    { id: 'hoops', label: 'Rayas horizontales' },
     { id: 'diagonal', label: 'Diagonal' },
     { id: 'diamonds', label: 'Rombos' },
     { id: 'chevron', label: 'Chevron' },
@@ -27,93 +28,93 @@ const PATTERNS_LIST = [
     { id: 'arches', label: 'Arcos' },
     { id: 'star', label: 'Estrella' },
     { id: 'pixels', label: 'Pixelado' },
-    { id: 'center-stripe', label: 'Franja Central' },
+    { id: 'center-stripe', label: 'Franja central' },
     { id: 'sash', label: 'Banda' },
-    { id: 'double-stripe', label: 'Doble Franja' },
+    { id: 'double-stripe', label: 'Doble franja' },
 ];
 
 const JERSEY_TEMPLATES = [
     {
         id: 'ginga-classic',
-        name: 'Ginga Classic',
-        colors: { primary: '#0a0a0a', secondary: '#39FF14', accent: '#1a1a1a' },
+        name: 'Ginga classic',
+        colors: { primary: '#0a0a0a', secondary: '#39FF14', accent: '#1a1a1a', textColor: '#39FF14' },
         pattern: 'swirl',
         font: 'Orbitron'
     },
     {
-        id: 'adidas-arches',
-        name: 'Adidas Arches',
-        colors: { primary: '#000000', secondary: '#444444', accent: '#000000' },
-        pattern: 'arches',
-        font: 'Teko'
-    },
-    {
-        id: 'adidas-camo',
-        name: 'Adidas Camo',
-        colors: { primary: '#2c3e50', secondary: '#34495e', accent: '#000000' },
+        id: 'nova-camo',
+        name: 'Nova camo',
+        colors: { primary: '#ff0000', secondary: '#000000', accent: '#ffffff', textColor: '#ffffff' },
         pattern: 'camo',
         font: 'Black Ops One'
     },
     {
-        id: 'adidas-checkers',
-        name: 'Adidas Check',
-        colors: { primary: '#ffffff', secondary: '#000000', accent: '#000000' },
+        id: 'apex-arches',
+        name: 'Apex arches',
+        colors: { primary: '#0000ff', secondary: '#ffffff', accent: '#000000', textColor: '#ffffff' },
+        pattern: 'arches',
+        font: 'Teko'
+    },
+    {
+        id: 'vortex-tri',
+        name: 'Vortex tri',
+        colors: { primary: '#ff9900', secondary: '#000000', accent: '#ffffff', textColor: '#000000' },
+        pattern: 'triangles',
+        font: 'Goldman'
+    },
+    {
+        id: 'alpha-26',
+        name: 'Alpha 26 home',
+        colors: { primary: '#000000', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
+        pattern: 'center-stripe',
+        font: 'Anton'
+    },
+    {
+        id: 'classic-retro',
+        name: 'Classic retro',
+        colors: { primary: '#ffffff', secondary: '#ff0000', accent: '#000000', textColor: '#000000' },
+        pattern: 'hoops',
+        font: 'Impact'
+    },
+    {
+        id: 'neon-strike',
+        name: 'Neon strike',
+        colors: { primary: '#0a0a0a', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
+        pattern: 'diagonal',
+        font: 'Goldman'
+    },
+    {
+        id: 'titan-checkers',
+        name: 'Titan check',
+        colors: { primary: '#ffff00', secondary: '#000000', accent: '#ffffff', textColor: '#000000' },
         pattern: 'checkers',
         font: 'Saira Condensed'
     },
     {
         id: 'liquid-flames',
-        name: 'Liquid Flames',
-        colors: { primary: '#000000', secondary: '#00d2ff', accent: '#ffffff' },
+        name: 'Liquid flames',
+        colors: { primary: '#000000', secondary: '#ff33cc', accent: '#ffffff', textColor: '#ff33cc' },
         pattern: 'swirl',
         font: 'Rubik Glitch'
     },
     {
-        id: 'adidas-tri',
-        name: 'Adidas Tri',
-        colors: { primary: '#e74c3c', secondary: '#c0392b', accent: '#ffffff' },
-        pattern: 'triangles',
-        font: 'Goldman'
-    },
-    {
-        id: 'adidas-lab',
-        name: 'Adidas Lab',
-        colors: { primary: '#ffeaa7', secondary: '#fdcb6e', accent: '#2d3436' },
+        id: 'cyber-lab',
+        name: 'Cyber lab',
+        colors: { primary: '#6600cc', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
         pattern: 'labyrinth',
         font: 'Chakra Petch'
     },
     {
-        id: 'adidas-melange',
-        name: 'Adidas Melange',
-        colors: { primary: '#b2bec3', secondary: '#636e72', accent: '#2d3436' },
+        id: 'flux-melange',
+        name: 'Flux melange',
+        colors: { primary: '#00ccff', secondary: '#ffffff', accent: '#000000', textColor: '#ffffff' },
         pattern: 'halftone',
         font: 'Oswald'
     },
     {
-        id: 'psg-26',
-        name: 'PSG 26 Home',
-        colors: { primary: '#2c3e50', secondary: '#e74c3c', accent: '#ecf0f1' },
-        pattern: 'center-stripe',
-        font: 'Anton'
-    },
-    {
-        id: 'neon-strike',
-        name: 'Neon Strike',
-        colors: { primary: '#0a0a0a', secondary: '#39FF14', accent: '#1a1a1a' },
-        pattern: 'diagonal',
-        font: 'Goldman'
-    },
-    {
-        id: 'classic-retro',
-        name: 'Classic Retro',
-        colors: { primary: '#cc0000', secondary: '#ffffff', accent: '#ffffff' },
-        pattern: 'hoops',
-        font: 'Impact'
-    },
-    {
         id: 'cyber-pixels',
-        name: 'Cyber Pixels',
-        colors: { primary: '#1a1a2e', secondary: '#00d2ff', accent: '#0f3460' },
+        name: 'Cyber pixels',
+        colors: { primary: '#004d00', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
         pattern: 'pixels',
         font: 'Orbitron'
     }
@@ -121,16 +122,21 @@ const JERSEY_TEMPLATES = [
 
 // Reference colors from FIFA Kit Creator
 const PRESET_COLORS = [
-    { "name": "Negro", "hex": "#000000" }, { "name": "Blanco", "hex": "#ffffff" },
-    { "name": "Rojo Arsenal", "hex": "#cf151f" }, { "name": "Azul Arsenal", "hex": "#232e44" },
-    { "name": "Azul Chelsea", "hex": "#123e89" }, { "name": "Rojo Liverpool", "hex": "#b7121d" },
-    { "name": "Azul Man City", "hex": "#4ea7f0" }, { "name": "Rojo Man Utd", "hex": "#ce152d" },
-    { "name": "Oro Real Madrid", "hex": "#baa071" }, { "name": "Azul Barcelona", "hex": "#2261b2" },
-    { "name": "Rojo Barcelona", "hex": "#d63c54" }, { "name": "Azul PSG", "hex": "#242e47" },
-    { "name": "Oro Juventus", "hex": "#bf9556" }, { "name": "Amarillo Dortmund", "hex": "#f1d501" },
-    { "name": "Rojo Bayern", "hex": "#d00a2c" }, { "name": "Azul Inter", "hex": "#2270d7" },
-    { "name": "Rojo Milan", "hex": "#d3222d" }, { "name": "Azul Napoli", "hex": "#308ded" },
-    { "name": "Rojo Ajax", "hex": "#d2122e" }, { "name": "Verde Ginga", "hex": "#39FF14" }
+    { "name": "Negro", "hex": "#000000" },
+    { "name": "Blanco", "hex": "#ffffff" },
+    { "name": "Gris oscuro", "hex": "#333333" },
+    { "name": "Gris claro", "hex": "#cccccc" },
+    { "name": "Verde Ginga", "hex": "#39FF14" },
+    { "name": "Verde bosque", "hex": "#004d00" },
+    { "name": "Azul marino", "hex": "#000033" },
+    { "name": "Azul real", "hex": "#0000ff" },
+    { "name": "Azul cielo", "hex": "#00ccff" },
+    { "name": "Rojo Ginga", "hex": "#ff0000" },
+    { "name": "Rojo granate", "hex": "#800000" },
+    { "name": "Amarillo", "hex": "#ffff00" },
+    { "name": "Naranja", "hex": "#ff9900" },
+    { "name": "Rosa", "hex": "#ff33cc" },
+    { "name": "Morado", "hex": "#6600cc" }
 ];
 
 const FONT_OPTIONS = [
@@ -172,11 +178,11 @@ const FONT_OPTIONS = [
     { name: 'Manchester United', label: 'Man Utd', fallback: 'Montserrat' },
     { name: 'Premier League 23-24', label: 'Premier League 24', fallback: 'Anton' },
     { name: 'Arkema', label: 'Arkema', fallback: 'Saira Stencil One' },
-    { name: 'Adidas 2009', label: 'Adidas 09', fallback: 'Teko' },
+    { name: 'Strike 2009', label: 'Strike 09', fallback: 'Teko' },
     { name: 'Mainz', label: 'Mainz', fallback: 'Oswald' },
     { name: 'Mermaid', label: 'Mermaid', fallback: 'Playfair Display' },
     { name: 'FC Barcelona', label: 'FC Barcelona', fallback: 'Teko' },
-    { name: 'PSG Jordan', label: 'PSG Jordan', fallback: 'Oswald' },
+    { name: 'Jordan Elite', label: 'Jordan Elite', fallback: 'Oswald' },
     { name: 'Ligue 1 2024-25', label: 'Ligue 1 25', fallback: 'Roboto Condensed' },
     { name: 'Al-Hilal 2024-25', label: 'Al-Hilal 25', fallback: 'Chakra Petch' },
     { name: 'Germany 2020', label: 'Germany 20', fallback: 'Saira Condensed' },
@@ -184,7 +190,7 @@ const FONT_OPTIONS = [
     { name: 'Puma 2024', label: 'Puma 24', fallback: 'Teko' },
     { name: 'Vogue', label: 'Vogue', fallback: 'Playfair Display' },
     { name: 'Champions', label: 'Champions', fallback: 'Montserrat' },
-    { name: 'Adidas 2024', label: 'Adidas 24', fallback: 'Saira Condensed' },
+    { name: 'Strike 2024', label: 'Strike 24', fallback: 'Saira Condensed' },
     { name: 'Lin Libertine', label: 'Lin Libertine', fallback: 'Playfair Display' },
     { name: 'Permanent Marker', label: 'Marker', fallback: 'Permanent Marker' },
     { name: 'AC Milan', label: 'AC Milan', fallback: 'Teko' },
@@ -192,17 +198,17 @@ const FONT_OPTIONS = [
     { name: 'Aldo the Apache', label: 'Aldo Apache', fallback: 'Black Ops One' },
     { name: 'Nike 2024', label: 'Nike 24', fallback: 'Oswald' },
     { name: 'Winchester', label: 'Winchester', fallback: 'Playfair Display' },
-    { name: 'Adidas 2012', label: 'Adidas 12', fallback: 'Oswald' },
+    { name: 'Strike 2012', label: 'Strike 12', fallback: 'Oswald' },
     { name: 'Serie A', label: 'Serie A Font', fallback: 'Oswald' },
-    { name: 'Adidas 2026 Home', label: 'Adidas 26 Home', fallback: 'Goldman' },
+    { name: 'Velocity Home', label: 'Velocity Home', fallback: 'Goldman' },
     { name: 'Real Madrid 2025', label: 'Real Madrid 25', fallback: 'Cinzel' },
     { name: 'Heron', label: 'Heron', fallback: 'Oswald' },
-    { name: 'Adidas 2026 Away', label: 'Adidas 26 Away', fallback: 'Goldman' },
+    { name: 'Velocity Away', label: 'Velocity Away', fallback: 'Goldman' },
     { name: 'Turkey', label: 'Turkey', fallback: 'Saira Condensed' },
     { name: 'Ultimate Script', label: 'Ultimate Script', fallback: 'Caveat' },
     { name: 'Whole Trains', label: 'Whole Trains', fallback: 'Bungee Inline' },
     { name: 'Wolfsburg', label: 'Wolfsburg', fallback: 'Impact' },
-    { name: 'Adidas Euro 2020', label: 'Adidas Euro 20', fallback: 'Teko' },
+    { name: 'United Euro 20', label: 'United Euro 20', fallback: 'Teko' },
     { name: 'Brazil 20', label: 'Brazil 20', fallback: 'Saira Condensed' },
     { name: 'Bungee', label: 'Bungee', fallback: 'Bungee Inline' },
     { name: 'Canada', label: 'Canada', fallback: 'Orbitron' },
@@ -228,13 +234,13 @@ const FONT_OPTIONS = [
     { name: 'Premier League Shirt', label: 'PL Shirt', fallback: 'Anton' },
     { name: 'Premier League Shirt Old', label: 'PL Shirt Old', fallback: 'Oswald' },
     { name: 'Prisma', label: 'Prisma', fallback: 'Monoton' },
-    { name: 'PSG 20-21', label: 'PSG 20', fallback: 'Oswald' },
-    { name: 'PSG 21-22 Away', label: 'PSG 21 Away', fallback: 'Montserrat' },
+    { name: 'Elite 20-21', label: 'Elite 20', fallback: 'Oswald' },
+    { name: 'Elite 21 Away', label: 'Elite 21 Away', fallback: 'Montserrat' },
     { name: 'PSV Eindhoven 2020-21', label: 'PSV 20', fallback: 'Teko' },
     { name: 'Real Madrid 2022', label: 'Real Madrid 22', fallback: 'Cinzel' },
     { name: 'Real Madrid 2023', label: 'Real Madrid 23', fallback: 'Montserrat' },
     { name: 'Barcelona 2012', label: 'Barcelona 12', fallback: 'Teko' },
-    { name: 'Adidas 2022', label: 'Adidas 2022', fallback: 'Saira Condensed' },
+    { name: 'Global 2022', label: 'Global 22', fallback: 'Saira Condensed' },
     { name: 'Nike 2022', label: 'Nike 2022', fallback: 'Oswald' },
     { name: 'Puma 2022', label: 'Puma 2022', fallback: 'Teko' },
     { name: 'Premier League', label: 'Premier League', fallback: 'Anton' },
@@ -402,16 +408,32 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     {pattern === 'triangles' && (
                         <g>
                             <rect width="100" height="100" fill={color1} />
-                            <path d="M0,0 L10,20 L20,0 Z M30,0 L40,20 L50,0 Z M60,0 L70,20 L80,0 Z" fill={color2} opacity={0.6} transform="scale(1.5)" />
+                            <g fill={color2} opacity={0.6}>
+                                <path d="M10,10 L25,10 L17.5,25 Z" />
+                                <path d="M30,10 L45,10 L37.5,25 Z" />
+                                <path d="M50,10 L65,10 L57.5,25 Z" />
+                                <path d="M70,10 L85,10 L77.5,25 Z" />
+
+                                <path d="M17.5,30 L32.5,30 L25,45 Z" />
+                                <path d="M37.5,30 L52.5,30 L45,45 Z" />
+                                <path d="M57.5,30 L72.5,30 L65,45 Z" />
+
+                                <path d="M10,50 L25,50 L17.5,65 Z" />
+                                <path d="M30,50 L45,50 L37.5,65 Z" />
+                                <path d="M50,50 L65,50 L57.5,65 Z" />
+                                <path d="M70,50 L85,50 L77.5,65 Z" />
+                            </g>
                         </g>
                     )}
                     {pattern === 'camo' && (
                         <g>
                             <rect width="100" height="100" fill={color1} />
-                            <circle cx="20" cy="20" r="15" fill={color2} opacity={0.5} />
-                            <circle cx="60" cy="50" r="20" fill={color2} opacity={0.5} />
-                            <circle cx="30" cy="80" r="18" fill={color2} opacity={0.5} />
-                            <circle cx="80" cy="20" r="12" fill={color2} opacity={0.5} />
+                            <circle cx="25" cy="25" r="18" fill={color2} opacity={0.4} />
+                            <circle cx="65" cy="35" r="22" fill={color2} opacity={0.3} />
+                            <circle cx="45" cy="70" r="25" fill={color2} opacity={0.4} />
+                            <circle cx="85" cy="75" r="15" fill={color2} opacity={0.3} />
+                            <circle cx="15" cy="80" r="12" fill={color2} opacity={0.4} />
+                            <path d="M40,20 Q60,10 70,40 Q50,60 30,40 Z" fill={color2} opacity={0.3} />
                         </g>
                     )}
                     {pattern === 'swirl' && (
@@ -419,6 +441,24 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                             <rect width="100" height="100" fill={color1} />
                             <path d="M50,50 m-40,0 a40,40 0 1,0 80,0 a40,40 0 1,0 -80,0" fill="none" stroke={color2} strokeWidth="5" opacity={0.6} />
                             <path d="M50,50 m-20,0 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0" fill="none" stroke={color2} strokeWidth="5" opacity={0.6} />
+                        </g>
+                    )}
+                    {pattern === 'hoops-thin' && (
+                        <g fill={color2} opacity={0.6}>
+                            <rect width="100" height="100" fill={color1} />
+                            {Array.from({ length: 15 }).map((_, i) => (
+                                <rect key={i} x="0" y={i * 7} width="100" height="2" />
+                            ))}
+                        </g>
+                    )}
+                    {pattern === 'ocean-waves' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <g stroke={color2} strokeWidth="2" fill="none" opacity={0.6}>
+                                {Array.from({ length: 6 }).map((_, i) => (
+                                    <path key={i} d={`M0,${i * 15 + 10} Q25,${i * 15} 50,${i * 15 + 10} T100,${i * 15 + 10}`} />
+                                ))}
+                            </g>
                         </g>
                     )}
                     {pattern === 'arches' && (
@@ -446,8 +486,10 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     )}
 
                     {/* Default fallback for undefined patterns in thumbnail - just show color1 base */}
-                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'swirl', 'arches', 'star', 'pixels'].includes(pattern) && pattern !== 'none' && (
-                        <text x="50" y="60" textAnchor="middle" fill={color2} fontSize="30" fontWeight="bold">?</text>
+                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'swirl', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves'].includes(pattern) && pattern !== 'none' && (
+                        <g opacity={0.3}>
+                            <path d={shirtPath} fill={color2} />
+                        </g>
                     )}
                 </g>
 
@@ -461,11 +503,12 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
 const JerseyDesigner = () => {
     // Default "Teo 69" State
     const [colors, setColors] = useState({
-        primary: '#ffffff',
-        secondary: '#000000',
-        accent: '#1a1a1a'
+        primary: '#0a0a0a',
+        secondary: '#39FF14',
+        accent: '#1a1a1a',
+        textColor: '#39FF14'
     });
-    const [pattern, setPattern] = useState('splatter');
+    const [pattern, setPattern] = useState('swirl');
     const [name, setName] = useState('TEO');
     const [number, setNumber] = useState('69');
     const [font, setFont] = useState('Orbitron');
@@ -478,6 +521,13 @@ const JerseyDesigner = () => {
     const [collar, setCollar] = useState('round'); // round, v-neck, polo
     const [sleeve, setSleeve] = useState('normal'); // normal, raglan
     const [showFontDropdown, setShowFontDropdown] = useState(false);
+
+    // Handle template application
+    const applyTemplate = (template) => {
+        setColors(template.colors);
+        setPattern(template.pattern);
+        if (template.font) setFont(template.font);
+    };
 
     // Logo Position State - Now 3D
     // Crest (Escudo): Positioned to match the Iron Man reference, now smaller and higher quality
@@ -517,13 +567,6 @@ const JerseyDesigner = () => {
 
     const handleColorChange = (key, value) => {
         setColors(prev => ({ ...prev, [key]: value }));
-    };
-
-    const applyTemplate = (template) => {
-        setColors(template.colors);
-        setPattern(template.pattern);
-        setFont(template.font);
-        if (template.vibrancy) setVibrancy(template.vibrancy);
     };
 
     const handleFileUpload = (e, type) => {
@@ -571,6 +614,15 @@ const JerseyDesigner = () => {
                 <div className="header-center">
                     <a href="https://ginga.es" target="_blank" rel="noopener noreferrer">
                         <img src="/ginga-logo-header.png" alt="Ginga" className="header-logo" style={{ height: '120px' }} />
+                    </a>
+                </div>
+                <div className="header-right">
+                    <a href="https://www.instagram.com/ginga.es/" target="_blank" rel="noopener noreferrer" className="header-instagram" title="Síguenos en Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                            <circle cx="12" cy="12" r="4.5" />
+                            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                        </svg>
                     </a>
                 </div>
             </header>
@@ -653,15 +705,15 @@ const JerseyDesigner = () => {
                     <nav className="controls-nav">
                         <button className={activeTab === 'shield' ? 'active' : ''} onClick={() => { setActiveTab('shield'); setSelectedLogo(null); }}>
                             <Image size={20} />
-                            <span>ESCUDO</span>
+                            <span>Escudo</span>
                         </button>
                         <button className={activeTab === 'text' ? 'active' : ''} onClick={() => { setActiveTab('text'); setSelectedLogo(null); }}>
                             <Type size={20} />
-                            <span>TEXTO</span>
+                            <span>Texto</span>
                         </button>
                         <button className={activeTab === 'design' ? 'active' : ''} onClick={() => { setActiveTab('design'); setSelectedLogo(null); }}>
                             <Palette size={20} />
-                            <span>DISEÑO</span>
+                            <span>Diseño</span>
                         </button>
                     </nav>
 
@@ -683,14 +735,14 @@ const JerseyDesigner = () => {
                                             </div>
                                         )}
                                         <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'team')} />
-                                        <span>Click para Subir Imagen</span>
+                                        <span>Click para subir imagen</span>
                                     </div>
                                 </div>
 
                                 {/* Team Logo Controls */}
                                 {teamLogo && (
                                     <div className="control-group" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
-                                        <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>POSICIÓN ESCUDO</h3>
+                                        <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>Posición escudo</h3>
 
                                         <div className="input-item">
                                             <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -724,12 +776,12 @@ const JerseyDesigner = () => {
                                             }}
                                         >
                                             <Trash2 size={16} />
-                                            Eliminar Escudo
+                                            Eliminar escudo
                                         </button>
                                     </div>
                                 )}
                                 <div className="upload-item" style={{ marginTop: '20px' }}>
-                                    <label>Patrocinador (Opcional)</label>
+                                    <label>Patrocinador (opcional)</label>
                                     <div className="upload-zone">
                                         {sponsorLogo ? (
                                             <div className="upload-preview-container" style={{ marginTop: '10px', textAlign: 'center' }}>
@@ -738,14 +790,14 @@ const JerseyDesigner = () => {
                                         ) : (
                                             <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'sponsor')} />
                                         )}
-                                        {!sponsorLogo && <span>Click para Subir</span>}
+                                        {!sponsorLogo && <span>Click para subir</span>}
                                     </div>
                                 </div>
 
                                 {/* Sponsor Logo Controls */}
                                 {sponsorLogo && (
                                     <div className="control-group" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
-                                        <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>POSICIÓN PATROCINADOR</h3>
+                                        <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>Posición patrocinador</h3>
 
                                         <div className="input-item">
                                             <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -779,7 +831,7 @@ const JerseyDesigner = () => {
                                             }}
                                         >
                                             <Trash2 size={16} />
-                                            Eliminar Patrocinador
+                                            Eliminar patrocinador
                                         </button>
                                     </div>
                                 )}
@@ -799,6 +851,10 @@ const JerseyDesigner = () => {
                                 <div className="input-item">
                                     <label>Dorsal</label>
                                     <input type="text" value={number} maxLength={2} onChange={(e) => setNumber(e.target.value)} />
+                                </div>
+                                <div className="input-item">
+                                    <label>Color del texto</label>
+                                    <input type="color" value={colors.textColor} onChange={(e) => handleColorChange('textColor', e.target.value)} />
                                 </div>
                                 <div className="input-item">
                                     <label>Fuente</label>
@@ -863,13 +919,18 @@ const JerseyDesigner = () => {
                                     {designTab === 'colors' && (
                                         <div className="control-group">
                                             <div className="color-picker-item">
-                                                <label>Color 1 (Principal)</label>
+                                                <label>Color 1 (principal)</label>
                                                 <input type="color" value={colors.primary} onChange={(e) => handleColorChange('primary', e.target.value)} />
                                             </div>
                                             <div className="color-picker-item">
-                                                <label>Color 2 (Nombre y Número)</label>
+                                                <label>Color 2 (diseño/patrón)</label>
                                                 <input type="color" value={colors.secondary} onChange={(e) => handleColorChange('secondary', e.target.value)} />
                                             </div>
+                                            <div className="color-picker-item">
+                                                <label>Color del texto</label>
+                                                <input type="color" value={colors.textColor} onChange={(e) => handleColorChange('textColor', e.target.value)} />
+                                            </div>
+
 
                                             <div className="presets-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
                                                 {PRESET_COLORS.map(c => (

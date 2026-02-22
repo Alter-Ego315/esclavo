@@ -1,7 +1,7 @@
 import React from 'react';
 
-const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, brandLogo, font = 'Orbitron', view = 'full', vibrancy = 50, sleeve, collar }) => {
-    const { primary, secondary, accent } = colors;
+const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, font = 'Orbitron', view = 'full', vibrancy = 50, sleeve, collar }) => {
+    const { primary, secondary, accent, textColor } = colors;
 
     // Based on the standard shirt_baked.glb UV mapping:
     // The texture is usually creating a full wrap.
@@ -15,8 +15,8 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
         return (
             <div className="jersey-preview-container" style={{ width: '512px', height: '512px', background: 'transparent' }}>
                 <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
-                    <text x="256" y="220" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
-                    <text x="256" y="370" textAnchor="middle" fill={secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
+                    <text x="256" y="220" textAnchor="middle" fill={textColor || secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
+                    <text x="256" y="370" textAnchor="middle" fill={textColor || secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
                 </svg>
             </div>
         );
@@ -56,7 +56,47 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
         return base64;
     };
 
-    const companyLogoB64 = useBase64Image('/ginga-green.png');
+    const GINGA_LOGOS = [
+        { name: 'blanco', color: [255, 255, 255], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (blanco).png' },
+        { name: 'negro', color: [0, 0, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (negro).png' },
+        { name: 'verde', color: [57, 255, 20], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (verde).png' },
+        { name: 'rojo', color: [255, 0, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (rojo).png' },
+        { name: 'azul claro', color: [0, 204, 255], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (azul claro).png' },
+        { name: 'azul oscuro', color: [0, 0, 51], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (azul oscuro).png' },
+        { name: 'amarillo', color: [255, 255, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (amarillo).png' },
+        { name: 'naranja', color: [255, 153, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (orange).png' },
+        { name: 'rosa', color: [255, 51, 204], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (rosa).png' },
+        { name: 'morado', color: [102, 0, 204], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (morado).png' }
+    ];
+
+    const getContrastingLogo = (hex) => {
+        if (!hex) return GINGA_LOGOS[0].path;
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+
+        const target = [255 - r, 255 - g, 255 - b];
+
+        let bestLogo = GINGA_LOGOS[0];
+        let minDist = Infinity;
+
+        GINGA_LOGOS.forEach(logo => {
+            const dist = Math.sqrt(
+                Math.pow(target[0] - logo.color[0], 2) +
+                Math.pow(target[1] - logo.color[1], 2) +
+                Math.pow(target[2] - logo.color[2], 2)
+            );
+            if (dist < minDist) {
+                minDist = dist;
+                bestLogo = logo;
+            }
+        });
+        return bestLogo.path;
+    };
+
+    const brandLogoPath = React.useMemo(() => getContrastingLogo(primary), [primary]);
+
+    const companyLogoB64 = useBase64Image(brandLogoPath);
     const teamLogoB64 = useBase64Image(teamLogo);
     const sponsorLogoB64 = useBase64Image(sponsorLogo);
 
@@ -171,11 +211,20 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                     </g>
                 )}
 
-                {/* 6. WAVES (Organic) */}
-                {pattern === 'waves' && (
-                    <g stroke={secondary} strokeWidth="15" fill="none" opacity="0.6">
-                        {Array.from({ length: 20 }).map((_, i) => (
-                            <path key={i} d={`M0, ${i * 60} Q256, ${i * 60 - 50} 512, ${i * 60} T1024, ${i * 60} `} />
+                {/* 6. THIN HOOPS (Straight Lines) */}
+                {pattern === 'hoops-thin' && (
+                    <g fill={secondary} opacity="0.6">
+                        {Array.from({ length: 40 }).map((_, i) => (
+                            <rect key={i} x="0" y={i * 25} width="1024" height="4" />
+                        ))}
+                    </g>
+                )}
+
+                {/* 7. OCEAN WAVES (Organic Waves) */}
+                {pattern === 'ocean-waves' && (
+                    <g stroke={secondary} strokeWidth="12" fill="none" opacity="0.6">
+                        {Array.from({ length: 15 }).map((_, i) => (
+                            <path key={i} d={`M0,${i * 70} Q128,${i * 70 - 40} 256,${i * 70} T512,${i * 70} T768,${i * 70} T1024,${i * 70}`} />
                         ))}
                     </g>
                 )}
@@ -267,7 +316,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, b
                         {/* Shifted pattern slightly left to align grid with center */}
                         {Array.from({ length: 12 }).map((_, y) => (
                             Array.from({ length: 12 }).map((_, x) => (
-                                <path key={`${x} -${y} `} d={`M${x * 100 + 50},${y * 100} L${x * 100 + 100},${y * 100 + 100} L${x * 100},${y * 100 + 100} Z`} />
+                                <path key={`${x}-${y}`} d={`M${x * 100 + 50},${y * 100} L${x * 100 + 100},${y * 100 + 100} L${x * 100},${y * 100 + 100} Z`} />
                             ))
                         ))}
                     </g>
