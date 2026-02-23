@@ -6,6 +6,46 @@
     animation: fade-in 1s ease-out;
 }
 
+.designer-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px);
+    z-index: 100;
+}
+
+.header-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-right {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-instagram {
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.header-instagram:hover {
+    color: #E1306C;
+    transform: scale(1.15);
+}
+
 .app-header {
     height: 50px;
     /* Reduced from 60px */
