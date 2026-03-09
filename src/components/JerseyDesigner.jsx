@@ -154,9 +154,8 @@ const RAW_FONT_OPTIONS = [
     { name: 'Oswald', label: 'American Captain' },
 
     // Local Fonts (from public/Fonts)
-    { name: 'Algerian', label: 'Algerian' },
+    { name: 'Algerian', label: 'ALGERIAN' },
     { name: 'Blowbrush', label: 'Blowbrush' },
-    { name: 'Brush King', label: 'Brush King' },
     { name: 'Eras ITC Demi', label: 'Eras ITC Demi' },
     { name: 'Ethnocentric', label: 'Ethnocentric' },
     { name: 'Real Madrid 2009', label: 'Real Madrid 09' },
@@ -417,8 +416,8 @@ const JerseyDesigner = () => {
         textColor: '#000000'
     });
     const [pattern, setPattern] = useState('none');
-    const [name, setName] = useState('');
-    const [number, setNumber] = useState('');
+    const [name, setName] = useState('TEO');
+    const [number, setNumber] = useState('69');
     const [font, setFont] = useState('Oswald');
     const [teamLogo, setTeamLogo] = useState(null);
     const [sponsorLogo, setSponsorLogo] = useState(null);
