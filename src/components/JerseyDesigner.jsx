@@ -976,14 +976,32 @@ const JerseyDesigner = () => {
 
                                 <div className="sub-content">
                                     {designTab === 'templates' && (
-                                        <div className="templates-grid">
+                                        <div className="templates-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '25px', padding: '10px' }}>
                                             {JERSEY_TEMPLATES.map(t => (
-                                                <div key={t.id} className="template-card" onClick={() => applyTemplate(t)}>
-                                                    <div className="template-preview" style={{ background: t.colors.primary }}>
-                                                        <div className="template-stripe" style={{ background: t.colors.secondary }}></div>
+                                                <button
+                                                    key={t.id}
+                                                    onClick={() => applyTemplate(t)}
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        alignItems: 'center',
+                                                        padding: '20px 10px',
+                                                        background: 'var(--surface)',
+                                                        border: '1px solid var(--border)',
+                                                        borderRadius: '16px',
+                                                        cursor: 'pointer',
+                                                        transition: 'transform 0.2s',
+                                                        minHeight: '180px',
+                                                        justifyContent: 'space-between'
+                                                    }}
+                                                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                                                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                                >
+                                                    <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '15px' }}>
+                                                        <PatternThumbnail pattern={t.pattern} color1={t.colors.primary} color2={t.colors.secondary} />
                                                     </div>
-                                                    <span>{t.name}</span>
-                                                </div>
+                                                    <span style={{ fontSize: '13px', fontWeight: '500', textAlign: 'center', color: 'var(--text-primary)', width: '100%' }}>{t.name}</span>
+                                                </button>
                                             ))}
                                         </div>
                                     )}
