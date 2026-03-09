@@ -4,6 +4,7 @@ import { OrbitControls, Environment, useGLTF, Decal, useTexture } from '@react-t
 import * as THREE from 'three';
 import JerseyPreview from './JerseyPreview';
 import MovableDecal from './MovableDecal';
+import { FONT_OPTIONS, GINGA_LOGOS } from './JerseyDesigner';
 
 // Helper component to adjust camera zoom/position when locked
 const CameraAdjuster = ({ viewLocked, controlsRef }) => {
@@ -57,25 +58,57 @@ const generateNameNumberTexture = (name, number, font, color, bgColor) => {
     ctx.strokeStyle = outlineColor;
     ctx.lineWidth = 4; // Slightly thicker for better visibility
 
+    // Name size capped at 85% of the original American Captain size (153px max).
+    // Positions are fixed as absolute pixels so the gap is always the same regardless of font.
+    const nameSize = 153;
+    const numberSize = 484; // 440 * 1.1
+    const nameY = Math.round(height * 0.26);   // fixed absolute Y for name center
+    const numberY = nameY + Math.round(nameSize / 2) + 60 + Math.round(numberSize / 2); // 60px gap between name-bottom and number-top
+
     const displayName = String(name || '').toUpperCase();
     if (displayName) {
-        let fontSizeName = 180;
-        if (displayName.length > 6) fontSizeName = 160;
-        if (displayName.length > 8) fontSizeName = 140;
-        ctx.font = `900 ${fontSizeName}px "${font}"`;
-        ctx.strokeText(displayName, width / 2, height * 0.30);
-        ctx.fillText(displayName, width / 2, height * 0.30);
+        ctx.font = `900 ${nameSize}px "${font}"`;
+        ctx.strokeText(displayName, width / 2, nameY);
+        ctx.fillText(displayName, width / 2, nameY);
     }
 
     const displayNumber = String(number || '');
     if (displayNumber) {
-        ctx.font = `900 440px "${font}"`;
-        ctx.strokeText(displayNumber, width / 2, height * 0.58, 580);
-        ctx.fillText(displayNumber, width / 2, height * 0.58, 580);
+        ctx.font = `900 ${numberSize}px "${font}"`;
+        ctx.strokeText(displayNumber, width / 2, numberY, 580);
+        ctx.fillText(displayNumber, width / 2, numberY, 580);
     }
 
     const tex = new THREE.CanvasTexture(canvas);
     tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+};
+
+const generateCustomTextTexture = (text, fontName, color) => {
+    if (!text) return null;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 1024;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    let fontSize = 250;
+    if (text.length > 8) fontSize = 200;
+    if (text.length > 12) fontSize = 150;
+
+    ctx.font = `900 ${fontSize}px "${fontName}"`;
+    ctx.fillText(text, 512, 512);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.minFilter = THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+
     return tex;
 };
 
@@ -150,56 +183,25 @@ const PoloCollar = ({ color }) => (
     </group>
 );
 
-const GINGA_LOGOS = [
-    { name: 'blanco', color: [255, 255, 255], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (blanco).png' },
-    { name: 'negro', color: [0, 0, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (negro).png' },
-    { name: 'verde', color: [57, 255, 20], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (verde).png' },
-    { name: 'rojo', color: [255, 0, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (rojo).png' },
-    { name: 'azul claro', color: [0, 204, 255], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (azul claro).png' },
-    { name: 'azul oscuro', color: [0, 0, 51], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (azul oscuro).png' },
-    { name: 'amarillo', color: [255, 255, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (amarillo).png' },
-    { name: 'naranja', color: [255, 153, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (orange).png' },
-    { name: 'rosa', color: [255, 51, 204], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (rosa).png' },
-    { name: 'morado', color: [102, 0, 204], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (morado).png' }
-];
-
-const getContrastingLogo = (hex) => {
-    if (!hex) return GINGA_LOGOS[0].path;
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-
-    // Goal: Maximum visibility. Inverted color is a good heuristic.
-    const target = [255 - r, 255 - g, 255 - b];
-
-    let bestLogo = GINGA_LOGOS[0];
-    let minDist = Infinity;
-
-    GINGA_LOGOS.forEach(logo => {
-        const dist = Math.sqrt(
-            Math.pow(target[0] - logo.color[0], 2) +
-            Math.pow(target[1] - logo.color[1], 2) +
-            Math.pow(target[2] - logo.color[2], 2)
-        );
-        if (dist < minDist) {
-            minDist = dist;
-            bestLogo = logo;
-        }
-    });
-    return bestLogo.path;
+const getBrandLogoPath = (colorName) => {
+    const found = GINGA_LOGOS.find(l => l.name === colorName);
+    return found ? found.path : GINGA_LOGOS[0].path;
 };
 
 const ShirtModel = ({
     texture, decalTexture, color, collar, accentColor,
     teamLogo, sponsorLogo, teamLogoState, sponsorLogoState,
     onTeamLogoUpdate, onSponsorLogoUpdate, selectedLogo, onSelectLogo,
-    isDraggingAny, onDragChange
+    isDraggingAny, onDragChange,
+    customText, customTextState, onCustomTextUpdate, customTextColor, brandLogoColor,
+    teamLogoTex, sponsorLogoTex, customTextTex,
+    controlsRef // Pass controlsRef for MovableDecal
 }) => {
     const { nodes, materials } = useGLTF('/shirt_baked.glb');
     const [material, setMaterial] = useState(null);
     const meshRef = useRef();
 
-    const brandTexture = useTexture(getContrastingLogo(color));
+    const brandTexture = useTexture(getBrandLogoPath(brandLogoColor));
 
     useEffect(() => {
         if (brandTexture) {
@@ -240,8 +242,19 @@ const ShirtModel = ({
             const intersects = e.intersections.filter(i => i.object === meshRef.current);
             if (intersects.length > 0) {
                 const point = intersects[0].point;
-                const updateFn = selectedLogo === 'team' ? onTeamLogoUpdate : onSponsorLogoUpdate;
-                const prevState = selectedLogo === 'team' ? teamLogoState : sponsorLogoState;
+                let updateFn;
+                let prevState;
+                if (selectedLogo === 'team') {
+                    updateFn = onTeamLogoUpdate;
+                    prevState = teamLogoState;
+                } else if (selectedLogo === 'sponsor') {
+                    updateFn = onSponsorLogoUpdate;
+                    prevState = sponsorLogoState;
+                } else if (selectedLogo === 'text') {
+                    updateFn = onCustomTextUpdate;
+                    prevState = customTextState;
+                }
+
                 if (updateFn && prevState) {
                     updateFn({ ...prevState, pos: [point.x, point.y, point.z] });
                 }
@@ -261,32 +274,56 @@ const ShirtModel = ({
                 material={material || materials.lambert1}
                 onPointerMove={handleMeshPointerMove}
             >
-                {teamLogo && teamLogoState && (
+                {teamLogo && teamLogoState && teamLogoTex && (
                     <MovableDecal
+                        texture={teamLogoTex}
                         position={teamLogoState.pos}
                         rotation={teamLogoState.rot}
-                        scale={teamLogoState.scale}
-                        textureUrl={teamLogo}
+                        scaleX={teamLogoState.scaleX}
+                        scaleY={teamLogoState.scaleY}
                         isSelected={selectedLogo === 'team'}
                         onSelect={() => onSelectLogo && onSelectLogo('team')}
                         onUpdate={onTeamLogoUpdate}
                         onDelete={() => onTeamLogoUpdate && onTeamLogoUpdate(null)}
                         meshRef={meshRef}
                         onDragChange={onDragChange}
+                        orbitControlsRef={controlsRef}
+                        aspectRatio={teamLogoTex.image.width / teamLogoTex.image.height}
                     />
                 )}
-                {sponsorLogo && sponsorLogoState && (
+                {sponsorLogo && sponsorLogoState && sponsorLogoTex && (
                     <MovableDecal
-                        position={sponsorLogoState.pos}
-                        rotation={sponsorLogoState.rot}
-                        scale={sponsorLogoState.scale}
-                        textureUrl={sponsorLogo}
+                        texture={sponsorLogoTex}
+                        position={sponsorLogoState?.pos || [0, -0.10, 0.16]}
+                        rotation={sponsorLogoState?.rot || Math.PI}
+                        scaleX={sponsorLogoState?.scaleX || 0.25}
+                        scaleY={sponsorLogoState?.scaleY || 0.25}
                         isSelected={selectedLogo === 'sponsor'}
                         onSelect={() => onSelectLogo && onSelectLogo('sponsor')}
                         onUpdate={onSponsorLogoUpdate}
                         onDelete={() => onSponsorLogoUpdate && onSponsorLogoUpdate(null)}
                         meshRef={meshRef}
                         onDragChange={onDragChange}
+                        orbitControlsRef={controlsRef}
+                        aspectRatio={sponsorLogoTex.image.width / sponsorLogoTex.image.height}
+                    />
+                )}
+                {customText && customTextState && customTextTex && (
+                    <MovableDecal
+                        texture={customTextTex}
+                        position={customTextState?.pos || [0, -0.05, 0.165]}
+                        rotation={customTextState?.rot ?? Math.PI}
+                        scaleX={customTextState?.scaleX || 0.12}
+                        scaleY={customTextState?.scaleY || 0.12}
+                        isSelected={selectedLogo === 'text'}
+                        onSelect={() => onSelectLogo && onSelectLogo('text')}
+                        onUpdate={onCustomTextUpdate}
+                        onDelete={() => onCustomTextUpdate && onCustomTextUpdate(null)}
+                        meshRef={meshRef}
+                        onDragChange={onDragChange}
+                        orbitControlsRef={controlsRef}
+                        noFlip={false}
+                        aspectRatio={1}
                     />
                 )}
                 {decalTexture && (
@@ -300,7 +337,7 @@ const ShirtModel = ({
                     </Decal>
                 )}
                 <Decal
-                    position={[0.08, 0.08, 0.15]}
+                    position={[-0.08, 0.08, 0.15]}
                     rotation={[0, 0, 0]}
                     scale={[0.045, 0.045, 0.2]}
                     map={brandTexture}
@@ -324,6 +361,9 @@ useGLTF.preload('/shirt_baked.glb');
 const Jersey3D = forwardRef((props, ref) => {
     const [texture, setTexture] = useState(null);
     const [decalTexture, setDecalTexture] = useState(null);
+    const [teamLogoTex, setTeamLogoTex] = useState(null);
+    const [sponsorLogoTex, setSponsorLogoTex] = useState(null);
+    const [customTextTex, setCustomTextTex] = useState(null); // New state for custom text texture
     const [isDraggingAny, setIsDraggingAny] = useState(false);
     const containerRef = useRef();
     const controlsRef = useRef();
@@ -336,24 +376,16 @@ const Jersey3D = forwardRef((props, ref) => {
             const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
             if (!canvas || !controls) return null;
 
-            const originalWidth = canvas.width;
-            const originalHeight = canvas.height;
-            const exportSize = 2048;
-
-            const setSize = (w, h) => {
-                canvas.width = w; canvas.height = h;
-                canvas.style.width = `${w}px`; canvas.style.height = `${h}px`;
-                if (gl) gl.viewport(0, 0, w, h);
-            };
-
             const capture = () => new Promise(resolve => {
-                requestAnimationFrame(() => { setTimeout(() => resolve(canvas.toDataURL('image/png', 1.0)), 250); });
+                requestAnimationFrame(() => { setTimeout(() => resolve(canvas.toDataURL('image/png', 1.0)), 150); });
             });
 
-            const savedWidth = canvas.style.width;
-            const savedHeight = canvas.style.height;
-            setSize(exportSize, exportSize);
+            // Clean, non-destructive export. Save user's current camera state to restore later.
+            const savedPos = controls.object.position.clone();
+            const savedTarget = controls.target.clone();
 
+            // Zoom in and center for export. 
+            // 0.9 is an ideal distance for the standard web aspect ratio to fill the screen without clipping.
             controls.object.position.set(0, 0, 0.9);
             controls.target.set(0, 0.12, 0);
             controls.update();
@@ -363,26 +395,93 @@ const Jersey3D = forwardRef((props, ref) => {
             controls.update();
             const backImage = await capture();
 
-            canvas.style.width = savedWidth || '100%';
-            canvas.style.height = savedHeight || '100%';
-            controls.object.position.set(0, 0, 0.9);
+            // Restore normal view wrapper parameters
+            controls.object.position.copy(savedPos);
+            controls.target.copy(savedTarget);
             controls.update();
 
             return { front: frontImage, back: backImage };
         }
     }));
 
+    // Update textures - use a single ref to track the last update time
+    // Watch customText changes
     useEffect(() => {
+        if (!props.customText) {
+            setCustomTextTex(null);
+            return;
+        }
+
+        const updateTextTex = async () => {
+            try { await document.fonts.load(`100px "${props.font}"`); } catch (e) { }
+            const tex = generateCustomTextTexture(props.customText, props.font, props.customTextColor || '#ffffff');
+            if (tex) setCustomTextTex(tex);
+        };
+        updateTextTex();
+    }, [props.customText, props.font, props.customTextColor]);
+
+    // Load team logo into a Three.js texture when the base64 data URL changes
+    useEffect(() => {
+        if (!props.teamLogo) { setTeamLogoTex(null); return; }
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.colorSpace = THREE.SRGBColorSpace;
+            tex.minFilter = THREE.LinearFilter;
+            tex.magFilter = THREE.LinearFilter;
+            tex.flipY = false;
+            setTeamLogoTex(tex);
+        };
+        img.src = props.teamLogo;
+    }, [props.teamLogo]);
+
+    // Load sponsor logo into a Three.js texture when the base64 data URL changes
+    useEffect(() => {
+        if (!props.sponsorLogo) { setSponsorLogoTex(null); return; }
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.colorSpace = THREE.SRGBColorSpace;
+            tex.minFilter = THREE.LinearFilter;
+            tex.magFilter = THREE.LinearFilter;
+            tex.flipY = false;
+            setSponsorLogoTex(tex);
+        };
+        img.src = props.sponsorLogo;
+    }, [props.sponsorLogo]);
+
+    useEffect(() => {
+        let isMounted = true;
+        let timer;
+
         const updateTextures = async () => {
+            const now = Date.now();
+            // If this was triggered rapidly but isn't just a bg change, throttle
+
             const mainTex = await generateTextureFromSvg(`.hidden-previews .full-view svg`, false);
-            if (mainTex) setTexture(mainTex);
+            if (isMounted && mainTex) setTexture(mainTex);
+
             try { await document.fonts.load(`100px "${props.font}"`); } catch (e) { }
             const decalTex = generateNameNumberTexture(props.name, props.number, props.font, props.colors.textColor || props.colors.secondary, props.colors.primary);
-            if (decalTex) setDecalTexture(decalTex);
+            if (isMounted && decalTex) setDecalTexture(decalTex);
         };
-        const timer = setTimeout(updateTextures, 300);
-        return () => clearTimeout(timer);
-    }, [props.colors, props.pattern, props.name, props.number, props.font, props.collar]);
+
+        // We use a small debounce for everything to prevent double-bakes on load, but short enough that panning feels okay
+        timer = setTimeout(updateTextures, 50);
+
+        return () => {
+            isMounted = false;
+            clearTimeout(timer);
+        };
+    }, [props.colors, props.pattern, props.name, props.number, props.font, props.collar, props.backgroundImage, props.bgOffset]);
 
     return (
         <div className="jersey-3d-wrapper studio-mode" ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -405,6 +504,10 @@ const Jersey3D = forwardRef((props, ref) => {
                         accentColor={props.colors.accent}
                         isDraggingAny={isDraggingAny}
                         onDragChange={setIsDraggingAny}
+                        teamLogoTex={teamLogoTex}
+                        sponsorLogoTex={sponsorLogoTex}
+                        customTextTex={customTextTex}
+                        controlsRef={controlsRef}
                     />
                 </group>
                 <OrbitControls
