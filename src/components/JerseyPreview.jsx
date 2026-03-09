@@ -220,8 +220,9 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
 
                 {pattern === 'cross-offset' && (
                     <g fill={secondary}>
-                        <rect x="212" y="0" width="80" height="1024" /> {/* Offset Vertical, narrowed */}
-                        <rect x="0" y="312" width="1024" height="80" /> {/* Horizontal, narrowed */}
+                        {/* Moved further left: x from 212 to 150 */}
+                        <rect x="150" y="0" width="80" height="1024" />
+                        <rect x="0" y="312" width="1024" height="80" />
                     </g>
                 )}
 
@@ -271,10 +272,10 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
 
                 {pattern === 'chevron' && (
                     <g fill={secondary} opacity={0.9}>
-                        {/* Front chevron: V-tip at x=252 */}
-                        <path d="M-260,300 L252,550 L764,300 L764,450 L252,700 L-260,450 Z" />
-                        {/* Back chevron: V-tip at x=762 (mirrored on UV right half) */}
-                        <path d="M504,300 L762,550 L1284,300 L1284,450 L762,700 L504,450 Z" />
+                        {/* Front chevron: strictly limited to front panel UV space (roughly x=50 to x=450) to avoid side distortion */}
+                        <path d="M50,370 L252,550 L454,370 L454,520 L252,700 L50,520 Z" />
+                        {/* Back chevron: strictly limited to back panel UV space (roughly x=550 to x=950) */}
+                        <path d="M560,370 L762,550 L964,370 L964,520 L762,700 L560,520 Z" />
                     </g>
                 )}
 
