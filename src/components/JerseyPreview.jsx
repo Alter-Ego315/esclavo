@@ -138,27 +138,13 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     <mask id="halftoneFade">
                         <rect x="0" y="0" width="1024" height="1024" fill="url(#fadeGrad)" />
                     </mask>
-
-                    {/* Mask for Gradient continuous fade out at sides to leave sleeves solid primary */}
-                    <linearGradient id="sleeveGradientMask" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="black" />
-                        <stop offset="15%" stopColor="black" />
-                        <stop offset="25%" stopColor="white" />
-                        <stop offset="75%" stopColor="white" />
-                        <stop offset="85%" stopColor="black" />
-                        <stop offset="100%" stopColor="black" />
-                    </linearGradient>
-                    <mask id="fadeSides">
-                        <rect width="1024" height="1024" fill="url(#sleeveGradientMask)" />
-                    </mask>
                 </defs>
 
                 {/* --- APPLY PATTERNS --- */}
 
                 {/* 1. GRADIENTS */}
                 {pattern === 'gradient' && (
-                    // Masked to keep sleeves solid primary
-                    <rect width="1024" height="1024" fill="url(#gradSoft)" mask="url(#fadeSides)" />
+                    <rect width="1024" height="1024" fill="url(#gradSoft)" />
                 )}
 
                 {/* 2. HALFTONE LINES (Horizontal Scanlines fading out) */}

@@ -487,7 +487,7 @@ const Jersey3D = forwardRef((props, ref) => {
         <div className="jersey-3d-wrapper studio-mode" ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
             <Canvas
                 shadows dpr={[1, 2]}
-                camera={{ position: [0, 0, 0.9], fov: 45 }}
+                camera={{ position: [0, 0.15, 1.3], fov: 45 }}
                 gl={{ preserveDrawingBuffer: true }}
                 onCreated={({ gl }) => { canvasRef.current = gl.domElement; }}
                 onPointerMissed={() => props.onSelectLogo && props.onSelectLogo(null)}
@@ -512,7 +512,7 @@ const Jersey3D = forwardRef((props, ref) => {
                 </group>
                 <OrbitControls
                     ref={controlsRef}
-                    target={[0, props.viewLocked ? 0.25 : 0.12, 0]}
+                    target={[0, props.viewLocked ? 0.25 : 0.15, 0]}
                     enablePan={false}
                     enabled={!isDraggingAny}
                     enableZoom={!props.viewLocked}
