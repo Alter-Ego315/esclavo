@@ -637,7 +637,8 @@
 @media (max-width: 800px) {
     .designer-layout {
         flex-direction: column;
-        overflow-y: auto;
+        overflow-y: visible;
+        /* Dejar que la página entera haga scroll */
         overflow-x: hidden;
     }
 
@@ -659,5 +660,31 @@
 
     .controls-content {
         padding-bottom: 40px;
+        overflow: visible;
+    }
+
+    .jersey-designer-container {
+        height: 100vh;
+        height: 100dvh;
+        /* Usa unidades dinámicas de móviles para sortear el address bar */
+        overflow-y: auto;
+        /* El scroll ocurre aquí centralizado */
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        /* Scroll suave en iOS */
+    }
+
+    /* Estilar el scrollbar del navegador para móvil */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: var(--text-dim);
+        border-radius: 20px;
     }
 }

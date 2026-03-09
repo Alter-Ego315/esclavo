@@ -7,11 +7,9 @@ import '../styles/JerseyDesigner.css';
 const PATTERNS_LIST = [
     { id: 'none', label: 'Ninguno' },
     { id: 'gradient', label: 'Degradado' },
-    { id: 'gradient-multi', label: 'Degradado multi' },
     { id: 'halftone-lines', label: 'Líneas' },
     { id: 'halftone-dots', label: 'Puntos' },
     { id: 'checkers', label: 'Ajedrez' },
-    { id: 'stepped-gradient', label: 'Degradado escalonado' },
     { id: 'zigzag', label: 'Zig zag' },
     { id: 'hoops-thin', label: 'Rayas finas' },
     { id: 'ocean-waves', label: 'Olas' },
@@ -39,70 +37,70 @@ const JERSEY_TEMPLATES = [
         name: 'Ginga classic',
         colors: { primary: '#0a0a0a', secondary: '#39FF14', accent: '#1a1a1a', textColor: '#39FF14' },
         pattern: 'swirl',
-        font: 'Orbitron'
+        font: 'Ethnocentric'
     },
     {
         id: 'nova-camo',
         name: 'Nova camo',
         colors: { primary: '#ff0000', secondary: '#000000', accent: '#ffffff', textColor: '#ffffff' },
         pattern: 'camo',
-        font: 'Black Ops One'
+        font: 'Oswald'
     },
     {
         id: 'apex-arches',
         name: 'Apex arches',
         colors: { primary: '#0000ff', secondary: '#ffffff', accent: '#000000', textColor: '#ffffff' },
         pattern: 'arches',
-        font: 'Teko'
+        font: 'Real Madrid 2022'
     },
     {
         id: 'vortex-tri',
         name: 'Vortex tri',
         colors: { primary: '#ff9900', secondary: '#000000', accent: '#ffffff', textColor: '#000000' },
         pattern: 'triangles',
-        font: 'Goldman'
+        font: 'Algerian'
     },
     {
         id: 'alpha-26',
         name: 'Alpha 26 home',
         colors: { primary: '#000000', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
         pattern: 'center-stripe',
-        font: 'Anton'
+        font: 'Eras ITC Demi'
     },
     {
         id: 'classic-retro',
         name: 'Classic retro',
         colors: { primary: '#ffffff', secondary: '#ff0000', accent: '#000000', textColor: '#000000' },
         pattern: 'hoops',
-        font: 'Impact'
+        font: 'Real Madrid 2009'
     },
     {
         id: 'neon-strike',
         name: 'Neon strike',
         colors: { primary: '#0a0a0a', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
         pattern: 'diagonal',
-        font: 'Goldman'
+        font: 'Oswald'
     },
     {
         id: 'titan-checkers',
         name: 'Titan check',
         colors: { primary: '#ffff00', secondary: '#000000', accent: '#ffffff', textColor: '#000000' },
         pattern: 'checkers',
-        font: 'Saira Condensed'
+        font: 'Algerian'
     },
     {
         id: 'liquid-flames',
         name: 'Liquid flames',
         colors: { primary: '#000000', secondary: '#ff33cc', accent: '#ffffff', textColor: '#ff33cc' },
         pattern: 'swirl',
-        font: 'Rubik Glitch'
+        font: 'Brush King'
     },
     {
         id: 'cyber-lab',
         name: 'Cyber lab',
         colors: { primary: '#6600cc', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
         pattern: 'labyrinth',
-        font: 'Chakra Petch'
+        font: 'Ethnocentric'
     },
     {
         id: 'flux-melange',
@@ -116,7 +114,7 @@ const JERSEY_TEMPLATES = [
         name: 'Cyber pixels',
         colors: { primary: '#004d00', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
         pattern: 'pixels',
-        font: 'Orbitron'
+        font: 'Real Madrid UCL 2021'
     }
 ];
 
@@ -139,124 +137,45 @@ const PRESET_COLORS = [
     { "name": "Morado", "hex": "#6600cc" }
 ];
 
-const FONT_OPTIONS = [
-    // Google Fonts (Available immediatly)
-    { name: 'Orbitron', label: 'Orbitron (Tech)' },
-    { name: 'Montserrat', label: 'Montserrat (Clean)' },
-    { name: 'Oswald', label: 'Oswald (Strong)' },
-    { name: 'Anton', label: 'Anton (Bold)' },
-    { name: 'Teko', label: 'Teko (Square)' },
-    { name: 'Black Ops One', label: 'Black Ops (Military)' },
-    { name: 'Saira Condensed', label: 'Saira (Tall)' },
-    { name: 'Chakra Petch', label: 'Chakra (Futuristic)' },
-    { name: 'Goldman', label: 'Goldman (Sport)' },
-    { name: 'Roboto Condensed', label: 'Roboto Cond' },
-    { name: 'Maven Pro', label: 'Maven Pro' },
-    { name: 'Lato', label: 'Lato' },
-    { name: 'Caveat', label: 'Caveat (Hand)' },
-    { name: 'Permanent Marker', label: 'Marker' },
-    { name: 'Bungee Inline', label: 'Bungee (Retro)' },
-    { name: 'Press Start 2P', label: '8-Bit' },
-    { name: 'Fontdiner Swanky', label: 'Swanky (Funky)' },
-
-    // Batch 2 Google Fonts
-    { name: 'Inter', label: 'Inter (UI Standard)' },
-    { name: 'Open Sans', label: 'Open Sans (Neutral)' },
-    { name: 'Exo', label: 'Exo (Geometric)' },
-    { name: 'Cinzel', label: 'Cinzel (Epic)' },
-    { name: 'Creepster', label: 'Creepster (Scary)' },
-    { name: 'Faster One', label: 'Faster One (Speed)' },
-    { name: 'Passion One', label: 'Passion One (Bold)' },
-    { name: 'Saira Stencil One', label: 'Saira Stencil' },
-    { name: 'UnifrakturMaguntia', label: 'Unifraktur (Gothic)' },
-    { name: 'Playfair Display', label: 'Vogue/Mermaid (Serif)' },
-    { name: 'Monoton', label: 'Prisma (Lines)' },
-    { name: 'Rubik Glitch', label: 'Glitch (Distorted)' },
-    { name: 'Turret Road', label: 'Turret (SciFi)' },
-
-    // Special Requests (Batch 2 - Fallbacks)
-    { name: 'Manchester United', label: 'Man Utd', fallback: 'Montserrat' },
-    { name: 'Premier League 23-24', label: 'Premier League 24', fallback: 'Anton' },
-    { name: 'Arkema', label: 'Arkema', fallback: 'Saira Stencil One' },
-    { name: 'Strike 2009', label: 'Strike 09', fallback: 'Teko' },
-    { name: 'Mainz', label: 'Mainz', fallback: 'Oswald' },
-    { name: 'Mermaid', label: 'Mermaid', fallback: 'Playfair Display' },
-    { name: 'FC Barcelona', label: 'FC Barcelona', fallback: 'Teko' },
-    { name: 'Jordan Elite', label: 'Jordan Elite', fallback: 'Oswald' },
-    { name: 'Ligue 1 2024-25', label: 'Ligue 1 25', fallback: 'Roboto Condensed' },
-    { name: 'Al-Hilal 2024-25', label: 'Al-Hilal 25', fallback: 'Chakra Petch' },
-    { name: 'Germany 2020', label: 'Germany 20', fallback: 'Saira Condensed' },
-    { name: 'Bayern Munchen 2', label: 'Bayern 2', fallback: 'Oswald' },
-    { name: 'Puma 2024', label: 'Puma 24', fallback: 'Teko' },
-    { name: 'Vogue', label: 'Vogue', fallback: 'Playfair Display' },
-    { name: 'Champions', label: 'Champions', fallback: 'Montserrat' },
-    { name: 'Strike 2024', label: 'Strike 24', fallback: 'Saira Condensed' },
-    { name: 'Lin Libertine', label: 'Lin Libertine', fallback: 'Playfair Display' },
-    { name: 'Permanent Marker', label: 'Marker', fallback: 'Permanent Marker' },
-    { name: 'AC Milan', label: 'AC Milan', fallback: 'Teko' },
-    { name: 'Sevilla 2020', label: 'Sevilla 20', fallback: 'Montserrat' },
-    { name: 'Aldo the Apache', label: 'Aldo Apache', fallback: 'Black Ops One' },
-    { name: 'Nike 2024', label: 'Nike 24', fallback: 'Oswald' },
-    { name: 'Winchester', label: 'Winchester', fallback: 'Playfair Display' },
-    { name: 'Strike 2012', label: 'Strike 12', fallback: 'Oswald' },
-    { name: 'Serie A', label: 'Serie A Font', fallback: 'Oswald' },
-    { name: 'Velocity Home', label: 'Velocity Home', fallback: 'Goldman' },
-    { name: 'Real Madrid 2025', label: 'Real Madrid 25', fallback: 'Cinzel' },
-    { name: 'Heron', label: 'Heron', fallback: 'Oswald' },
-    { name: 'Velocity Away', label: 'Velocity Away', fallback: 'Goldman' },
-    { name: 'Turkey', label: 'Turkey', fallback: 'Saira Condensed' },
-    { name: 'Ultimate Script', label: 'Ultimate Script', fallback: 'Caveat' },
-    { name: 'Whole Trains', label: 'Whole Trains', fallback: 'Bungee Inline' },
-    { name: 'Wolfsburg', label: 'Wolfsburg', fallback: 'Impact' },
-    { name: 'United Euro 20', label: 'United Euro 20', fallback: 'Teko' },
-    { name: 'Brazil 20', label: 'Brazil 20', fallback: 'Saira Condensed' },
-    { name: 'Bungee', label: 'Bungee', fallback: 'Bungee Inline' },
-    { name: 'Canada', label: 'Canada', fallback: 'Orbitron' },
-    { name: 'Creepster', label: 'Creepster', fallback: 'Creepster' },
-    { name: 'Crepello Italic', label: 'Crepello', fallback: 'Exo' },
-    { name: 'Manchester City UCL 2017', label: 'Man City UCL', fallback: 'Montserrat' },
-    { name: 'Real Madrid', label: 'Real Madrid', fallback: 'Montserrat' },
-    { name: 'Real Madrid 2021', label: 'Real Madrid 21', fallback: 'Chakra Petch' },
-    { name: 'A League', label: 'A League', fallback: 'Oswald' },
-    { name: 'BadaBoom', label: 'BadaBoom', fallback: 'Passion One' },
-    { name: 'Blazed', label: 'Blazed', fallback: 'Faster One' },
-    { name: 'DJB Get Digital', label: 'Digital', fallback: 'Press Start 2P' },
-    { name: 'EFL 2022', label: 'EFL 22', fallback: 'Saira Condensed' },
-    { name: 'England 2020', label: 'England 20', fallback: 'Oswald' },
-
-    // Special Requests (Batch 3)
-    { name: 'Firestarter', label: 'Firestarter', fallback: 'Rubik Glitch' },
-    { name: 'France 2020-21', label: 'France 20', fallback: 'Montserrat' },
-    { name: 'Liverpool', label: 'Liverpool', fallback: 'Oswald' },
-    { name: 'MLS 20', label: 'MLS 20', fallback: 'Saira Condensed' },
-    { name: 'MLS Old', label: 'MLS Old', fallback: 'Saira Stencil One' },
-    { name: 'Netherlands Euro 2020', label: 'Netherlands 20', fallback: 'Turret Road' },
-    { name: 'Premier League Shirt', label: 'PL Shirt', fallback: 'Anton' },
-    { name: 'Premier League Shirt Old', label: 'PL Shirt Old', fallback: 'Oswald' },
-    { name: 'Prisma', label: 'Prisma', fallback: 'Monoton' },
-    { name: 'Elite 20-21', label: 'Elite 20', fallback: 'Oswald' },
-    { name: 'Elite 21 Away', label: 'Elite 21 Away', fallback: 'Montserrat' },
-    { name: 'PSV Eindhoven 2020-21', label: 'PSV 20', fallback: 'Teko' },
-    { name: 'Real Madrid 2022', label: 'Real Madrid 22', fallback: 'Cinzel' },
-    { name: 'Real Madrid 2023', label: 'Real Madrid 23', fallback: 'Montserrat' },
-    { name: 'Barcelona 2012', label: 'Barcelona 12', fallback: 'Teko' },
-    { name: 'Global 2022', label: 'Global 22', fallback: 'Saira Condensed' },
-    { name: 'Nike 2022', label: 'Nike 2022', fallback: 'Oswald' },
-    { name: 'Puma 2022', label: 'Puma 2022', fallback: 'Teko' },
-    { name: 'Premier League', label: 'Premier League', fallback: 'Anton' },
-    { name: 'La Liga 23-24', label: 'La Liga 23', fallback: 'Teko' },
-    { name: 'Serie A', label: 'Serie A', fallback: 'Montserrat' },
-    { name: 'Ligue 1', label: 'Ligue 1', fallback: 'Roboto Condensed' },
-    { name: 'Bundesliga', label: 'Bundesliga', fallback: 'Oswald' },
-    { name: 'World Cup 2022', label: 'World Cup 22', fallback: 'Goldman' },
-    { name: 'Euro 2020', label: 'Euro 2020', fallback: 'Chakra Petch' },
-    { name: 'American Captain', label: 'American Captain', fallback: 'Oswald' },
-    { name: 'Varsity', label: 'Varsity', fallback: 'Saira Condensed' },
-    { name: 'Bebas Neue', label: 'Bebas Neue' },
-    { name: 'Impact', label: 'Impact' },
-    { name: 'Courier New', label: 'Monospace' }
+export const GINGA_LOGOS = [
+    { name: 'blanco', path: '/Logos de Ginga/Logo Ginga trasparente sin texto (blanco).png' },
+    { name: 'negro', path: '/Logos de Ginga/Logo Ginga trasparente sin texto (negro).png' },
+    { name: 'verde', path: '/Logos de Ginga/Logo Ginga trasparente sin texto (verde).png' },
+    { name: 'rojo', path: '/Logos de Ginga/Logo Ginga trasparente sin texto (rojo).png' },
+    { name: 'azul claro', path: '/Logos de Ginga/Logo Ginga trasparente sin texto (azul claro).png' },
+    { name: 'azul oscuro', path: '/Logos de Ginga/Logo Ginga trasparente sin texto (azul oscuro).png' },
+    { name: 'amarillo', path: '/Logos de Ginga/Logo Ginga trasparente sin texto (amarillo).png' },
+    { name: 'naranja', path: '/Logos de Ginga/Logo Ginga trasparente sin texto (orange).png' },
+    { name: 'rosa', path: '/Logos de Ginga/Logo Ginga trasparente sin texto (rosa).png' },
+    { name: 'morado', path: '/Logos de Ginga/Logo Ginga trasparente sin texto (morado).png' }
 ];
 
+const RAW_FONT_OPTIONS = [
+    // American Captain (Google Font)
+    { name: 'Oswald', label: 'American Captain' },
+
+    // Local Fonts (from public/Fonts)
+    { name: 'Algerian', label: 'Algerian' },
+    { name: 'Blowbrush', label: 'Blowbrush' },
+    { name: 'Brush King', label: 'Brush King' },
+    { name: 'Eras ITC Demi', label: 'Eras ITC Demi' },
+    { name: 'Ethnocentric', label: 'Ethnocentric' },
+    { name: 'Real Madrid 2009', label: 'Real Madrid 09' },
+    { name: 'Real Madrid 18-19', label: 'Real Madrid 18-19' },
+    { name: 'Real Madrid 19-20', label: 'Real Madrid 19-20' },
+    { name: 'Real Madrid UCL 2019', label: 'Real Madrid UCL 19' },
+    { name: 'Real Madrid UCL 2021', label: 'Real Madrid UCL 21' },
+    { name: 'Real Madrid 2022', label: 'Real Madrid 22' },
+    { name: 'Real Madrid 2022 Alt', label: 'Real Madrid 22 Alt' },
+];
+
+export const FONT_OPTIONS = RAW_FONT_OPTIONS.sort((a, b) => a.label.localeCompare(b.label));
+
+// Width heuristic: Oswald is condensed, others use default limit
+const getFontCharacterLimit = (fontName) => {
+    if (fontName === 'Oswald') return 22; // condensed
+    return 15; // default for all local fonts
+};
 // Helper component for pattern thumbnails
 const PatternThumbnail = ({ pattern, color1, color2 }) => {
     // T-shirt path for clipping
@@ -508,13 +427,21 @@ const JerseyDesigner = () => {
         accent: '#1a1a1a',
         textColor: '#39FF14'
     });
-    const [pattern, setPattern] = useState('swirl');
+    const [pattern, setPattern] = useState('none');
     const [name, setName] = useState('TEO');
     const [number, setNumber] = useState('69');
-    const [font, setFont] = useState('Orbitron');
+    const [font, setFont] = useState('Oswald');
     const [teamLogo, setTeamLogo] = useState(null);
     const [sponsorLogo, setSponsorLogo] = useState(null);
+    const [backgroundImage, setBackgroundImage] = useState(null);
+    const [bgOffset, setBgOffset] = useState({ x: 0, y: 0 });
 
+    // Custom Text Block State
+    const [customText, setCustomText] = useState('');
+    const [customTextColor, setCustomTextColor] = useState('#ffffff');
+    const [customTextPos, setCustomTextPos] = useState({ pos: [0, -0.05, 0.165], rot: Math.PI, scaleX: 0.12, scaleY: 0.12 });
+
+    const [brandLogoColor, setBrandLogoColor] = useState('blanco');
     const [vibrancy, setVibrancy] = useState(50);
 
     // New Features State
@@ -531,9 +458,9 @@ const JerseyDesigner = () => {
 
     // Logo Position State - Now 3D
     // Crest (Escudo): Positioned to match the Iron Man reference, now smaller and higher quality
-    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [-0.06, 0.08, 0.15], rot: Math.PI, scale: 0.07 });
+    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [-0.06, 0.08, 0.15], rot: Math.PI, scaleX: 0.07, scaleY: 0.07 });
     // Sponsor: Center, lowered and rotated 180deg to appear upright
-    const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, -0.10, 0.16], rot: Math.PI, scale: 0.25 });
+    const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, -0.10, 0.16], rot: Math.PI, scaleX: 0.25, scaleY: 0.25 });
     const [selectedLogo, setSelectedLogo] = useState(null); // 'team' or 'sponsor'
 
     // Handlers for 3D Decal Updates
@@ -541,6 +468,8 @@ const JerseyDesigner = () => {
         if (!newState) {
             setTeamLogo(null);
             setSelectedLogo(null);
+            // Reset position on delete
+            setTeamLogoPos({ pos: [-0.06, 0.08, 0.15], rot: Math.PI, scaleX: 0.07, scaleY: 0.07 });
         } else {
             setTeamLogoPos(prev => ({ ...prev, ...newState }));
         }
@@ -550,8 +479,20 @@ const JerseyDesigner = () => {
         if (!newState) {
             setSponsorLogo(null);
             setSelectedLogo(null);
+            // Reset position on delete
+            setSponsorLogoPos({ pos: [0, -0.10, 0.16], rot: Math.PI, scaleX: 0.25, scaleY: 0.25 });
         } else {
             setSponsorLogoPos(prev => ({ ...prev, ...newState }));
+        }
+    };
+
+    const handleCustomTextUpdate = (newState) => {
+        if (!newState) {
+            setCustomText('');
+            setSelectedLogo(null);
+            setCustomTextPos({ pos: [0, -0.05, 0.165], rot: Math.PI, scaleX: 0.12, scaleY: 0.12 });
+        } else {
+            setCustomTextPos(prev => ({ ...prev, ...newState }));
         }
     };
 
@@ -576,10 +517,50 @@ const JerseyDesigner = () => {
             reader.onloadend = () => {
                 if (type === 'team') setTeamLogo(reader.result);
                 if (type === 'sponsor') setSponsorLogo(reader.result);
+                if (type === 'background') setBackgroundImage(reader.result);
             };
             reader.readAsDataURL(file);
         }
+        // Reset the input value so the same file can be uploaded again after deletion
+        e.target.value = '';
     };
+
+    // Keyboard listener for panning background image
+    useEffect(() => {
+        if (!backgroundImage) return;
+
+        const handleKeyDown = (e) => {
+            // Ignore if user is typing in an input
+            if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'textarea') {
+                return;
+            }
+
+            const step = 20; // pixels to move per keypress
+            switch (e.key) {
+                case 'ArrowUp':
+                    setBgOffset(prev => ({ ...prev, y: prev.y - step }));
+                    e.preventDefault();
+                    break;
+                case 'ArrowDown':
+                    setBgOffset(prev => ({ ...prev, y: prev.y + step }));
+                    e.preventDefault();
+                    break;
+                case 'ArrowLeft':
+                    setBgOffset(prev => ({ ...prev, x: prev.x - step }));
+                    e.preventDefault();
+                    break;
+                case 'ArrowRight':
+                    setBgOffset(prev => ({ ...prev, x: prev.x + step }));
+                    e.preventDefault();
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [backgroundImage]);
 
     const jersey3DRef = React.useRef();
 
@@ -610,10 +591,40 @@ const JerseyDesigner = () => {
     return (
         <div className="jersey-designer-container">
             {/* Header */}
-            <header className="designer-header">
-                <div className="header-center">
-                    <img src="/ginga-logo-header.png" alt="Ginga" className="header-logo" style={{ height: '120px' }} />
-                </div>
+            <header className="designer-header" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0 20px', position: 'relative' }}>
+                <a href="https://ginga.es" target="_blank" rel="noopener noreferrer" className="header-center" style={{ textDecoration: 'none', cursor: 'pointer' }}>
+                    <img src="/ginga-logo-header.png" alt="Ginga" className="header-logo" style={{ height: '80px', objectFit: 'contain' }} />
+                </a>
+
+                {/* WhatsApp Contact Button */}
+                <a
+                    href="https://wa.me/34711245855"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                        position: 'absolute',
+                        right: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        background: '#25D366', // WhatsApp green
+                        color: '#fff',
+                        padding: '10px 20px',
+                        borderRadius: '30px',
+                        textDecoration: 'none',
+                        fontWeight: 'bold',
+                        fontSize: '14px',
+                        boxShadow: '0 4px 10px rgba(37, 211, 102, 0.3)',
+                        transition: 'transform 0.2s'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                    ¡Contáctanos con tu diseño!
+                </a>
             </header>
 
             <main className="designer-layout">
@@ -635,13 +646,20 @@ const JerseyDesigner = () => {
                                     collar={collar}
                                     sleeve={sleeve}
                                     viewLocked={viewLocked}
+                                    backgroundImage={backgroundImage}
+                                    bgOffset={bgOffset}
 
                                     // Interactive Decal Props
                                     teamLogoState={teamLogoPos}
                                     sponsorLogoState={sponsorLogoPos}
+                                    customTextState={customTextPos}
                                     onTeamLogoUpdate={handleTeamLogoUpdate}
                                     onSponsorLogoUpdate={handleSponsorLogoUpdate}
+                                    onCustomTextUpdate={handleCustomTextUpdate}
                                     selectedLogo={selectedLogo}
+                                    customText={customText}
+                                    customTextColor={customTextColor}
+                                    brandLogoColor={brandLogoColor}
                                     onSelectLogo={setSelectedLogo}
                                 />
 
@@ -685,6 +703,8 @@ const JerseyDesigner = () => {
                                 vibrancy={vibrancy}
                                 collar={collar}
                                 sleeve={sleeve}
+                                backgroundImage={backgroundImage}
+                                bgOffset={bgOffset}
                             />
                         )}
                     </React.Suspense>
@@ -710,120 +730,148 @@ const JerseyDesigner = () => {
                         {/* 1. SECCIÓN ESCUDO */}
                         {activeTab === 'shield' && (
                             <div className="control-group">
-                                <h3>Escudo del Equipo</h3>
-                                <p className="section-desc">Sube tu escudo y aparecerá en el pecho.</p>
+                                <h3>Escudos y Logos</h3>
 
-                                <div className="upload-item" style={{ marginTop: '20px' }}>
-                                    <div className="upload-zone">
-                                        {teamLogo ? (
-                                            <div className="upload-preview-container" style={{ marginTop: '10px', textAlign: 'center' }}>
-                                                <img src={teamLogo} alt="Team Logo" style={{ height: '60px', objectFit: 'contain' }} />
-                                            </div>
-                                        ) : (
-                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.5 }}>
-                                            </div>
-                                        )}
-                                        <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'team')} />
-                                        <span>Click para subir imagen</span>
+                                <div className="input-item" style={{ marginBottom: '20px' }}>
+                                    <label>Color Logo Ginga (Pecho Derecho)</label>
+                                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '10px' }}>
+                                        {GINGA_LOGOS.map(l => (
+                                            <button
+                                                key={l.name}
+                                                onClick={() => setBrandLogoColor(l.name)}
+                                                style={{
+                                                    width: '32px', height: '32px',
+                                                    backgroundImage: `url("${l.path}")`,
+                                                    backgroundSize: '80%',
+                                                    backgroundPosition: 'center',
+                                                    backgroundRepeat: 'no-repeat',
+                                                    backgroundColor: l.name === 'blanco' ? '#333' : '#fff',
+                                                    border: brandLogoColor === l.name ? '2px solid #39FF14' : '2px solid transparent',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer'
+                                                }}
+                                                title={l.name}
+                                            />
+                                        ))}
                                     </div>
                                 </div>
 
-                                {/* Team Logo Controls */}
-                                {teamLogo && (
-                                    <div className="control-group" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
-                                        <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>Posición escudo</h3>
+                                <div style={{ borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
+                                    <h3>Escudo del Equipo</h3>
+                                    <p className="section-desc">Sube tu escudo y aparecerá en el pecho.</p>
 
-                                        <div className="input-item">
-                                            <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                Posición y Tamaño
-                                                <span style={{ fontSize: '0.7em', color: '#39FF14' }}>INTERACTIVO</span>
-                                            </label>
-                                            <div style={{ fontSize: '0.8rem', color: '#aaa', padding: '5px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
-                                                Haz clic en el logo sobre la camiseta para moverlo, rotarlo o cambiar su tamaño.
-                                            </div>
+                                    <div className="upload-item" style={{ marginTop: '20px' }}>
+                                        <div className="upload-zone">
+                                            {teamLogo ? (
+                                                <div className="upload-preview-container" style={{ marginTop: '10px', textAlign: 'center' }}>
+                                                    <img src={teamLogo} alt="Team Logo" style={{ height: '60px', objectFit: 'contain' }} />
+                                                </div>
+                                            ) : (
+                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.5 }}>
+                                                </div>
+                                            )}
+                                            <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'team')} />
+                                            <span>Click para subir imagen</span>
                                         </div>
+                                    </div>
 
-                                        <button
-                                            onClick={() => setTeamLogo(null)}
-                                            className="delete-item-btn"
-                                            style={{
-                                                marginTop: '15px',
-                                                width: '100%',
-                                                padding: '10px',
-                                                background: 'rgba(255, 68, 68, 0.1)',
-                                                border: '1px solid rgba(255, 68, 68, 0.3)',
-                                                borderRadius: '8px',
-                                                color: '#ff4444',
-                                                cursor: 'pointer',
-                                                fontSize: '12px',
-                                                fontWeight: 'Bold',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                gap: '8px',
-                                                transition: 'all 0.2s ease'
-                                            }}
-                                        >
-                                            <Trash2 size={16} />
-                                            Eliminar escudo
-                                        </button>
-                                    </div>
-                                )}
-                                <div className="upload-item" style={{ marginTop: '20px' }}>
-                                    <label>Patrocinador (opcional)</label>
-                                    <div className="upload-zone">
-                                        {sponsorLogo ? (
-                                            <div className="upload-preview-container" style={{ marginTop: '10px', textAlign: 'center' }}>
-                                                <img src={sponsorLogo} alt="Sponsor Logo" style={{ height: '40px', objectFit: 'contain' }} />
+                                    {/* Team Logo Controls */}
+                                    {teamLogo && (
+                                        <div className="control-group" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
+                                            <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>Posición escudo</h3>
+
+                                            <div className="input-item">
+                                                <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    Posición y Tamaño
+                                                    <span style={{ fontSize: '0.7em', color: '#39FF14' }}>INTERACTIVO</span>
+                                                </label>
+                                                <div style={{ fontSize: '0.8rem', color: '#aaa', padding: '5px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
+                                                    Haz clic en el logo sobre la camiseta para moverlo, rotarlo o cambiar su tamaño.
+                                                </div>
                                             </div>
-                                        ) : (
-                                            <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'sponsor')} />
-                                        )}
-                                        {!sponsorLogo && <span>Click para subir</span>}
+
+                                            <button
+                                                onClick={() => setTeamLogo(null)}
+                                                className="delete-item-btn"
+                                                style={{
+                                                    marginTop: '15px',
+                                                    width: '100%',
+                                                    padding: '10px',
+                                                    background: 'rgba(255, 68, 68, 0.1)',
+                                                    border: '1px solid rgba(255, 68, 68, 0.3)',
+                                                    borderRadius: '8px',
+                                                    color: '#ff4444',
+                                                    cursor: 'pointer',
+                                                    fontSize: '12px',
+                                                    fontWeight: 'Bold',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '8px',
+                                                    transition: 'all 0.2s ease'
+                                                }}
+                                            >
+                                                <Trash2 size={16} />
+                                                Eliminar escudo
+                                            </button>
+                                        </div>
+                                    )}
+                                    <div className="upload-item" style={{ marginTop: '20px' }}>
+                                        <label>Patrocinador (opcional)</label>
+                                        <div className="upload-zone">
+                                            {sponsorLogo ? (
+                                                <div className="upload-preview-container" style={{ marginTop: '10px', textAlign: 'center' }}>
+                                                    <img src={sponsorLogo} alt="Sponsor Logo" style={{ height: '40px', objectFit: 'contain' }} />
+                                                </div>
+                                            ) : (
+                                                <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'sponsor')} />
+                                            )}
+                                            {!sponsorLogo && <span>Click para subir</span>}
+                                        </div>
                                     </div>
+
+                                    {/* Sponsor Logo Controls */}
+                                    {sponsorLogo && (
+                                        <div className="control-group" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
+                                            <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>Posición patrocinador</h3>
+
+                                            <div className="input-item">
+                                                <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    Posición y Tamaño
+                                                    <span style={{ fontSize: '0.7em', color: '#39FF14' }}>INTERACTIVO</span>
+                                                </label>
+                                                <div style={{ fontSize: '0.8rem', color: '#aaa', padding: '5px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
+                                                    Haz clic en el logo sobre la camiseta para moverlo, rotarlo o cambiar su tamaño.
+                                                </div>
+                                            </div>
+
+                                            <button
+                                                onClick={() => setSponsorLogo(null)}
+                                                className="delete-item-btn"
+                                                style={{
+                                                    marginTop: '15px',
+                                                    width: '100%',
+                                                    padding: '10px',
+                                                    background: 'rgba(255, 68, 68, 0.1)',
+                                                    border: '1px solid rgba(255, 68, 68, 0.3)',
+                                                    borderRadius: '8px',
+                                                    color: '#ff4444',
+                                                    cursor: 'pointer',
+                                                    fontSize: '12px',
+                                                    fontWeight: 'Bold',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '8px',
+                                                    transition: 'all 0.2s ease'
+                                                }}
+                                            >
+                                                <Trash2 size={16} />
+                                                Eliminar patrocinador
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
-
-                                {/* Sponsor Logo Controls */}
-                                {sponsorLogo && (
-                                    <div className="control-group" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
-                                        <h3 style={{ marginBottom: '10px', fontSize: '11px', color: 'var(--text-dim)' }}>Posición patrocinador</h3>
-
-                                        <div className="input-item">
-                                            <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                Posición y Tamaño
-                                                <span style={{ fontSize: '0.7em', color: '#39FF14' }}>INTERACTIVO</span>
-                                            </label>
-                                            <div style={{ fontSize: '0.8rem', color: '#aaa', padding: '5px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
-                                                Haz clic en el logo sobre la camiseta para moverlo, rotarlo o cambiar su tamaño.
-                                            </div>
-                                        </div>
-
-                                        <button
-                                            onClick={() => setSponsorLogo(null)}
-                                            className="delete-item-btn"
-                                            style={{
-                                                marginTop: '15px',
-                                                width: '100%',
-                                                padding: '10px',
-                                                background: 'rgba(255, 68, 68, 0.1)',
-                                                border: '1px solid rgba(255, 68, 68, 0.3)',
-                                                borderRadius: '8px',
-                                                color: '#ff4444',
-                                                cursor: 'pointer',
-                                                fontSize: '12px',
-                                                fontWeight: 'Bold',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                gap: '8px',
-                                                transition: 'all 0.2s ease'
-                                            }}
-                                        >
-                                            <Trash2 size={16} />
-                                            Eliminar patrocinador
-                                        </button>
-                                    </div>
-                                )}
                             </div>
                         )}
 
@@ -834,15 +882,61 @@ const JerseyDesigner = () => {
                             <div className="control-group">
                                 <h3>Personalización</h3>
                                 <div className="input-item">
-                                    <label>Nombre Jugador</label>
+                                    <label>Nombre Jugador (Espalda)</label>
                                     <input type="text" value={name} maxLength={10} onChange={(e) => setName(e.target.value)} />
                                 </div>
                                 <div className="input-item">
-                                    <label>Dorsal</label>
+                                    <label>Dorsal (Espalda)</label>
                                     <input type="text" value={number} maxLength={2} onChange={(e) => setNumber(e.target.value)} />
                                 </div>
-                                <div className="input-item">
-                                    <label>Color del texto</label>
+
+                                <div className="input-item" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
+                                    <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        Texto Libre (Frontal)
+                                        <span style={{ fontSize: '0.7em', color: '#39FF14' }}>INTERACTIVO</span>
+                                    </label>
+                                    <div style={{ fontSize: '0.8rem', color: '#aaa', padding: '5px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', marginBottom: '10px' }}>
+                                        Aparecerá en el pecho. Haz clic sobre él en la camiseta para moverlo o escalarlo.
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={customText}
+                                        maxLength={getFontCharacterLimit(font)}
+                                        placeholder="Escribe algo..."
+                                        onChange={(e) => setCustomText(e.target.value)}
+                                    />
+                                    <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        <label style={{ fontSize: '12px' }}>Color del Texto Libre:</label>
+                                        <input type="color" value={customTextColor} onChange={(e) => setCustomTextColor(e.target.value)} />
+                                    </div>
+                                    {customText && (
+                                        <button
+                                            onClick={() => handleCustomTextUpdate(null)}
+                                            className="delete-item-btn"
+                                            style={{
+                                                marginTop: '10px',
+                                                width: '100%',
+                                                padding: '8px',
+                                                background: 'rgba(255, 68, 68, 0.1)',
+                                                border: '1px solid rgba(255, 68, 68, 0.3)',
+                                                borderRadius: '8px',
+                                                color: '#ff4444',
+                                                cursor: 'pointer',
+                                                fontSize: '12px',
+                                                fontWeight: 'Bold',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: '8px'
+                                            }}
+                                        >
+                                            <Trash2 size={16} /> Eliminar texto
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="input-item" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
+                                    <label>Color general del texto</label>
                                     <input type="color" value={colors.textColor} onChange={(e) => handleColorChange('textColor', e.target.value)} />
                                 </div>
                                 <div className="input-item">
@@ -921,53 +1015,102 @@ const JerseyDesigner = () => {
                                             </div>
 
 
-                                            <div className="presets-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px' }}>
-                                                {PRESET_COLORS.map(c => (
-                                                    <button
-                                                        key={c.name}
-                                                        title={c.name}
-                                                        onClick={() => handleColorChange('primary', c.hex)}
-                                                        style={{
-                                                            width: '24px',
-                                                            height: '24px',
-                                                            borderRadius: '50%',
-                                                            background: c.hex,
-                                                            border: '1px solid rgba(255,255,255,0.2)',
-                                                            cursor: 'pointer'
-                                                        }}
-                                                    />
-                                                ))}
+                                            <div style={{ marginTop: '20px' }}>
+                                                <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                                                    Color Logo Ginga
+                                                </label>
+                                                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                                    {GINGA_LOGOS.map(l => (
+                                                        <button
+                                                            key={l.name}
+                                                            onClick={() => setBrandLogoColor(l.name)}
+                                                            style={{
+                                                                width: '32px', height: '32px',
+                                                                backgroundImage: `url("${l.path}")`,
+                                                                backgroundSize: '80%',
+                                                                backgroundPosition: 'center',
+                                                                backgroundRepeat: 'no-repeat',
+                                                                backgroundColor: l.name === 'blanco' ? '#333' : '#fff',
+                                                                border: brandLogoColor === l.name ? '2px solid #39FF14' : '2px solid transparent',
+                                                                borderRadius: '6px',
+                                                                cursor: 'pointer'
+                                                            }}
+                                                            title={l.name}
+                                                        />
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     )}
 
                                     {designTab === 'patterns' && (
-                                        <div className="pattern-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '25px', padding: '10px' }}>
-                                            {PATTERNS_LIST.map(p => (
-                                                <button
-                                                    key={p.id}
-                                                    className={pattern === p.id ? 'active' : ''}
-                                                    onClick={() => setPattern(p.id)}
-                                                    style={{
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        alignItems: 'center',
-                                                        padding: '20px 10px',
-                                                        background: 'var(--surface)',
-                                                        border: pattern === p.id ? '2px solid var(--accent)' : '1px solid var(--border)',
-                                                        borderRadius: '16px',
-                                                        cursor: 'pointer',
-                                                        transition: 'transform 0.2s',
-                                                        minHeight: '180px',
-                                                        justifyContent: 'space-between'
-                                                    }}
-                                                >
-                                                    <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '15px' }}>
-                                                        <PatternThumbnail pattern={p.id} color1={colors.primary} color2={colors.secondary} />
+                                        <div style={{ padding: '10px' }}>
+                                            <div className="upload-item" style={{ marginBottom: '25px', padding: '15px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px' }}>
+                                                <h4 style={{ marginBottom: '10px', fontSize: '14px', color: 'var(--text-primary)' }}>Imagen de fondo (textura completa)</h4>
+                                                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '15px' }}>Sube una imagen para cubrir toda la camiseta bajo el diseño.</p>
+
+                                                <div className="upload-zone">
+                                                    {backgroundImage ? (
+                                                        <div className="upload-preview-container" style={{ marginTop: '10px', textAlign: 'center' }}>
+                                                            <img src={backgroundImage} alt="Background" style={{ height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
+                                                        </div>
+                                                    ) : (
+                                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.5 }}>
+                                                        </div>
+                                                    )}
+                                                    <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'background')} />
+                                                    {!backgroundImage && <span>Click para subir imagen de fondo</span>}
+                                                </div>
+
+                                                {backgroundImage && (
+                                                    <div style={{ marginTop: '15px' }}>
+                                                        <div style={{ fontSize: '11px', color: '#39FF14', background: 'rgba(57, 255, 20, 0.1)', padding: '8px', borderRadius: '6px', textAlign: 'center', marginBottom: '10px' }}>
+                                                            <Move size={14} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+                                                            Usa las flechas del teclado (⬅️ ⬆️ ⬇️ ➡️) para mover la imagen de fondo.
+                                                        </div>
+                                                        <button
+                                                            onClick={() => { setBackgroundImage(null); setBgOffset({ x: 0, y: 0 }); }}
+                                                            className="delete-item-btn"
+                                                            style={{
+                                                                width: '100%', padding: '8px', background: 'rgba(255, 68, 68, 0.1)',
+                                                                border: '1px solid rgba(255, 68, 68, 0.3)', borderRadius: '8px', color: '#ff4444',
+                                                                cursor: 'pointer', fontSize: '12px', fontWeight: 'Bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
+                                                            }}
+                                                        >
+                                                            <Trash2 size={16} /> Eliminar fondo
+                                                        </button>
                                                     </div>
-                                                    <span style={{ fontSize: '13px', fontWeight: '500', textAlign: 'center', color: 'var(--text-primary)', width: '100%' }}>{p.label}</span>
-                                                </button>
-                                            ))}
+                                                )}
+                                            </div>
+
+                                            <h4 style={{ marginBottom: '15px', fontSize: '14px', color: 'var(--text-primary)' }}>Patrones Base</h4>
+                                            <div className="pattern-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '25px' }}>
+                                                {PATTERNS_LIST.map(p => (
+                                                    <button
+                                                        key={p.id}
+                                                        className={pattern === p.id ? 'active' : ''}
+                                                        onClick={() => setPattern(p.id)}
+                                                        style={{
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            alignItems: 'center',
+                                                            padding: '20px 10px',
+                                                            background: 'var(--surface)',
+                                                            border: pattern === p.id ? '2px solid var(--accent)' : '1px solid var(--border)',
+                                                            borderRadius: '16px',
+                                                            cursor: 'pointer',
+                                                            transition: 'transform 0.2s',
+                                                            minHeight: '180px',
+                                                            justifyContent: 'space-between'
+                                                        }}
+                                                    >
+                                                        <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '15px' }}>
+                                                            <PatternThumbnail pattern={p.id} color1={colors.primary} color2={colors.secondary} />
+                                                        </div>
+                                                        <span style={{ fontSize: '13px', fontWeight: '500', textAlign: 'center', color: 'var(--text-primary)', width: '100%' }}>{p.label}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
                                     )}
                                 </div>

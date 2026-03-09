@@ -1,9 +1,12 @@
 import React from 'react';
+import { GINGA_LOGOS } from './JerseyDesigner';
 
-const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, font = 'Orbitron', view = 'full', vibrancy = 50, sleeve, collar }) => {
+const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, customText, backgroundImage, bgOffset = { x: 0, y: 0 }, font = 'Orbitron', view = 'full', vibrancy = 50, sleeve, collar, brandLogoColor }) => {
     const { primary, secondary, accent, textColor } = colors;
 
     // Based on the standard shirt_baked.glb UV mapping:
+    // Front panel is roughly around x: 512, y: 512 (when flattened 1024x1024)
+    // Back panel is roughly around x: 512, y: 512 in the back view
     // The texture is usually creating a full wrap.
     // Center area (approx 50% width) is Front.
     // Sides are Back.
@@ -56,56 +59,22 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, f
         return base64;
     };
 
-    const GINGA_LOGOS = [
-        { name: 'blanco', color: [255, 255, 255], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (blanco).png' },
-        { name: 'negro', color: [0, 0, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (negro).png' },
-        { name: 'verde', color: [57, 255, 20], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (verde).png' },
-        { name: 'rojo', color: [255, 0, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (rojo).png' },
-        { name: 'azul claro', color: [0, 204, 255], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (azul claro).png' },
-        { name: 'azul oscuro', color: [0, 0, 51], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (azul oscuro).png' },
-        { name: 'amarillo', color: [255, 255, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (amarillo).png' },
-        { name: 'naranja', color: [255, 153, 0], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (orange).png' },
-        { name: 'rosa', color: [255, 51, 204], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (rosa).png' },
-        { name: 'morado', color: [102, 0, 204], path: '/Logos de Ginga/Logo Ginga trasparente sin texto (morado).png' }
-    ];
-
-    const getContrastingLogo = (hex) => {
-        if (!hex) return GINGA_LOGOS[0].path;
-        const r = parseInt(hex.slice(1, 3), 16);
-        const g = parseInt(hex.slice(3, 5), 16);
-        const b = parseInt(hex.slice(5, 7), 16);
-
-        const target = [255 - r, 255 - g, 255 - b];
-
-        let bestLogo = GINGA_LOGOS[0];
-        let minDist = Infinity;
-
-        GINGA_LOGOS.forEach(logo => {
-            const dist = Math.sqrt(
-                Math.pow(target[0] - logo.color[0], 2) +
-                Math.pow(target[1] - logo.color[1], 2) +
-                Math.pow(target[2] - logo.color[2], 2)
-            );
-            if (dist < minDist) {
-                minDist = dist;
-                bestLogo = logo;
-            }
-        });
-        return bestLogo.path;
-    };
-
-    const brandLogoPath = React.useMemo(() => getContrastingLogo(primary), [primary]);
+    const brandLogoPath = React.useMemo(() => {
+        const found = GINGA_LOGOS.find(l => l.name === brandLogoColor);
+        return found ? found.path : GINGA_LOGOS[0].path;
+    }, [brandLogoColor]);
 
     const companyLogoB64 = useBase64Image(brandLogoPath);
     const teamLogoB64 = useBase64Image(teamLogo);
     const sponsorLogoB64 = useBase64Image(sponsorLogo);
+    const backgroundImageB64 = useBase64Image(backgroundImage);
 
     return (
         <div className={`jersey - preview - container ${view} -view`} style={{ background: 'transparent', width: '4096px', height: '4096px' }}>
             <svg viewBox="0 0 1024 1024" className="jersey-svg" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%', shapeRendering: 'geometricPrecision' }}>
                 <defs>
                     <style type="text/css">
-                        {`@import url('https://fonts.googleapis.com/css2?family=Anton&family=Black+Ops+One&family=Bungee+Inline&family=Caveat:wght@700&family=Chakra+Petch:wght@700&family=Cinzel:wght@400;700&family=Creepster&family=Exo:wght@400;700&family=Faster+One&family=Fontdiner+Swanky&family=Goldman:wght@700&family=Inter:wght@400;700;900&family=Lato:wght@400;700;900&family=Maven+Pro:wght@700;900&family=Monoton&family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;700&family=Orbitron:wght@700;900&family=Oswald:wght@500;700&family=Passion+One:wght@400;700&family=Permanent+Marker&family=Playfair+Display:wght@400;700&family=Press+Start+2P&family=Roboto+Condensed:wght@700&family=Rubik+Glitch&family=Saira+Condensed:wght@700;900&family=Saira+Stencil+One&family=Teko:wght@700&family=Turret+Road:wght@800&family=UnifrakturMaguntia&display=swap'); `}
+                        {`@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap'); `}
                     </style>
                     <linearGradient id="jerseyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" style={{ stopColor: primary, stopOpacity: 1 }} />
@@ -125,6 +94,26 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, f
                 {/* 1. BASE COLOR LAYER - Default Solid */}
                 <rect width="1024" height="1024" fill={primary} />
 
+                {backgroundImageB64 && (
+                    <defs>
+                        {/* Define the background image as a repeating pattern for infinite tiling */}
+                        <pattern id="bgImagePattern" x={bgOffset?.x || 0} y={bgOffset?.y || 0} width="1024" height="1024" patternUnits="userSpaceOnUse">
+                            <image
+                                href={backgroundImageB64}
+                                x="0"
+                                y="0"
+                                width="1024"
+                                height="1024"
+                                preserveAspectRatio="xMidYMid slice"
+                            />
+                        </pattern>
+                    </defs>
+                )}
+                {/* 1.5 BACKGROUND IMAGE LAYER - Rendered beneath patterns but above solid color */}
+                {backgroundImageB64 && (
+                    <rect width="1024" height="1024" fill="url(#bgImagePattern)" style={{ mixBlendMode: 'normal' }} />
+                )}
+
                 {/* --- DEFINITIONS FOR PATTERNS --- */}
                 <defs>
                     {/* Linear Gradient (Soft) */}
@@ -141,19 +130,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, f
                     </linearGradient>
 
                     {/* Stepped Gradient (Banded) */}
-                    <linearGradient id="gradStepped" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor={primary} />
-                        <stop offset="20%" stopColor={primary} />
-                        <stop offset="20%" stopColor={colors.accent || '#444'} />
-                        <stop offset="40%" stopColor={colors.accent || '#444'} />
-                        <stop offset="40%" stopColor={secondary} />
-                        <stop offset="60%" stopColor={secondary} />
-                        <stop offset="60%" stopColor={colors.accent || '#444'} />
-                        <stop offset="80%" stopColor={colors.accent || '#444'} />
-                        <stop offset="80%" stopColor={primary} />
-                        <stop offset="100%" stopColor={primary} />
-                    </linearGradient>
-
                     {/* Mask for Halftone Lines (Gradient fade) */}
                     <linearGradient id="fadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stopColor="white" stopOpacity="1" />
@@ -168,8 +144,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, f
 
                 {/* 1. GRADIENTS */}
                 {pattern === 'gradient' && <rect width="1024" height="1024" fill="url(#gradSoft)" />}
-                {pattern === 'gradient-multi' && <rect width="1024" height="1024" fill="url(#gradMulti)" />}
-                {pattern === 'stepped-gradient' && <rect width="1024" height="1024" fill="url(#gradStepped)" />}
 
                 {/* 2. HALFTONE LINES (Horizontal Scanlines fading out) */}
                 {pattern === 'halftone-lines' && (
@@ -243,6 +217,9 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, f
                         <rect x="0" y="300" width="1024" height="150" /> {/* Horizontal */}
                     </g>
                 )}
+
+                {/* 5. DECALS (Logos & Text) - Removed to avoid baking them into the base texture. 
+                     They are now rendered exclusively as MovableDecals in Jersey3D */}
 
                 {/* 8. STANDARD PATTERNS (Legacy/Simple) */}
                 {pattern === 'diagonal' && (
@@ -380,19 +357,19 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, f
                 {/* 2.6 COLLAR STYLES */}
                 <g transform="translate(252, 50)"> {/* Centered at 252 */}
                     {/* V-NECK */}
-                    {colors.accent && collar === 'v-neck' && (
-                        <path d="M-50,0 L0,80 L50,0 L50,-20 L-50,-20 Z" fill={colors.accent} stroke="none" />
+                    {collar === 'v-neck' && (
+                        <path d="M-50,0 L0,80 L50,0 L50,-20 L-50,-20 Z" fill={primary} stroke="none" />
                     )}
 
                     {/* POLO */}
-                    {colors.accent && collar === 'polo' && (
+                    {collar === 'polo' && (
                         <g>
                             {/* Collar Fold Left */}
-                            <path d="M-60,0 L-10,60 L-30,80 L-100,20 Z" fill={colors.accent} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
+                            <path d="M-60,0 L-10,60 L-30,80 L-100,20 Z" fill={primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
                             {/* Collar Fold Right */}
-                            <path d="M60,0 L10,60 L30,80 L100,20 Z" fill={colors.accent} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
+                            <path d="M60,0 L10,60 L30,80 L100,20 Z" fill={primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
                             {/* Placket */}
-                            <rect x="-10" y="50" width="20" height="60" fill={colors.accent} />
+                            <rect x="-10" y="50" width="20" height="60" fill={primary} />
                             <circle cx="0" cy="70" r="3" fill="white" />
                             <circle cx="0" cy="90" r="3" fill="white" />
                         </g>
@@ -403,8 +380,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, f
                 {/* Logos are now handled by 3D Decals in Jersey3D.jsx for better quality and interactivity. */}
                 {/* We keep this group structure in case we want to add baked-in elements later. */}
                 <g transform="translate(512, 512)">
-                    {/* TEAM LOGO (Shield) - Left Chest (Wearer's Left - Image Right) */}
-                    {teamLogoB64 && <image href={teamLogoB64} x="-300" y="-325" width="80" height="80" />}
+                    {/* TEAM LOGO (Shield) - Removed from SVG to prevent duplicate with 3D Decal */}
                 </g>
 
                 {/* 4. BACK AREA */}
