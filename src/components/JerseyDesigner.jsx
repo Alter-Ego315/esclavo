@@ -409,16 +409,16 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
 };
 
 const JerseyDesigner = () => {
-    // Default "Teo 69" State
+    // Default "Blank White" State
     const [colors, setColors] = useState({
-        primary: '#0a0a0a',
-        secondary: '#39FF14',
-        accent: '#1a1a1a',
-        textColor: '#39FF14'
+        primary: '#ffffff',
+        secondary: '#000000',
+        accent: '#ffffff',
+        textColor: '#000000'
     });
     const [pattern, setPattern] = useState('none');
-    const [name, setName] = useState('TEO');
-    const [number, setNumber] = useState('69');
+    const [name, setName] = useState('');
+    const [number, setNumber] = useState('');
     const [font, setFont] = useState('Oswald');
     const [teamLogo, setTeamLogo] = useState(null);
     const [sponsorLogo, setSponsorLogo] = useState(null);
@@ -427,10 +427,10 @@ const JerseyDesigner = () => {
 
     // Custom Text Block State
     const [customText, setCustomText] = useState('');
-    const [customTextColor, setCustomTextColor] = useState('#ffffff');
+    const [customTextColor, setCustomTextColor] = useState('#000000');
     const [customTextPos, setCustomTextPos] = useState({ pos: [0, -0.05, 0.165], rot: Math.PI, scaleX: 0.12, scaleY: 0.12 });
 
-    const [brandLogoColor, setBrandLogoColor] = useState('blanco');
+    const [brandLogoColor, setBrandLogoColor] = useState('verde');
     const [vibrancy, setVibrancy] = useState(50);
 
     // New Features State
@@ -997,10 +997,9 @@ const JerseyDesigner = () => {
                                                     onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
                                                     onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                                                 >
-                                                    <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '15px' }}>
+                                                    <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                         <PatternThumbnail pattern={t.pattern} color1={t.colors.primary} color2={t.colors.secondary} />
                                                     </div>
-                                                    <span style={{ fontSize: '13px', fontWeight: '500', textAlign: 'center', color: 'var(--text-primary)', width: '100%' }}>{t.name}</span>
                                                 </button>
                                             ))}
                                         </div>
