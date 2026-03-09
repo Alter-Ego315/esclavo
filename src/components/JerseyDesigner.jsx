@@ -161,12 +161,9 @@ const RAW_FONT_OPTIONS = [
     { name: 'Eras ITC Demi', label: 'Eras ITC Demi' },
     { name: 'Ethnocentric', label: 'Ethnocentric' },
     { name: 'Real Madrid 2009', label: 'Real Madrid 09' },
-    { name: 'Real Madrid 18-19', label: 'Real Madrid 18-19' },
     { name: 'Real Madrid 19-20', label: 'Real Madrid 19-20' },
-    { name: 'Real Madrid UCL 2019', label: 'Real Madrid UCL 19' },
     { name: 'Real Madrid UCL 2021', label: 'Real Madrid UCL 21' },
     { name: 'Real Madrid 2022', label: 'Real Madrid 22' },
-    { name: 'Real Madrid 2022 Alt', label: 'Real Madrid 22 Alt' },
 ];
 
 export const FONT_OPTIONS = RAW_FONT_OPTIONS.sort((a, b) => a.label.localeCompare(b.label));
