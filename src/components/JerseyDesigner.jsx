@@ -22,7 +22,6 @@ const PATTERNS_LIST = [
     { id: 'chevron', label: 'Chevron' },
     { id: 'triangles', label: 'Triángulos' },
     { id: 'camo', label: 'Camuflaje' },
-    { id: 'swirl', label: 'Remolino' },
     { id: 'arches', label: 'Arcos' },
     { id: 'star', label: 'Estrella' },
     { id: 'pixels', label: 'Pixelado' },
@@ -36,7 +35,7 @@ const JERSEY_TEMPLATES = [
         id: 'ginga-classic',
         name: 'Ginga classic',
         colors: { primary: '#0a0a0a', secondary: '#39FF14', accent: '#1a1a1a', textColor: '#39FF14' },
-        pattern: 'swirl',
+        pattern: 'gradient',
         font: 'Ethnocentric'
     },
     {
@@ -92,7 +91,7 @@ const JERSEY_TEMPLATES = [
         id: 'liquid-flames',
         name: 'Liquid flames',
         colors: { primary: '#000000', secondary: '#ff33cc', accent: '#ffffff', textColor: '#ff33cc' },
-        pattern: 'swirl',
+        pattern: 'gradient',
         font: 'Brush King'
     },
     {
@@ -352,13 +351,7 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                             <path d="M40,20 Q60,10 70,40 Q50,60 30,40 Z" fill={color2} opacity={0.3} />
                         </g>
                     )}
-                    {pattern === 'swirl' && (
-                        <g>
-                            <rect width="100" height="100" fill={color1} />
-                            <path d="M50,50 m-40,0 a40,40 0 1,0 80,0 a40,40 0 1,0 -80,0" fill="none" stroke={color2} strokeWidth="5" opacity={0.6} />
-                            <path d="M50,50 m-20,0 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0" fill="none" stroke={color2} strokeWidth="5" opacity={0.6} />
-                        </g>
-                    )}
+
                     {pattern === 'hoops-thin' && (
                         <g fill={color2} opacity={0.6}>
                             <rect width="100" height="100" fill={color1} />
@@ -401,8 +394,7 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                         </g>
                     )}
 
-                    {/* Default fallback for undefined patterns in thumbnail - just show color1 base */}
-                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'swirl', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves'].includes(pattern) && pattern !== 'none' && (
+                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves'].includes(pattern) && pattern !== 'none' && (
                         <g opacity={0.3}>
                             <path d={shirtPath} fill={color2} />
                         </g>

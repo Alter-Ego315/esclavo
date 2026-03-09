@@ -143,7 +143,14 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 {/* --- APPLY PATTERNS --- */}
 
                 {/* 1. GRADIENTS */}
-                {pattern === 'gradient' && <rect width="1024" height="1024" fill="url(#gradSoft)" />}
+                {pattern === 'gradient' && (
+                    <>
+                        <rect width="1024" height="1024" fill="url(#gradSoft)" />
+                        {/* Sleeves use top/primary color, not blended gradient */}
+                        <rect x="0" y="0" width="100" height="1024" fill={primary} />
+                        <rect x="750" y="0" width="274" height="1024" fill={primary} />
+                    </>
+                )}
 
                 {/* 2. HALFTONE LINES (Horizontal Scanlines fading out) */}
                 {pattern === 'halftone-lines' && (
@@ -206,15 +213,15 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 {/* 7. CROSS VARIANTS */}
                 {pattern === 'cross' && (
                     <g fill={secondary}>
-                        <rect x="152" y="0" width="200" height="1024" /> {/* Vertical Center (252 - 100) */}
-                        <rect x="0" y="300" width="1024" height="200" /> {/* Horizontal */}
+                        <rect x="202" y="0" width="100" height="1024" /> {/* Vertical Center, narrowed */}
+                        <rect x="0" y="312" width="1024" height="100" /> {/* Horizontal, narrowed */}
                     </g>
                 )}
 
                 {pattern === 'cross-offset' && (
                     <g fill={secondary}>
-                        <rect x="252" y="0" width="150" height="1024" /> {/* Offset Vertical (Starts at center) */}
-                        <rect x="0" y="300" width="1024" height="150" /> {/* Horizontal */}
+                        <rect x="212" y="0" width="80" height="1024" /> {/* Offset Vertical, narrowed */}
+                        <rect x="0" y="312" width="1024" height="80" /> {/* Horizontal, narrowed */}
                     </g>
                 )}
 
@@ -258,15 +265,16 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 )}
 
                 {pattern === 'sash' && (
-                    // Needs to cross through roughly 252,512. 
-                    // Adjusted coordinates to cross visual center
-                    <path d="M0,0 L200,0 L800,1024 L600,1024 Z" fill={secondary} opacity={0.9} />
+                    // Narrowed band: ~100px wide instead of 200px
+                    <path d="M100,0 L200,0 L700,1024 L600,1024 Z" fill={secondary} opacity={0.9} />
                 )}
 
                 {pattern === 'chevron' && (
-                    <g transform="translate(-260, 300)" fill={secondary} opacity={0.9}>
-                        {/* Shifted by -260 to align V-point to new center */}
-                        <path d="M0,0 L512,250 L1024,0 L1024,150 L512,400 L0,150 Z" />
+                    <g fill={secondary} opacity={0.9}>
+                        {/* Front chevron: V-tip at x=252 */}
+                        <path d="M-260,300 L252,550 L764,300 L764,450 L252,700 L-260,450 Z" />
+                        {/* Back chevron: V-tip at x=762 (mirrored on UV right half) */}
+                        <path d="M504,300 L762,550 L1284,300 L1284,450 L762,700 L504,450 Z" />
                     </g>
                 )}
 
@@ -310,14 +318,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     <rect width="1024" height="1024" fill={secondary} opacity={0.4} filter="url(#camoFilter)" />
                 )}
 
-                {pattern === 'swirl' && (
-                    <g stroke={secondary} strokeWidth="10" fill="none" opacity="0.4">
-                        {/* Centered at 252, 512 */}
-                        {Array.from({ length: 10 }).map((_, i) => (
-                            <circle key={i} cx="252" cy="512" r={i * 60 + 20} strokeDasharray="100 50" />
-                        ))}
-                    </g>
-                )}
 
                 {pattern === 'star' && (
                     <g fill={secondary} opacity={0.2} transform="translate(252,400) scale(3)">
