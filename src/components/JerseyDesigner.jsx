@@ -13,6 +13,7 @@ const PATTERNS_LIST = [
     { id: 'stripes', label: 'Rayas verticales' },
     { id: 'hoops', label: 'Rayas horizontales' },
     { id: 'diagonal', label: 'Diagonal' },
+    { id: 'hexagons', label: 'Hexágonos' },
     { id: 'gradient', label: 'Degradado' },
     { id: 'halftone-dots', label: 'Puntos' },
     { id: 'checkers', label: 'Ajedrez' },
@@ -112,6 +113,13 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                         <stop offset="50%" stopColor={color2} />
                         <stop offset="100%" stopColor={color2} />
                     </linearGradient>
+                    <linearGradient id="fadeGradThumb" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="white" stopOpacity="1" />
+                        <stop offset="100%" stopColor="white" stopOpacity="0" />
+                    </linearGradient>
+                    <mask id="halftoneFadeThumb">
+                        <rect x="0" y="0" width="100" height="100" fill="url(#fadeGradThumb)" />
+                    </mask>
                 </defs>
 
                 {/* Base Layer (Solid Color to ensure shape visibility) */}
@@ -122,6 +130,22 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     {pattern === 'gradient' && <rect width="100" height="100" fill="url(#gradSoftThumb)" />}
                     {pattern === 'gradient-multi' && <rect width="100" height="100" fill="url(#gradMultiThumb)" />}
                     {pattern === 'stepped-gradient' && <rect width="100" height="100" fill="url(#gradSteppedThumb)" />}
+
+                    {pattern === 'hexagons' && (
+                        <g mask="url(#halftoneFadeThumb)">
+                            <rect width="100" height="100" fill={color1} />
+                            <pattern id="hexagons-thumb" width="84" height="48.4974" patternUnits="userSpaceOnUse" patternTransform="scale(0.3)">
+                                <g fill="none" stroke={color2} strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
+                                    <polygon points="-14,-24.2487 14,-24.2487 28,0 14,24.2487 -14,24.2487 -28,0" />
+                                    <polygon points="-14,24.2487 14,24.2487 28,48.4974 14,72.7461 -14,72.7461 -28,48.4974" />
+                                    <polygon points="28,0 56,0 70,24.2487 56,48.4974 28,48.4974 14,24.2487" />
+                                    <polygon points="70,-24.2487 98,-24.2487 112,0 98,24.2487 70,24.2487 56,0" />
+                                    <polygon points="70,24.2487 98,24.2487 112,48.4974 98,72.7461 70,72.7461 56,48.4974" />
+                                </g>
+                            </pattern>
+                            <rect width="100" height="100" fill="url(#hexagons-thumb)" />
+                        </g>
+                    )}
 
                     {pattern === 'checkers' && (
                         <g fill={color2} opacity={0.6}>
@@ -307,7 +331,7 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                         </g>
                     )}
 
-                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves'].includes(pattern) && pattern !== 'none' && (
+                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves', 'hexagons'].includes(pattern) && pattern !== 'none' && (
                         <g opacity={0.3}>
                             <path d={shirtPath} fill={color2} />
                         </g>

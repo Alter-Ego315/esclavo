@@ -138,6 +138,16 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     <mask id="halftoneFade">
                         <rect x="0" y="0" width="1024" height="1024" fill="url(#fadeGrad)" />
                     </mask>
+
+                    <pattern id="hexagonsPat" width="84" height="48.4974" patternUnits="userSpaceOnUse" patternTransform="scale(0.8)">
+                        <g fill="none" stroke={secondary} strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
+                            <polygon points="-14,-24.2487 14,-24.2487 28,0 14,24.2487 -14,24.2487 -28,0" />
+                            <polygon points="-14,24.2487 14,24.2487 28,48.4974 14,72.7461 -14,72.7461 -28,48.4974" />
+                            <polygon points="28,0 56,0 70,24.2487 56,48.4974 28,48.4974 14,24.2487" />
+                            <polygon points="70,-24.2487 98,-24.2487 112,0 98,24.2487 70,24.2487 56,0" />
+                            <polygon points="70,24.2487 98,24.2487 112,48.4974 98,72.7461 70,72.7461 56,48.4974" />
+                        </g>
+                    </pattern>
                 </defs>
 
                 {/* --- APPLY PATTERNS --- */}
@@ -145,6 +155,13 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 {/* 1. GRADIENTS */}
                 {pattern === 'gradient' && (
                     <rect width="1024" height="1024" fill="url(#gradSoft)" />
+                )}
+
+                {/* HEXAGONS (Fading out honeycomb) */}
+                {pattern === 'hexagons' && (
+                    <g mask="url(#halftoneFade)">
+                        <rect width="1024" height="1024" fill="url(#hexagonsPat)" />
+                    </g>
                 )}
 
                 {/* 2. HALFTONE LINES (Horizontal Scanlines fading out) */}
