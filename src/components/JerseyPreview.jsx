@@ -139,23 +139,11 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <rect x="0" y="0" width="1024" height="1024" fill="url(#fadeGrad)" />
                     </mask>
 
-                    <pattern id="hexagonsPat" width="84" height="48.4974" patternUnits="userSpaceOnUse" patternTransform="scale(0.3)">
-                        <g fill="none" stroke={secondary} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
-                            {/* Outer Hexagons */}
-                            <polygon points="-14,-24.2487 14,-24.2487 28,0 14,24.2487 -14,24.2487 -28,0" />
-                            <polygon points="-14,24.2487 14,24.2487 28,48.4974 14,72.7461 -14,72.7461 -28,48.4974" />
-                            <polygon points="28,0 56,0 70,24.2487 56,48.4974 28,48.4974 14,24.2487" />
-                            <polygon points="70,-24.2487 98,-24.2487 112,0 98,24.2487 70,24.2487 56,0" />
-                            <polygon points="70,24.2487 98,24.2487 112,48.4974 98,72.7461 70,72.7461 56,48.4974" />
-
-                            {/* Inner Hexagons */}
-                            <g strokeWidth="3">
-                                <polygon points="-9,-15.588 9,-15.588 18,0 9,15.588 -9,15.588 -18,0" />
-                                <polygon points="-9,32.909 9,32.909 18,48.497 9,64.085 -9,64.085 -18,48.497" />
-                                <polygon points="33,0 51,0 60,15.588 51,31.176 33,31.176 24,15.588" transform="translate(0, 8.66)" />
-                                <polygon points="75,-15.588 93,-15.588 102,0 93,15.588 -75,15.588 -102,0" transform="matrix(1,0,0,1,150,0) scale(-1, 1)" />
-                                <polygon points="75,32.909 93,32.909 102,48.497 93,64.085 75,64.085 66,48.497" />
-                            </g>
+                    <pattern id="hexagonsPat" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.6)">
+                        <g fill="none" stroke={secondary} strokeLinecap="round" strokeLinejoin="round">
+                            {[[0, 0], [34.641, 0], [-17.3205, 30], [17.3205, 30], [51.9615, 30], [0, 60], [34.641, 60]].map(([cx, cy], i) => (
+                                <polygon key={i} points={`${cx - 12.1244},${cy - 7} ${cx - 12.1244},${cy + 7} ${cx},${cy + 14} ${cx + 12.1244},${cy + 7} ${cx + 12.1244},${cy - 7} ${cx},${cy - 14} ${cx},${cy - 20} ${cx + 17.3205},${cy - 10} ${cx + 17.3205},${cy + 10} ${cx},${cy + 20} ${cx - 17.3205},${cy + 10} ${cx - 17.3205},${cy - 10}`} strokeWidth="3" />
+                            ))}
                         </g>
                     </pattern>
                 </defs>
