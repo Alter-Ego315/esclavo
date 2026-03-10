@@ -268,9 +268,9 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 {pattern === 'chevron' && (
                     <g fill={secondary} opacity={0.9}>
                         {/* Front chevron: strictly limited to front panel UV space (roughly x=50 to x=450) to avoid side distortion */}
-                        <path d="M50,370 L252,550 L454,370 L454,520 L252,700 L50,520 Z" />
+                        <path d="M50,550 L252,370 L454,550 L454,700 L252,520 L50,700 Z" />
                         {/* Back chevron: strictly limited to back panel UV space (roughly x=550 to x=950) */}
-                        <path d="M560,370 L762,550 L964,370 L964,520 L762,700 L560,520 Z" />
+                        <path d="M560,550 L762,370 L964,550 L964,700 L762,520 L560,700 Z" />
                     </g>
                 )}
 

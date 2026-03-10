@@ -6,116 +6,16 @@ import '../styles/JerseyDesigner.css';
 
 const PATTERNS_LIST = [
     { id: 'none', label: 'Ninguno' },
+    { id: 'chevron', label: 'Chevron' },
+    { id: 'zigzag', label: 'Zig zag' },
     { id: 'gradient', label: 'Degradado' },
     { id: 'halftone-lines', label: 'Líneas' },
-    { id: 'halftone-dots', label: 'Puntos' },
-    { id: 'checkers', label: 'Ajedrez' },
-    { id: 'zigzag', label: 'Zig zag' },
-    { id: 'hoops-thin', label: 'Rayas finas' },
     { id: 'ocean-waves', label: 'Olas' },
-    { id: 'cross', label: 'Cruz' },
-    { id: 'cross-offset', label: 'Cruz nórdica' },
     { id: 'stripes', label: 'Rayas verticales' },
     { id: 'hoops', label: 'Rayas horizontales' },
     { id: 'diagonal', label: 'Diagonal' },
-    { id: 'diamonds', label: 'Rombos' },
-    { id: 'chevron', label: 'Chevron' },
-    { id: 'triangles', label: 'Triángulos' },
-    { id: 'camo', label: 'Camuflaje' },
-    { id: 'arches', label: 'Arcos' },
-    { id: 'star', label: 'Estrella' },
-    { id: 'pixels', label: 'Pixelado' },
-    { id: 'center-stripe', label: 'Franja central' },
-    { id: 'sash', label: 'Banda' },
-    { id: 'double-stripe', label: 'Doble franja' },
 ];
 
-const JERSEY_TEMPLATES = [
-    {
-        id: 'ginga-classic',
-        name: 'Ginga classic',
-        colors: { primary: '#0a0a0a', secondary: '#39FF14', accent: '#1a1a1a', textColor: '#39FF14' },
-        pattern: 'gradient',
-        font: 'Ethnocentric'
-    },
-    {
-        id: 'nova-camo',
-        name: 'Nova camo',
-        colors: { primary: '#ff0000', secondary: '#000000', accent: '#ffffff', textColor: '#ffffff' },
-        pattern: 'camo',
-        font: 'Oswald'
-    },
-    {
-        id: 'apex-arches',
-        name: 'Apex arches',
-        colors: { primary: '#0000ff', secondary: '#ffffff', accent: '#000000', textColor: '#ffffff' },
-        pattern: 'arches',
-        font: 'Real Madrid 2022'
-    },
-    {
-        id: 'vortex-tri',
-        name: 'Vortex tri',
-        colors: { primary: '#ff9900', secondary: '#000000', accent: '#ffffff', textColor: '#000000' },
-        pattern: 'triangles',
-        font: 'Algerian'
-    },
-    {
-        id: 'alpha-26',
-        name: 'Alpha 26 home',
-        colors: { primary: '#000000', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
-        pattern: 'center-stripe',
-        font: 'Eras ITC Demi'
-    },
-    {
-        id: 'classic-retro',
-        name: 'Classic retro',
-        colors: { primary: '#ffffff', secondary: '#ff0000', accent: '#000000', textColor: '#000000' },
-        pattern: 'hoops',
-        font: 'Real Madrid 2009'
-    },
-    {
-        id: 'neon-strike',
-        name: 'Neon strike',
-        colors: { primary: '#0a0a0a', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
-        pattern: 'diagonal',
-        font: 'Oswald'
-    },
-    {
-        id: 'titan-checkers',
-        name: 'Titan check',
-        colors: { primary: '#ffff00', secondary: '#000000', accent: '#ffffff', textColor: '#000000' },
-        pattern: 'checkers',
-        font: 'Algerian'
-    },
-    {
-        id: 'liquid-flames',
-        name: 'Liquid flames',
-        colors: { primary: '#000000', secondary: '#ff33cc', accent: '#ffffff', textColor: '#ff33cc' },
-        pattern: 'gradient',
-        font: 'Brush King'
-    },
-    {
-        id: 'cyber-lab',
-        name: 'Cyber lab',
-        colors: { primary: '#6600cc', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
-        pattern: 'labyrinth',
-        font: 'Ethnocentric'
-    },
-    {
-        id: 'flux-melange',
-        name: 'Flux melange',
-        colors: { primary: '#00ccff', secondary: '#ffffff', accent: '#000000', textColor: '#ffffff' },
-        pattern: 'halftone',
-        font: 'Oswald'
-    },
-    {
-        id: 'cyber-pixels',
-        name: 'Cyber pixels',
-        colors: { primary: '#004d00', secondary: '#39FF14', accent: '#ffffff', textColor: '#39FF14' },
-        pattern: 'pixels',
-        font: 'Real Madrid UCL 2021'
-    }
-];
 
 // Reference colors from FIFA Kit Creator
 const PRESET_COLORS = [
@@ -294,8 +194,8 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     {pattern === 'chevron' && (
                         <g>
                             <rect width="100" height="100" fill={color1} />
-                            <path d="M0,40 L50,70 L100,40" fill="none" stroke={color2} strokeWidth="12" opacity={0.9} />
-                            <path d="M0,70 L50,100 L100,70" fill="none" stroke={color2} strokeWidth="12" opacity={0.9} />
+                            <path d="M0,70 L50,40 L100,70" fill="none" stroke={color2} strokeWidth="12" opacity={0.9} />
+                            <path d="M0,100 L50,70 L100,100" fill="none" stroke={color2} strokeWidth="12" opacity={0.9} />
                         </g>
                     )}
                     {pattern === 'center-stripe' && (
@@ -437,13 +337,6 @@ const JerseyDesigner = () => {
     const [sleeve, setSleeve] = useState('normal'); // normal, raglan
     const [showFontDropdown, setShowFontDropdown] = useState(false);
 
-    // Handle template application
-    const applyTemplate = (template) => {
-        setColors(template.colors);
-        setPattern(template.pattern);
-        if (template.font) setFont(template.font);
-    };
-
     // Logo Position State - Now 3D
     // Crest (Escudo): Positioned to match the Iron Man reference, now smaller and higher quality
     const [teamLogoPos, setTeamLogoPos] = useState({ pos: [-0.06, 0.08, 0.15], rot: Math.PI, scaleX: 0.07, scaleY: 0.07 });
@@ -488,7 +381,7 @@ const JerseyDesigner = () => {
 
     // Navigation State
     const [activeTab, setActiveTab] = useState('shield'); // shield, neck, sleeves, text, design
-    const [designTab, setDesignTab] = useState('templates'); // templates, colors, patterns
+    const [designTab, setDesignTab] = useState('patterns'); // colors, patterns
 
     const [view, setView] = useState('front');
     const [show3D, setShow3D] = useState(true);
@@ -968,42 +861,11 @@ const JerseyDesigner = () => {
                         {activeTab === 'design' && (
                             <div className="design-section-wrapper">
                                 <div className="sub-tabs">
-                                    <button className={designTab === 'templates' ? 'active' : ''} onClick={() => setDesignTab('templates')}>Plantillas</button>
                                     <button className={designTab === 'colors' ? 'active' : ''} onClick={() => setDesignTab('colors')}>Colores</button>
                                     <button className={designTab === 'patterns' ? 'active' : ''} onClick={() => setDesignTab('patterns')}>Patrones</button>
                                 </div>
 
                                 <div className="sub-content">
-                                    {designTab === 'templates' && (
-                                        <div className="templates-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '25px', padding: '10px' }}>
-                                            {JERSEY_TEMPLATES.map(t => (
-                                                <button
-                                                    key={t.id}
-                                                    onClick={() => applyTemplate(t)}
-                                                    style={{
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        alignItems: 'center',
-                                                        padding: '20px 10px',
-                                                        background: 'var(--surface)',
-                                                        border: '1px solid var(--border)',
-                                                        borderRadius: '16px',
-                                                        cursor: 'pointer',
-                                                        transition: 'transform 0.2s',
-                                                        minHeight: '180px',
-                                                        justifyContent: 'space-between'
-                                                    }}
-                                                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                                                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                                                >
-                                                    <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                        <PatternThumbnail pattern={t.pattern} color1={t.colors.primary} color2={t.colors.secondary} />
-                                                    </div>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    )}
-
                                     {designTab === 'colors' && (
                                         <div className="control-group">
                                             <div className="color-picker-item">
