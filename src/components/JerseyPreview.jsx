@@ -139,10 +139,13 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <rect x="0" y="0" width="1024" height="1024" fill="url(#fadeGrad)" />
                     </mask>
 
-                    <pattern id="hexagonsPat" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.55)">
+                    <pattern id="hexagonsPat" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.35)">
                         <g fill="none" stroke={secondary} strokeLinecap="round" strokeLinejoin="round">
                             {[[0, 0], [34.641, 0], [-17.3205, 30], [17.3205, 30], [51.9615, 30], [0, 60], [34.641, 60]].map(([cx, cy], i) => (
-                                <polyline key={i} points={`${cx},${cy - 14} ${cx + 12.1244},${cy - 7} ${cx + 12.1244},${cy + 7} ${cx},${cy + 14} ${cx - 12.1244},${cy + 7} ${cx - 12.1244},${cy - 7} ${cx},${cy - 14} ${cx},${cy - 20} ${cx + 17.3205},${cy - 10} ${cx + 17.3205},${cy + 10} ${cx},${cy + 20} ${cx - 17.3205},${cy + 10} ${cx - 17.3205},${cy - 10}`} strokeWidth="3" />
+                                <g key={i}>
+                                    <polyline points={`${cx + 17.3205},${cy - 10} ${cx + 17.3205},${cy + 10} ${cx},${cy + 20} ${cx - 17.3205},${cy + 10} ${cx - 17.3205},${cy - 10}`} strokeWidth="3" />
+                                    <polyline points={`${cx},${cy - 14} ${cx + 12.1244},${cy - 7} ${cx + 12.1244},${cy + 7} ${cx},${cy + 14} ${cx - 12.1244},${cy + 7} ${cx - 12.1244},${cy - 7}`} strokeWidth="3" />
+                                </g>
                             ))}
                         </g>
                     </pattern>
