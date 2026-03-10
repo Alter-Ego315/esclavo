@@ -518,7 +518,7 @@ const JerseyDesigner = () => {
 
                 {/* WhatsApp Contact Button */}
                 <a
-                    href="https://wa.me/34711245855"
+                    href="https://wa.me/34711245855?text=Hola%20Ginga%2C%20tenemos%20esta%20idea%20para%20el%20dise%C3%B1o%20de%20nuestras%20camisetas%3A"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
