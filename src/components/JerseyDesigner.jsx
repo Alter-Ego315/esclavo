@@ -133,14 +133,9 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                 {/* Base Layer (Solid Color to ensure shape visibility) */}
                 <path d={shirtPath} fill={color1} />
 
-                {/* Pattern Layer (Clipped to Shirt) */}
-                <g clipPath="url(#shirt-clip)">
-                    {pattern === 'gradient' && <rect width="100" height="100" fill="url(#gradSoftThumb)" />}
-                    {pattern === 'gradient-multi' && <rect width="100" height="100" fill="url(#gradMultiThumb)" />}
-                    {pattern === 'stepped-gradient' && <rect width="100" height="100" fill="url(#gradSteppedThumb)" />}
-
-                    {pattern === 'hexagons' && (
-                        <g mask="url(#hexFadeThumb)">
+                {/* Pattern 
+                
+                eThumb)">
                             <rect width="100" height="100" fill={color1} />
                             <pattern id="hexagons-thumb" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.08)">
                                 <g fill="none" stroke={color2} strokeLinecap="round" strokeLinejoin="round">
@@ -266,91 +261,91 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     )}
 
                     {/* NEW MISSING PATTERNS */}
-                    {pattern === 'triangles' && (
-                        <g>
-                            <rect width="100" height="100" fill={color1} />
-                            <g fill={color2} opacity={0.6}>
-                                <path d="M10,10 L25,10 L17.5,25 Z" />
-                                <path d="M30,10 L45,10 L37.5,25 Z" />
-                                <path d="M50,10 L65,10 L57.5,25 Z" />
-                                <path d="M70,10 L85,10 L77.5,25 Z" />
-
-                                <path d="M17.5,30 L32.5,30 L25,45 Z" />
-                                <path d="M37.5,30 L52.5,30 L45,45 Z" />
-                                <path d="M57.5,30 L72.5,30 L65,45 Z" />
-
-                                <path d="M10,50 L25,50 L17.5,65 Z" />
-                                <path d="M30,50 L45,50 L37.5,65 Z" />
-                                <path d="M50,50 L65,50 L57.5,65 Z" />
-                                <path d="M70,50 L85,50 L77.5,65 Z" />
-                            </g>
-                        </g>
-                    )}
-                    {pattern === 'camo' && (
-                        <g>
-                            <rect width="100" height="100" fill={color1} />
-                            <circle cx="25" cy="25" r="18" fill={color2} opacity={0.4} />
-                            <circle cx="65" cy="35" r="22" fill={color2} opacity={0.3} />
-                            <circle cx="45" cy="70" r="25" fill={color2} opacity={0.4} />
-                            <circle cx="85" cy="75" r="15" fill={color2} opacity={0.3} />
-                            <circle cx="15" cy="80" r="12" fill={color2} opacity={0.4} />
-                            <path d="M40,20 Q60,10 70,40 Q50,60 30,40 Z" fill={color2} opacity={0.3} />
-                        </g>
-                    )}
-
-                    {pattern === 'hoops-thin' && (
+                {pattern === 'triangles' && (
+                    <g>
+                        <rect width="100" height="100" fill={color1} />
                         <g fill={color2} opacity={0.6}>
-                            <rect width="100" height="100" fill={color1} />
-                            {Array.from({ length: 15 }).map((_, i) => (
-                                <rect key={i} x="0" y={i * 7} width="100" height="2" />
+                            <path d="M10,10 L25,10 L17.5,25 Z" />
+                            <path d="M30,10 L45,10 L37.5,25 Z" />
+                            <path d="M50,10 L65,10 L57.5,25 Z" />
+                            <path d="M70,10 L85,10 L77.5,25 Z" />
+
+                            <path d="M17.5,30 L32.5,30 L25,45 Z" />
+                            <path d="M37.5,30 L52.5,30 L45,45 Z" />
+                            <path d="M57.5,30 L72.5,30 L65,45 Z" />
+
+                            <path d="M10,50 L25,50 L17.5,65 Z" />
+                            <path d="M30,50 L45,50 L37.5,65 Z" />
+                            <path d="M50,50 L65,50 L57.5,65 Z" />
+                            <path d="M70,50 L85,50 L77.5,65 Z" />
+                        </g>
+                    </g>
+                )}
+                {pattern === 'camo' && (
+                    <g>
+                        <rect width="100" height="100" fill={color1} />
+                        <circle cx="25" cy="25" r="18" fill={color2} opacity={0.4} />
+                        <circle cx="65" cy="35" r="22" fill={color2} opacity={0.3} />
+                        <circle cx="45" cy="70" r="25" fill={color2} opacity={0.4} />
+                        <circle cx="85" cy="75" r="15" fill={color2} opacity={0.3} />
+                        <circle cx="15" cy="80" r="12" fill={color2} opacity={0.4} />
+                        <path d="M40,20 Q60,10 70,40 Q50,60 30,40 Z" fill={color2} opacity={0.3} />
+                    </g>
+                )}
+
+                {pattern === 'hoops-thin' && (
+                    <g fill={color2} opacity={0.6}>
+                        <rect width="100" height="100" fill={color1} />
+                        {Array.from({ length: 15 }).map((_, i) => (
+                            <rect key={i} x="0" y={i * 7} width="100" height="2" />
+                        ))}
+                    </g>
+                )}
+                {pattern === 'ocean-waves' && (
+                    <g>
+                        <rect width="100" height="100" fill={color1} />
+                        <g stroke={color2} strokeWidth="2" fill="none" opacity={0.6}>
+                            {Array.from({ length: 6 }).map((_, i) => (
+                                <path key={i} d={`M0,${i * 15 + 10} Q25,${i * 15} 50,${i * 15 + 10} T100,${i * 15 + 10}`} />
                             ))}
                         </g>
-                    )}
-                    {pattern === 'ocean-waves' && (
-                        <g>
-                            <rect width="100" height="100" fill={color1} />
-                            <g stroke={color2} strokeWidth="2" fill="none" opacity={0.6}>
-                                {Array.from({ length: 6 }).map((_, i) => (
-                                    <path key={i} d={`M0,${i * 15 + 10} Q25,${i * 15} 50,${i * 15 + 10} T100,${i * 15 + 10}`} />
-                                ))}
-                            </g>
-                        </g>
-                    )}
-                    {pattern === 'arches' && (
-                        <g>
-                            <rect width="100" height="100" fill={color1} />
-                            <circle cx="50" cy="100" r="40" fill="none" stroke={color2} strokeWidth="4" opacity={0.6} />
-                            <circle cx="50" cy="100" r="25" fill="none" stroke={color2} strokeWidth="4" opacity={0.6} />
-                        </g>
-                    )}
-                    {pattern === 'star' && (
-                        <g>
-                            <rect width="100" height="100" fill={color1} />
-                            <polygon points="50,15 61,35 85,35 66,50 75,75 50,60 25,75 34,50 15,35 39,35" fill={color2} opacity={0.6} />
-                        </g>
-                    )}
-                    {pattern === 'pixels' && (
-                        <g>
-                            <rect width="100" height="100" fill={color1} />
-                            <rect x="10" y="10" width="10" height="10" fill={color2} opacity={0.7} />
-                            <rect x="30" y="30" width="10" height="10" fill={color2} opacity={0.7} />
-                            <rect x="50" y="10" width="10" height="10" fill={color2} opacity={0.7} />
-                            <rect x="70" y="50" width="10" height="10" fill={color2} opacity={0.7} />
-                            <rect x="20" y="60" width="10" height="10" fill={color2} opacity={0.7} />
-                        </g>
-                    )}
+                    </g>
+                )}
+                {pattern === 'arches' && (
+                    <g>
+                        <rect width="100" height="100" fill={color1} />
+                        <circle cx="50" cy="100" r="40" fill="none" stroke={color2} strokeWidth="4" opacity={0.6} />
+                        <circle cx="50" cy="100" r="25" fill="none" stroke={color2} strokeWidth="4" opacity={0.6} />
+                    </g>
+                )}
+                {pattern === 'star' && (
+                    <g>
+                        <rect width="100" height="100" fill={color1} />
+                        <polygon points="50,15 61,35 85,35 66,50 75,75 50,60 25,75 34,50 15,35 39,35" fill={color2} opacity={0.6} />
+                    </g>
+                )}
+                {pattern === 'pixels' && (
+                    <g>
+                        <rect width="100" height="100" fill={color1} />
+                        <rect x="10" y="10" width="10" height="10" fill={color2} opacity={0.7} />
+                        <rect x="30" y="30" width="10" height="10" fill={color2} opacity={0.7} />
+                        <rect x="50" y="10" width="10" height="10" fill={color2} opacity={0.7} />
+                        <rect x="70" y="50" width="10" height="10" fill={color2} opacity={0.7} />
+                        <rect x="20" y="60" width="10" height="10" fill={color2} opacity={0.7} />
+                    </g>
+                )}
 
-                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves', 'hexagons'].includes(pattern) && pattern !== 'none' && (
-                        <g opacity={0.3}>
-                            <path d={shirtPath} fill={color2} />
-                        </g>
-                    )}
-                </g>
+                {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves', 'hexagons'].includes(pattern) && pattern !== 'none' && (
+                    <g opacity={0.3}>
+                        <path d={shirtPath} fill={color2} />
+                    </g>
+                )}
+            </g>
 
-                {/* Collar Detail */}
-                <path d="M26 6C30 6 34 8 36 11C38 14 42 18 50 18C58 18 62 14 64 11C66 8 70 6 74 6" fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
-            </svg>
-        </div>
+            {/* Collar Detail */}
+            <path d="M26 6C30 6 34 8 36 11C38 14 42 18 50 18C58 18 62 14 64 11C66 8 70 6 74 6" fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
+        </svg>
+        </div >
     );
 };
 
@@ -492,64 +487,8 @@ const JerseyDesigner = () => {
 
     const jersey3DRef = React.useRef();
 
-    const handleWhatsAppShare = async () => {
-        if (!jersey3DRef.current) return;
 
-        // Visual feedback
-        const btn = document.activeElement;
-        if (btn && btn.tagName === 'BUTTON') {
-            btn.innerHTML = 'Preparando compartición...';
-            btn.style.opacity = '0.7';
-        }
 
-        try {
-            await new Promise(resolve => setTimeout(resolve, 50));
-            const images = await jersey3DRef.current.captureViews();
-
-            if (images) {
-                const text = "Hola Ginga, tenemos esta idea para el diseño de nuestras camisetas:";
-
-                // Convert base64 to File objects for sharing
-                const frontBlob = await fetch(images.front).then(r => r.blob());
-                const backBlob = await fetch(images.back).then(r => r.blob());
-
-                const files = [
-                    new File([frontBlob], `ginga-jersey-front.png`, { type: 'image/png' }),
-                    new File([backBlob], `ginga-jersey-back.png`, { type: 'image/png' })
-                ];
-
-                // Check for Web Share API support (Level 2 - Files)
-                if (navigator.canShare && navigator.canShare({ files })) {
-                    await navigator.share({
-                        files,
-                        title: 'Mi Diseño Ginga',
-                        text: text
-                    });
-                } else {
-                    // Desktop Fallback: Download + Open Link
-                    const saveAs = (await import('file-saver')).saveAs;
-                    saveAs(frontBlob, `ginga-jersey-${name || 'style'}-front.png`);
-                    saveAs(backBlob, `ginga-jersey-${name || 'style'}-back.png`);
-
-                    // Small delay to ensure downloads trigger
-                    await new Promise(resolve => setTimeout(resolve, 800));
-                    window.open(`https://wa.me/34711245855?text=${encodeURIComponent(text + "\n*(Adjunto las fotos descargadas)*")}`, '_blank');
-                }
-            }
-        } catch (error) {
-            console.error('Error sharing:', error);
-            // If user cancels sharing, don't show alert
-            if (error.name !== 'AbortError') {
-                alert('Hubo un problema al compartir. Se abrirá el chat directamente.');
-                window.open(`https://wa.me/34711245855?text=Hola%20Ginga...`, '_blank');
-            }
-        } finally {
-            if (btn && btn.tagName === 'BUTTON') {
-                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> ¡Contáctanos con tu diseño!`;
-                btn.style.opacity = '1';
-            }
-        }
-    };
 
     const handleExport = async () => {
         if (jersey3DRef.current) {
@@ -584,9 +523,10 @@ const JerseyDesigner = () => {
                 </a>
 
                 {/* WhatsApp Contact Button */}
-                {/* WhatsApp Contact Button */}
-                <button
-                    onClick={handleWhatsAppShare}
+                <a
+                    href="https://wa.me/34711245855?text=Hola%20Ginga%2C%20tenemos%20esta%20idea%20para%20el%20dise%C3%B1o%20de%20nuestras%20camisetas%3A"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
                         position: 'absolute',
                         right: '20px',
@@ -597,13 +537,11 @@ const JerseyDesigner = () => {
                         color: '#fff',
                         padding: '10px 20px',
                         borderRadius: '30px',
-                        border: 'none',
-                        cursor: 'pointer',
                         textDecoration: 'none',
                         fontWeight: 'bold',
                         fontSize: '14px',
                         boxShadow: '0 4px 10px rgba(37, 211, 102, 0.3)',
-                        transition: 'transform 0.2s, opacity 0.2s'
+                        transition: 'transform 0.2s'
                     }}
                     onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                     onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
@@ -612,7 +550,7 @@ const JerseyDesigner = () => {
                         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                     </svg>
                     ¡Contáctanos con tu diseño!
-                </button>
+                </a>
             </header>
 
             <main className="designer-layout">
