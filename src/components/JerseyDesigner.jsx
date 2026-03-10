@@ -492,6 +492,51 @@ const JerseyDesigner = () => {
 
     const jersey3DRef = React.useRef();
 
+    const handleWhatsAppShare = async () => {
+        if (!jersey3DRef.current) return;
+
+        // Visual feedback
+        const btn = document.activeElement;
+        const originalText = btn.innerText;
+        if (btn && btn.tagName === 'BUTTON') {
+            btn.innerHTML = 'Preparando imágenes...';
+            btn.style.opacity = '0.7';
+        }
+
+        try {
+            // Give UI time to update
+            await new Promise(resolve => setTimeout(resolve, 50));
+            const images = await jersey3DRef.current.captureViews();
+
+            if (images) {
+                const saveAs = (await import('file-saver')).saveAs;
+
+                // Download front image
+                const frontBlob = await fetch(images.front).then(r => r.blob());
+                saveAs(frontBlob, `ginga-jersey-${name || 'style'}-front.png`);
+
+                // Download back image
+                const backBlob = await fetch(images.back).then(r => r.blob());
+                saveAs(backBlob, `ginga-jersey-${name || 'style'}-back.png`);
+
+                // Add a small delay so downloads trigger before navigating away
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        } catch (error) {
+            console.error('Error sharing to WhatsApp:', error);
+            alert('Error al generar las imágenes. Intentando abrir WhatsApp de todos modos.');
+        } finally {
+            if (btn && btn.tagName === 'BUTTON') {
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> ¡Contáctanos con tu diseño!`;
+                btn.style.opacity = '1';
+            }
+        }
+
+        // Open WhatsApp Web/App
+        const text = "Hola Ginga, tenemos esta idea para el diseño de nuestras camisetas:\n*(Imágenes del diseño adjuntas)*";
+        window.open(`https://wa.me/34711245855?text=${encodeURIComponent(text)}`, '_blank');
+    };
+
     const handleExport = async () => {
         if (jersey3DRef.current) {
             // Show loading state or feedback here if needed
@@ -525,10 +570,9 @@ const JerseyDesigner = () => {
                 </a>
 
                 {/* WhatsApp Contact Button */}
-                <a
-                    href="https://wa.me/34711245855?text=Hola%20Ginga%2C%20tenemos%20esta%20idea%20para%20el%20dise%C3%B1o%20de%20nuestras%20camisetas%3A"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                {/* WhatsApp Contact Button */}
+                <button
+                    onClick={handleWhatsAppShare}
                     style={{
                         position: 'absolute',
                         right: '20px',
@@ -539,11 +583,13 @@ const JerseyDesigner = () => {
                         color: '#fff',
                         padding: '10px 20px',
                         borderRadius: '30px',
+                        border: 'none',
+                        cursor: 'pointer',
                         textDecoration: 'none',
                         fontWeight: 'bold',
                         fontSize: '14px',
                         boxShadow: '0 4px 10px rgba(37, 211, 102, 0.3)',
-                        transition: 'transform 0.2s'
+                        transition: 'transform 0.2s, opacity 0.2s'
                     }}
                     onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                     onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
@@ -552,7 +598,7 @@ const JerseyDesigner = () => {
                         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                     </svg>
                     ¡Contáctanos con tu diseño!
-                </a>
+                </button>
             </header>
 
             <main className="designer-layout">
