@@ -144,7 +144,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                             {[[0, 0], [34.641, 0], [-17.3205, 30], [17.3205, 30], [51.9615, 30], [0, 60], [34.641, 60]].map(([cx, cy], i) => (
                                 <g key={i}>
                                     <polyline points={`${cx + 17.3205},${cy - 10} ${cx + 17.3205},${cy + 10} ${cx},${cy + 20} ${cx - 17.3205},${cy + 10} ${cx - 17.3205},${cy - 10}`} strokeWidth="3" />
-                                    <polyline points={`${cx + 12.1244},${cy - 7} ${cx + 12.1244},${cy + 7} ${cx},${cy + 14} ${cx - 12.1244},${cy + 7} ${cx - 12.1244},${cy - 7} ${cx},${cy - 14}`} strokeWidth="3" />
+                                    <polyline points={`${cx - 12.1244},${cy - 7} ${cx - 12.1244},${cy + 7} ${cx},${cy + 14} ${cx + 12.1244},${cy + 7} ${cx + 12.1244},${cy - 7} ${cx},${cy - 14}`} strokeWidth="3" />
                                 </g>
                             ))}
                         </g>
