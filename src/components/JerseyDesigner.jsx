@@ -134,7 +134,7 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     {pattern === 'hexagons' && (
                         <g mask="url(#halftoneFadeThumb)">
                             <rect width="100" height="100" fill={color1} />
-                            <pattern id="hexagons-thumb" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.18)">
+                            <pattern id="hexagons-thumb" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.12)">
                                 <g fill="none" stroke={color2} strokeLinecap="round" strokeLinejoin="round">
                                     {[[0, 0], [34.641, 0], [-17.3205, 30], [17.3205, 30], [51.9615, 30], [0, 60], [34.641, 60]].map(([cx, cy], i) => (
                                         <g key={i}>
