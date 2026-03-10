@@ -134,10 +134,10 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     {pattern === 'hexagons' && (
                         <g mask="url(#halftoneFadeThumb)">
                             <rect width="100" height="100" fill={color1} />
-                            <pattern id="hexagons-thumb" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.35)">
+                            <pattern id="hexagons-thumb" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.3)">
                                 <g fill="none" stroke={color2} strokeLinecap="round" strokeLinejoin="round">
                                     {[[0, 0], [34.641, 0], [-17.3205, 30], [17.3205, 30], [51.9615, 30], [0, 60], [34.641, 60]].map(([cx, cy], i) => (
-                                        <polygon key={i} points={`${cx - 12.1244},${cy - 7} ${cx - 12.1244},${cy + 7} ${cx},${cy + 14} ${cx + 12.1244},${cy + 7} ${cx + 12.1244},${cy - 7} ${cx},${cy - 14} ${cx},${cy - 20} ${cx + 17.3205},${cy - 10} ${cx + 17.3205},${cy + 10} ${cx},${cy + 20} ${cx - 17.3205},${cy + 10} ${cx - 17.3205},${cy - 10}`} strokeWidth="4" />
+                                        <polyline key={i} points={`${cx},${cy - 14} ${cx + 12.1244},${cy - 7} ${cx + 12.1244},${cy + 7} ${cx},${cy + 14} ${cx - 12.1244},${cy + 7} ${cx - 12.1244},${cy - 7} ${cx},${cy - 14} ${cx},${cy - 20} ${cx + 17.3205},${cy - 10} ${cx + 17.3205},${cy + 10} ${cx},${cy + 20} ${cx - 17.3205},${cy + 10} ${cx - 17.3205},${cy - 10}`} strokeWidth="4" />
                                     ))}
                                 </g>
                             </pattern>
