@@ -70,7 +70,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
     const backgroundImageB64 = useBase64Image(backgroundImage);
 
     return (
-        <div className={`jersey - preview - container ${view} -view`} style={{ background: 'transparent', width: '4096px', height: '4096px' }}>
+        <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '4096px', height: '4096px' }}>
             <svg viewBox="0 0 1024 1024" className="jersey-svg" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%', shapeRendering: 'geometricPrecision' }}>
                 <defs>
                     <style type="text/css">
