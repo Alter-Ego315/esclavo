@@ -139,6 +139,14 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <rect x="0" y="0" width="1024" height="1024" fill="url(#fadeGrad)" />
                     </mask>
 
+                    <linearGradient id="hexFadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="white" stopOpacity="0.6" />
+                        <stop offset="35%" stopColor="white" stopOpacity="0" />
+                    </linearGradient>
+                    <mask id="hexFade">
+                        <rect x="0" y="0" width="1024" height="1024" fill="url(#hexFadeGrad)" />
+                    </mask>
+
                     <pattern id="hexagonsPat" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.25)">
                         <g fill="none" stroke={secondary} strokeLinecap="round" strokeLinejoin="round">
                             {[[0, 0], [34.641, 0], [-17.3205, 30], [17.3205, 30], [51.9615, 30], [0, 60], [34.641, 60]].map(([cx, cy], i) => (
@@ -160,7 +168,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
 
                 {/* HEXAGONS (Fading out honeycomb) */}
                 {pattern === 'hexagons' && (
-                    <g mask="url(#halftoneFade)">
+                    <g mask="url(#hexFade)">
                         <rect width="1024" height="1024" fill="url(#hexagonsPat)" />
                     </g>
                 )}

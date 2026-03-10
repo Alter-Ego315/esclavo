@@ -120,6 +120,14 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     <mask id="halftoneFadeThumb">
                         <rect x="0" y="0" width="100" height="100" fill="url(#fadeGradThumb)" />
                     </mask>
+
+                    <linearGradient id="hexFadeGradThumb" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="white" stopOpacity="0.6" />
+                        <stop offset="35%" stopColor="white" stopOpacity="0" />
+                    </linearGradient>
+                    <mask id="hexFadeThumb">
+                        <rect x="0" y="0" width="100" height="100" fill="url(#hexFadeGradThumb)" />
+                    </mask>
                 </defs>
 
                 {/* Base Layer (Solid Color to ensure shape visibility) */}
@@ -132,7 +140,7 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     {pattern === 'stepped-gradient' && <rect width="100" height="100" fill="url(#gradSteppedThumb)" />}
 
                     {pattern === 'hexagons' && (
-                        <g mask="url(#halftoneFadeThumb)">
+                        <g mask="url(#hexFadeThumb)">
                             <rect width="100" height="100" fill={color1} />
                             <pattern id="hexagons-thumb" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.12)">
                                 <g fill="none" stroke={color2} strokeLinecap="round" strokeLinejoin="round">
