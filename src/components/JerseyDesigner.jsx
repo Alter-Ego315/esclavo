@@ -133,9 +133,14 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                 {/* Base Layer (Solid Color to ensure shape visibility) */}
                 <path d={shirtPath} fill={color1} />
 
-                {/* Pattern 
-                
-                eThumb)">
+                {/* Pattern Layer (Clipped to Shirt) */}
+                <g clipPath="url(#shirt-clip)">
+                    {pattern === 'gradient' && <rect width="100" height="100" fill="url(#gradSoftThumb)" />}
+                    {pattern === 'gradient-multi' && <rect width="100" height="100" fill="url(#gradMultiThumb)" />}
+                    {pattern === 'stepped-gradient' && <rect width="100" height="100" fill="url(#gradSteppedThumb)" />}
+
+                    {pattern === 'hexagons' && (
+                        <g mask="url(#hexFadeThumb)">
                             <rect width="100" height="100" fill={color1} />
                             <pattern id="hexagons-thumb" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.08)">
                                 <g fill="none" stroke={color2} strokeLinecap="round" strokeLinejoin="round">
@@ -261,91 +266,91 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     )}
 
                     {/* NEW MISSING PATTERNS */}
-                {pattern === 'triangles' && (
-                    <g>
-                        <rect width="100" height="100" fill={color1} />
-                        <g fill={color2} opacity={0.6}>
-                            <path d="M10,10 L25,10 L17.5,25 Z" />
-                            <path d="M30,10 L45,10 L37.5,25 Z" />
-                            <path d="M50,10 L65,10 L57.5,25 Z" />
-                            <path d="M70,10 L85,10 L77.5,25 Z" />
+                    {pattern === 'triangles' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <g fill={color2} opacity={0.6}>
+                                <path d="M10,10 L25,10 L17.5,25 Z" />
+                                <path d="M30,10 L45,10 L37.5,25 Z" />
+                                <path d="M50,10 L65,10 L57.5,25 Z" />
+                                <path d="M70,10 L85,10 L77.5,25 Z" />
 
-                            <path d="M17.5,30 L32.5,30 L25,45 Z" />
-                            <path d="M37.5,30 L52.5,30 L45,45 Z" />
-                            <path d="M57.5,30 L72.5,30 L65,45 Z" />
+                                <path d="M17.5,30 L32.5,30 L25,45 Z" />
+                                <path d="M37.5,30 L52.5,30 L45,45 Z" />
+                                <path d="M57.5,30 L72.5,30 L65,45 Z" />
 
-                            <path d="M10,50 L25,50 L17.5,65 Z" />
-                            <path d="M30,50 L45,50 L37.5,65 Z" />
-                            <path d="M50,50 L65,50 L57.5,65 Z" />
-                            <path d="M70,50 L85,50 L77.5,65 Z" />
+                                <path d="M10,50 L25,50 L17.5,65 Z" />
+                                <path d="M30,50 L45,50 L37.5,65 Z" />
+                                <path d="M50,50 L65,50 L57.5,65 Z" />
+                                <path d="M70,50 L85,50 L77.5,65 Z" />
+                            </g>
                         </g>
-                    </g>
-                )}
-                {pattern === 'camo' && (
-                    <g>
-                        <rect width="100" height="100" fill={color1} />
-                        <circle cx="25" cy="25" r="18" fill={color2} opacity={0.4} />
-                        <circle cx="65" cy="35" r="22" fill={color2} opacity={0.3} />
-                        <circle cx="45" cy="70" r="25" fill={color2} opacity={0.4} />
-                        <circle cx="85" cy="75" r="15" fill={color2} opacity={0.3} />
-                        <circle cx="15" cy="80" r="12" fill={color2} opacity={0.4} />
-                        <path d="M40,20 Q60,10 70,40 Q50,60 30,40 Z" fill={color2} opacity={0.3} />
-                    </g>
-                )}
+                    )}
+                    {pattern === 'camo' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <circle cx="25" cy="25" r="18" fill={color2} opacity={0.4} />
+                            <circle cx="65" cy="35" r="22" fill={color2} opacity={0.3} />
+                            <circle cx="45" cy="70" r="25" fill={color2} opacity={0.4} />
+                            <circle cx="85" cy="75" r="15" fill={color2} opacity={0.3} />
+                            <circle cx="15" cy="80" r="12" fill={color2} opacity={0.4} />
+                            <path d="M40,20 Q60,10 70,40 Q50,60 30,40 Z" fill={color2} opacity={0.3} />
+                        </g>
+                    )}
 
-                {pattern === 'hoops-thin' && (
-                    <g fill={color2} opacity={0.6}>
-                        <rect width="100" height="100" fill={color1} />
-                        {Array.from({ length: 15 }).map((_, i) => (
-                            <rect key={i} x="0" y={i * 7} width="100" height="2" />
-                        ))}
-                    </g>
-                )}
-                {pattern === 'ocean-waves' && (
-                    <g>
-                        <rect width="100" height="100" fill={color1} />
-                        <g stroke={color2} strokeWidth="2" fill="none" opacity={0.6}>
-                            {Array.from({ length: 6 }).map((_, i) => (
-                                <path key={i} d={`M0,${i * 15 + 10} Q25,${i * 15} 50,${i * 15 + 10} T100,${i * 15 + 10}`} />
+                    {pattern === 'hoops-thin' && (
+                        <g fill={color2} opacity={0.6}>
+                            <rect width="100" height="100" fill={color1} />
+                            {Array.from({ length: 15 }).map((_, i) => (
+                                <rect key={i} x="0" y={i * 7} width="100" height="2" />
                             ))}
                         </g>
-                    </g>
-                )}
-                {pattern === 'arches' && (
-                    <g>
-                        <rect width="100" height="100" fill={color1} />
-                        <circle cx="50" cy="100" r="40" fill="none" stroke={color2} strokeWidth="4" opacity={0.6} />
-                        <circle cx="50" cy="100" r="25" fill="none" stroke={color2} strokeWidth="4" opacity={0.6} />
-                    </g>
-                )}
-                {pattern === 'star' && (
-                    <g>
-                        <rect width="100" height="100" fill={color1} />
-                        <polygon points="50,15 61,35 85,35 66,50 75,75 50,60 25,75 34,50 15,35 39,35" fill={color2} opacity={0.6} />
-                    </g>
-                )}
-                {pattern === 'pixels' && (
-                    <g>
-                        <rect width="100" height="100" fill={color1} />
-                        <rect x="10" y="10" width="10" height="10" fill={color2} opacity={0.7} />
-                        <rect x="30" y="30" width="10" height="10" fill={color2} opacity={0.7} />
-                        <rect x="50" y="10" width="10" height="10" fill={color2} opacity={0.7} />
-                        <rect x="70" y="50" width="10" height="10" fill={color2} opacity={0.7} />
-                        <rect x="20" y="60" width="10" height="10" fill={color2} opacity={0.7} />
-                    </g>
-                )}
+                    )}
+                    {pattern === 'ocean-waves' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <g stroke={color2} strokeWidth="2" fill="none" opacity={0.6}>
+                                {Array.from({ length: 6 }).map((_, i) => (
+                                    <path key={i} d={`M0,${i * 15 + 10} Q25,${i * 15} 50,${i * 15 + 10} T100,${i * 15 + 10}`} />
+                                ))}
+                            </g>
+                        </g>
+                    )}
+                    {pattern === 'arches' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <circle cx="50" cy="100" r="40" fill="none" stroke={color2} strokeWidth="4" opacity={0.6} />
+                            <circle cx="50" cy="100" r="25" fill="none" stroke={color2} strokeWidth="4" opacity={0.6} />
+                        </g>
+                    )}
+                    {pattern === 'star' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <polygon points="50,15 61,35 85,35 66,50 75,75 50,60 25,75 34,50 15,35 39,35" fill={color2} opacity={0.6} />
+                        </g>
+                    )}
+                    {pattern === 'pixels' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <rect x="10" y="10" width="10" height="10" fill={color2} opacity={0.7} />
+                            <rect x="30" y="30" width="10" height="10" fill={color2} opacity={0.7} />
+                            <rect x="50" y="10" width="10" height="10" fill={color2} opacity={0.7} />
+                            <rect x="70" y="50" width="10" height="10" fill={color2} opacity={0.7} />
+                            <rect x="20" y="60" width="10" height="10" fill={color2} opacity={0.7} />
+                        </g>
+                    )}
 
-                {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves', 'hexagons'].includes(pattern) && pattern !== 'none' && (
-                    <g opacity={0.3}>
-                        <path d={shirtPath} fill={color2} />
-                    </g>
-                )}
-            </g>
+                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves', 'hexagons'].includes(pattern) && pattern !== 'none' && (
+                        <g opacity={0.3}>
+                            <path d={shirtPath} fill={color2} />
+                        </g>
+                    )}
+                </g>
 
-            {/* Collar Detail */}
-            <path d="M26 6C30 6 34 8 36 11C38 14 42 18 50 18C58 18 62 14 64 11C66 8 70 6 74 6" fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
-        </svg>
-        </div >
+                {/* Collar Detail */}
+                <path d="M26 6C30 6 34 8 36 11C38 14 42 18 50 18C58 18 62 14 64 11C66 8 70 6 74 6" fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
+            </svg>
+        </div>
     );
 };
 
