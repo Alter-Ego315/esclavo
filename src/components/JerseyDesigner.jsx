@@ -385,8 +385,8 @@ const JerseyDesigner = () => {
     const [showFontDropdown, setShowFontDropdown] = useState(false);
 
     // Logo Position State - Now 3D
-    // Crest (Escudo): Positioned to match the Iron Man reference, now smaller and higher quality
-    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [-0.06, 0.08, 0.15], rot: Math.PI, scaleX: 0.07, scaleY: 0.07 });
+    // Crest (Escudo): Positioned to match the SVG placement x=-170 y=-325
+    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [0.06, 0.11, 0.15], rot: Math.PI, scaleX: 0.07, scaleY: 0.07 });
     // Sponsor: Center, lowered and rotated 180deg to appear upright
     const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, -0.10, 0.16], rot: Math.PI, scaleX: 0.25, scaleY: 0.25 });
     const [selectedLogo, setSelectedLogo] = useState(null); // 'team' or 'sponsor'
@@ -643,16 +643,22 @@ const JerseyDesigner = () => {
                     {/* Controles para mover patrón (mobile & PC) */}
                     {backgroundImage && (
                         <div className="pattern-move-controls" style={{
+                            position: 'absolute',
+                            bottom: '80px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            gap: '15px',
-                            padding: '12px',
-                            background: 'var(--surface)',
-                            borderTop: '1px solid var(--border)',
-                            borderBottom: '1px solid var(--border)'
+                            gap: '10px',
+                            padding: '10px 14px',
+                            background: 'rgba(0, 0, 0, 0.6)',
+                            backdropFilter: 'blur(5px)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            borderRadius: '16px',
+                            zIndex: 20
                         }}>
-                            <span style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: '500' }}>
+                            <span style={{ fontSize: '13px', color: '#fff', fontWeight: '500' }}>
                                 Mover Patrón:
                             </span>
                             <div style={{ display: 'flex', gap: '8px' }}>
