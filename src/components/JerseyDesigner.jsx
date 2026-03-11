@@ -6,8 +6,8 @@ import '../styles/JerseyDesigner.css';
 
 const PATTERNS_LIST = [
     { id: 'none', label: 'Ninguno' },
-    { id: 'chevron', label: 'Chevron' },
-    { id: 'norvehc', label: 'Norvehc' },
+    { id: 'chevron', label: 'Norvehc' },
+    { id: 'norvehc', label: 'Chevron' },
     { id: 'zigzag', label: 'Zig zag' },
     { id: 'halftone-lines', label: 'Líneas' },
     { id: 'ocean-waves', label: 'Olas' },
