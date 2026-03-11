@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Jersey3D from './Jersey3D';
 import JerseyPreview from './JerseyPreview';
 import { ChevronRight, ChevronLeft, Upload, Shirt, RotateCcw, Share2, Download, Eye, Layers, Type, Palette, Scissors, Binary, Grip, RotateCw, Image, ArrowLeftRight, Move, Check, Trash2 } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
-import MiniPreview from './MiniPreview';
 import '../styles/JerseyDesigner.css';
 
 const PATTERNS_LIST = [
@@ -372,11 +370,6 @@ const JerseyDesigner = () => {
         accent: '#ffffff',
         textColor: '#000000'
     });
-
-    const canvasContainerRef = useRef(null);
-    const [showMiniPreview, setShowMiniPreview] = useState(false);
-    const [userClosedMiniPreview, setUserClosedMiniPreview] = useState(false);
-
     const [pattern, setPattern] = useState('none');
     const [name, setName] = useState('TEO');
     const [number, setNumber] = useState('69');
@@ -440,42 +433,6 @@ const JerseyDesigner = () => {
     };
 
     // Navigation State
-
-    // Intersection Observer to toggle Mini PIP Preview on mobile consistently across tabs
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (window.innerWidth <= 800) {
-                    // Show PIP when the main 3D canvas is less than 50% visible
-                    if (entry.intersectionRatio < 0.5) {
-                        if (!userClosedMiniPreview) {
-                            setShowMiniPreview(true);
-                        }
-                    } else {
-                        setShowMiniPreview(false);
-                        setUserClosedMiniPreview(false); // Reset when user scrolls back to the top
-                    }
-                } else {
-                    setShowMiniPreview(false);
-                }
-            },
-            {
-                root: null, // Viewport
-                threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] // Evaluate at these visibility points
-            }
-        );
-
-        const currentCanvasRef = canvasContainerRef.current;
-        if (currentCanvasRef) {
-            observer.observe(currentCanvasRef);
-        }
-
-        return () => {
-            if (currentCanvasRef) {
-                observer.unobserve(currentCanvasRef);
-            }
-        };
-    }, [userClosedMiniPreview]);
 
     // Navigation State
     const [activeTab, setActiveTab] = useState('shield'); // shield, neck, sleeves, text, design
@@ -610,7 +567,7 @@ const JerseyDesigner = () => {
             </header>
 
             <main className="designer-layout">
-                <section className="preview-section" ref={canvasContainerRef}>
+                <section className="preview-section">
                     <React.Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'white' }}>Cargando Modelo 3D...</div>}>
                         {show3D ? (
                             <div className="canvas-container">
@@ -1125,32 +1082,6 @@ const JerseyDesigner = () => {
                     </div>
                 </aside>
             </main>
-
-            {/* Picture in Picture Mini-Preview */}
-            {window.innerWidth <= 768 && (
-                <AnimatePresence>
-                    {showMiniPreview && (
-                        <MiniPreview
-                            colors={colors}
-                            pattern={pattern}
-                            name={name}
-                            number={number}
-                            font={font}
-                            teamLogo={teamLogo}
-                            sponsorLogo={sponsorLogo}
-                            brandLogoColor={brandLogoColor}
-                            collar={collar}
-                            sleeve={sleeve}
-                            backgroundImage={backgroundImage}
-                            bgOffset={bgOffset}
-                            onClose={() => {
-                                setShowMiniPreview(false);
-                                setUserClosedMiniPreview(true);
-                            }}
-                        />
-                    )}
-                </AnimatePresence>
-            )}
         </div>
     );
 };

@@ -166,19 +166,19 @@ const generateVNeckAlphaMap = () => {
     return tex;
 };
 
-const PoloCollar = ({ color, isMini }) => (
+const PoloCollar = ({ color }) => (
     <group position={[0, 0.46, 0.05]} rotation={[0.2, 0, 0]} scale={[1, 1, 1]}>
         <mesh position={[-0.08, 0, 0]} rotation={[0, 0, 0.3]}>
             <boxGeometry args={[0.18, 0.08, 0.01]} />
-            {isMini ? <meshBasicMaterial color={color} /> : <meshStandardMaterial color={color} roughness={0.8} />}
+            <meshStandardMaterial color={color} roughness={0.8} />
         </mesh>
         <mesh position={[0.08, 0, 0]} rotation={[0, 0, -0.3]}>
             <boxGeometry args={[0.18, 0.08, 0.01]} />
-            {isMini ? <meshBasicMaterial color={color} /> : <meshStandardMaterial color={color} roughness={0.8} />}
+            <meshStandardMaterial color={color} roughness={0.8} />
         </mesh>
         <mesh position={[0, 0.03, -0.06]} rotation={[Math.PI / 2 - 0.2, 0, 0]}>
             <cylinderGeometry args={[0.13, 0.13, 0.08, 32, 1, true, Math.PI, Math.PI]} />
-            {isMini ? <meshBasicMaterial color={color} side={THREE.DoubleSide} /> : <meshStandardMaterial color={color} side={THREE.DoubleSide} roughness={0.8} />}
+            <meshStandardMaterial color={color} side={THREE.DoubleSide} roughness={0.8} />
         </mesh>
     </group>
 );
@@ -195,8 +195,7 @@ const ShirtModel = ({
     isDraggingAny, onDragChange,
     customText, customTextState, onCustomTextUpdate, customTextColor, brandLogoColor,
     teamLogoTex, sponsorLogoTex, customTextTex,
-    controlsRef, // Pass controlsRef for MovableDecal
-    ...props
+    controlsRef // Pass controlsRef for MovableDecal
 }) => {
     const { nodes, materials } = useGLTF('/shirt_baked.glb');
     const [material, setMaterial] = useState(null);
@@ -218,26 +217,16 @@ const ShirtModel = ({
 
     useEffect(() => {
         if (nodes.T_Shirt_male) {
-            const materialParams = {
+            const newMat = new THREE.MeshStandardMaterial({
                 map: texture || null,
                 color: texture ? 0xffffff : new THREE.Color(color),
+                roughness: 0.5,
+                metalness: 0.1,
                 side: THREE.DoubleSide,
                 alphaMap: vNeckAlphaMap,
                 transparent: !!vNeckAlphaMap,
                 alphaTest: 0.5
-            };
-
-            let newMat;
-            if (props.isMini) {
-                newMat = new THREE.MeshBasicMaterial(materialParams);
-            } else {
-                newMat = new THREE.MeshStandardMaterial({
-                    ...materialParams,
-                    roughness: 0.5,
-                    metalness: 0.1,
-                });
-            }
-
+            });
             if (texture) {
                 texture.flipY = false;
                 texture.colorSpace = THREE.SRGBColorSpace;
@@ -245,7 +234,7 @@ const ShirtModel = ({
             }
             setMaterial(newMat);
         }
-    }, [texture, color, nodes, vNeckAlphaMap, props.isMini]);
+    }, [texture, color, nodes, vNeckAlphaMap]);
 
     const handleMeshPointerMove = (e) => {
         if (isDraggingAny && selectedLogo && meshRef.current) {
@@ -285,7 +274,7 @@ const ShirtModel = ({
                 material={material || materials.lambert1}
                 onPointerMove={handleMeshPointerMove}
             >
-                {!props.isMini && teamLogo && teamLogoState && teamLogoTex && (
+                {teamLogo && teamLogoState && teamLogoTex && (
                     <MovableDecal
                         texture={teamLogoTex}
                         position={teamLogoState.pos}
@@ -302,7 +291,7 @@ const ShirtModel = ({
                         aspectRatio={teamLogoTex.image.width / teamLogoTex.image.height}
                     />
                 )}
-                {!props.isMini && sponsorLogo && sponsorLogoState && sponsorLogoTex && (
+                {sponsorLogo && sponsorLogoState && sponsorLogoTex && (
                     <MovableDecal
                         texture={sponsorLogoTex}
                         position={sponsorLogoState?.pos || [0, -0.10, 0.16]}
@@ -319,7 +308,7 @@ const ShirtModel = ({
                         aspectRatio={sponsorLogoTex.image.width / sponsorLogoTex.image.height}
                     />
                 )}
-                {!props.isMini && customText && customTextState && customTextTex && (
+                {customText && customTextState && customTextTex && (
                     <MovableDecal
                         texture={customTextTex}
                         position={customTextState?.pos || [0, -0.05, 0.165]}
@@ -337,7 +326,7 @@ const ShirtModel = ({
                         aspectRatio={1}
                     />
                 )}
-                {!props.isMini && decalTexture && (
+                {decalTexture && (
                     <Decal
                         position={[0, 0.0, -0.15]}
                         rotation={[0, Math.PI, 0]}
@@ -349,7 +338,7 @@ const ShirtModel = ({
                 )}
                 <Decal
                     position={[-0.08, 0.08, 0.15]}
-                    rotation={[0, 0, Math.PI]}
+                    rotation={[0, 0, 0]}
                     scale={[0.045, 0.045, 0.2]}
                     map={brandTexture}
                 >
@@ -362,7 +351,7 @@ const ShirtModel = ({
                     />
                 </Decal>
             </mesh>
-            {collar === 'polo' && <PoloCollar color={accentColor || color} isMini={props.isMini} />}
+            {collar === 'polo' && <PoloCollar color={accentColor || color} />}
         </group>
     );
 };
@@ -495,19 +484,17 @@ const Jersey3D = forwardRef((props, ref) => {
     }, [props.colors, props.pattern, props.name, props.number, props.font, props.collar, props.backgroundImage, props.bgOffset]);
 
     return (
-        <div className={`jersey-3d-wrapper ${props.isMini ? 'mini-mode' : 'studio-mode'}`} ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative', pointerEvents: props.isMini ? 'none' : 'auto' }}>
+        <div className="jersey-3d-wrapper studio-mode" ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
             <Canvas
-                shadows={!props.isMini}
-                dpr={props.isMini ? [1, 1] : [1, 2]} // Drop resolution ratio to 1 for PIP
+                shadows dpr={[1, 2]}
                 camera={{ position: [0, 0.15, 1.3], fov: 45 }}
-                gl={{ preserveDrawingBuffer: !props.isMini, powerPreference: 'low-power', antialias: !props.isMini }}
-                frameloop={props.isMini ? "demand" : "always"} // Only render PIP when props/camera changes
+                gl={{ preserveDrawingBuffer: true }}
                 onCreated={({ gl }) => { canvasRef.current = gl.domElement; }}
                 onPointerMissed={() => props.onSelectLogo && props.onSelectLogo(null)}
             >
-                <ambientLight intensity={props.isMini ? 0.9 : 0.7} />
-                {!props.isMini && <Environment preset="city" />}
-                <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow={!props.isMini} />
+                <ambientLight intensity={0.7} />
+                <Environment preset="city" />
+                <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow />
                 <group position={[0, 0.22, 0]}>
                     <ShirtModel
                         {...props}
@@ -527,8 +514,8 @@ const Jersey3D = forwardRef((props, ref) => {
                     ref={controlsRef}
                     target={[0, props.viewLocked ? 0.25 : 0.15, 0]}
                     enablePan={false}
-                    enabled={!isDraggingAny && !props.isMini}
-                    enableZoom={!props.viewLocked && !props.isMini}
+                    enabled={!isDraggingAny}
+                    enableZoom={!props.viewLocked}
                     minDistance={props.viewLocked ? 1.1 : 0.5}
                     maxDistance={props.viewLocked ? 1.1 : 3}
                     minPolarAngle={props.viewLocked ? Math.PI / 2 : 0}
@@ -537,11 +524,9 @@ const Jersey3D = forwardRef((props, ref) => {
                 />
                 <CameraAdjuster viewLocked={props.viewLocked} controlsRef={controlsRef} />
             </Canvas>
-            {!props.isMini && (
-                <div className="hidden-previews" style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', top: 0, left: 0, zIndex: -1 }}>
-                    <div className="full-view"><JerseyPreview {...props} view="full" /></div>
-                </div>
-            )}
+            <div className="hidden-previews" style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', top: 0, left: 0, zIndex: -1 }}>
+                <div className="full-view"><JerseyPreview {...props} view="full" /></div>
+            </div>
         </div>
     );
 });
