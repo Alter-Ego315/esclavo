@@ -82,10 +82,10 @@ const MiniPreview = ({
                 </div>
             </div>
 
-            {/* SVG Content Area */}
-            <div style={{ padding: '5px', background: 'var(--bg-layer-1)', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+            {/* 3D Content Area */}
+            <div style={{ padding: '0px', background: 'var(--bg-layer-1)', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative' }}>
                 <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <JerseyPreview
+                    <Jersey3D
                         colors={colors}
                         pattern={pattern}
                         name={name}
@@ -98,10 +98,11 @@ const MiniPreview = ({
                         sleeve={sleeve}
                         backgroundImage={backgroundImage}
                         bgOffset={bgOffset}
-                        view="front"
+                        viewLocked={true} // Locks rotation zoom on mini view
+                        isMini={true}     // Tells Jersey3D not to render duplicate SVGs
                     />
 
-                    {/* Invisible overlay to prevent SVG from stealing touch events so the whole card is draggable */}
+                    {/* Invisible overlay to prevent 3D canvas from stealing touch events so the whole card is draggable */}
                     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10, cursor: 'grab' }} />
                 </div>
             </div>
