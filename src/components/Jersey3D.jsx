@@ -486,15 +486,17 @@ const Jersey3D = forwardRef((props, ref) => {
     return (
         <div className={`jersey-3d-wrapper ${props.isMini ? 'mini-mode' : 'studio-mode'}`} ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative', pointerEvents: props.isMini ? 'none' : 'auto' }}>
             <Canvas
-                shadows={!props.isMini} dpr={props.isMini ? [1, 1.5] : [1, 2]}
+                shadows={!props.isMini}
+                dpr={props.isMini ? [1, 1] : [1, 2]} // Drop resolution ratio to 1 for PIP
                 camera={{ position: [0, 0.15, 1.3], fov: 45 }}
-                gl={{ preserveDrawingBuffer: true, powerPreference: 'low-power' }}
+                gl={{ preserveDrawingBuffer: !props.isMini, powerPreference: 'low-power', antialias: !props.isMini }}
+                frameloop={props.isMini ? "demand" : "always"} // Only render PIP when props/camera changes
                 onCreated={({ gl }) => { canvasRef.current = gl.domElement; }}
                 onPointerMissed={() => props.onSelectLogo && props.onSelectLogo(null)}
             >
-                <ambientLight intensity={0.7} />
-                <Environment preset="city" />
-                <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow />
+                <ambientLight intensity={props.isMini ? 0.9 : 0.7} />
+                {!props.isMini && <Environment preset="city" />}
+                <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow={!props.isMini} />
                 <group position={[0, 0.22, 0]}>
                     <ShirtModel
                         {...props}
