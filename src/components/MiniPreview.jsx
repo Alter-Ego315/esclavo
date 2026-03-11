@@ -27,10 +27,7 @@ const MiniPreview = ({
     return (
         <motion.div
             drag
-            dragControls={dragControls}
-            dragListener={false} // Only drag by the handle
-            dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }} // Let it be dragged freely but bounded by viewport
-            dragElastic={0}
+            dragElastic={0.1}
             dragMomentum={false}
             initial={{ opacity: 0, scale: 0.8, y: 50, x: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
@@ -39,22 +36,21 @@ const MiniPreview = ({
                 position: 'fixed',
                 bottom: '20px',
                 right: '20px',
-                width: isExpanded ? '200px' : '120px',
+                width: isExpanded ? '200px' : '100px',
+                height: isExpanded ? '200px' : '120px', // Explicit height to prevent stretching
                 background: 'var(--surface)',
                 border: '2px solid var(--border)',
                 borderRadius: '12px',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
                 zIndex: 1000,
-                overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
-                touchAction: 'none' // Prevent scroll while dragging
+                overflow: 'hidden'
             }}
         >
             {/* Header / Drag Handle */}
             <div
                 className="mini-preview-header"
-                onPointerDown={(e) => dragControls.start(e)}
                 style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -63,7 +59,8 @@ const MiniPreview = ({
                     background: 'var(--surface-light)',
                     borderBottom: '1px solid var(--border)',
                     cursor: 'grab',
-                    touchAction: 'none'
+                    touchAction: 'none', // Needed for Framer Motion pointer events on mobile
+                    userSelect: 'none'
                 }}
             >
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center', color: 'var(--text-secondary)' }}>
@@ -88,8 +85,8 @@ const MiniPreview = ({
             </div>
 
             {/* SVG Content Area */}
-            <div style={{ padding: '10px', background: 'var(--bg-layer-1)', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '100%', aspectRatio: '1/1' }}>
+            <div style={{ padding: '5px', background: 'var(--bg-layer-1)', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <JerseyPreview
                         colors={colors}
                         pattern={pattern}
@@ -105,6 +102,9 @@ const MiniPreview = ({
                         bgOffset={bgOffset}
                         view="front"
                     />
+
+                    {/* Invisible overlay to prevent SVG from stealing touch events so the whole card is draggable */}
+                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10, cursor: 'grab' }} />
                 </div>
             </div>
         </motion.div>
