@@ -402,10 +402,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 {/* Logos are now handled by 3D Decals in Jersey3D.jsx for better quality and interactivity. */}
                 {/* We keep this group structure in case we want to add baked-in elements later. */}
                 <g transform="translate(512, 512)">
-                    {/* TEAM LOGO (Shield) */}
-                    {teamLogoB64 && (
-                        <image href={teamLogoB64} x="-170" y="-325" width="120" height="120" preserveAspectRatio="xMidYMid meet" />
-                    )}
+                    {/* TEAM LOGO (Shield) - Removed from SVG to prevent duplicate with 3D Decal */}
                 </g>
 
                 {/* 4. BACK AREA */}
