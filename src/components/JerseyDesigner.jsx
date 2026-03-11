@@ -441,22 +441,41 @@ const JerseyDesigner = () => {
 
     // Navigation State
 
-    // Scroll Listener to toggle Mini PIP Preview on mobile consistently across tabs
-    const handleMainScroll = (e) => {
-        if (window.innerWidth <= 768) {
-            const scrollTop = e.target.scrollTop;
-            if (scrollTop > 350) {
-                if (!userClosedMiniPreview) {
-                    setShowMiniPreview(true);
+    // Intersection Observer to toggle Mini PIP Preview on mobile consistently across tabs
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (window.innerWidth <= 800) {
+                    // Show PIP when the main 3D canvas is out of view
+                    if (!entry.isIntersecting) {
+                        if (!userClosedMiniPreview) {
+                            setShowMiniPreview(true);
+                        }
+                    } else {
+                        setShowMiniPreview(false);
+                        setUserClosedMiniPreview(false); // Reset when user scrolls back to the top
+                    }
+                } else {
+                    setShowMiniPreview(false);
                 }
-            } else {
-                setShowMiniPreview(false);
-                setUserClosedMiniPreview(false); // Reset when user scrolls back to the top
+            },
+            {
+                root: null, // Viewport
+                threshold: 0.1 // Triggers when less than 10% is visible
             }
-        } else {
-            setShowMiniPreview(false);
+        );
+
+        const currentCanvasRef = canvasContainerRef.current;
+        if (currentCanvasRef) {
+            observer.observe(currentCanvasRef);
         }
-    };
+
+        return () => {
+            if (currentCanvasRef) {
+                observer.unobserve(currentCanvasRef);
+            }
+        };
+    }, [userClosedMiniPreview]);
 
     // Navigation State
     const [activeTab, setActiveTab] = useState('shield'); // shield, neck, sleeves, text, design
@@ -552,7 +571,7 @@ const JerseyDesigner = () => {
     };
 
     return (
-        <div className="jersey-designer-container" onScroll={handleMainScroll}>
+        <div className="jersey-designer-container">
             {/* Header */}
             <header className="designer-header" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0 20px', position: 'relative' }}>
                 <a href="https://ginga.es" target="_blank" rel="noopener noreferrer" className="header-center" style={{ textDecoration: 'none', cursor: 'pointer' }}>
