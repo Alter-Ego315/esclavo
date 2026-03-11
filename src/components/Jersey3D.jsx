@@ -166,19 +166,19 @@ const generateVNeckAlphaMap = () => {
     return tex;
 };
 
-const PoloCollar = ({ color }) => (
+const PoloCollar = ({ color, isMini }) => (
     <group position={[0, 0.46, 0.05]} rotation={[0.2, 0, 0]} scale={[1, 1, 1]}>
         <mesh position={[-0.08, 0, 0]} rotation={[0, 0, 0.3]}>
             <boxGeometry args={[0.18, 0.08, 0.01]} />
-            <meshStandardMaterial color={color} roughness={0.8} />
+            {isMini ? <meshBasicMaterial color={color} /> : <meshStandardMaterial color={color} roughness={0.8} />}
         </mesh>
         <mesh position={[0.08, 0, 0]} rotation={[0, 0, -0.3]}>
             <boxGeometry args={[0.18, 0.08, 0.01]} />
-            <meshStandardMaterial color={color} roughness={0.8} />
+            {isMini ? <meshBasicMaterial color={color} /> : <meshStandardMaterial color={color} roughness={0.8} />}
         </mesh>
         <mesh position={[0, 0.03, -0.06]} rotation={[Math.PI / 2 - 0.2, 0, 0]}>
             <cylinderGeometry args={[0.13, 0.13, 0.08, 32, 1, true, Math.PI, Math.PI]} />
-            <meshStandardMaterial color={color} side={THREE.DoubleSide} roughness={0.8} />
+            {isMini ? <meshBasicMaterial color={color} side={THREE.DoubleSide} /> : <meshStandardMaterial color={color} side={THREE.DoubleSide} roughness={0.8} />}
         </mesh>
     </group>
 );
@@ -195,7 +195,8 @@ const ShirtModel = ({
     isDraggingAny, onDragChange,
     customText, customTextState, onCustomTextUpdate, customTextColor, brandLogoColor,
     teamLogoTex, sponsorLogoTex, customTextTex,
-    controlsRef // Pass controlsRef for MovableDecal
+    controlsRef, // Pass controlsRef for MovableDecal
+    ...props
 }) => {
     const { nodes, materials } = useGLTF('/shirt_baked.glb');
     const [material, setMaterial] = useState(null);
@@ -217,16 +218,26 @@ const ShirtModel = ({
 
     useEffect(() => {
         if (nodes.T_Shirt_male) {
-            const newMat = new THREE.MeshStandardMaterial({
+            const materialParams = {
                 map: texture || null,
                 color: texture ? 0xffffff : new THREE.Color(color),
-                roughness: 0.5,
-                metalness: 0.1,
                 side: THREE.DoubleSide,
                 alphaMap: vNeckAlphaMap,
                 transparent: !!vNeckAlphaMap,
                 alphaTest: 0.5
-            });
+            };
+
+            let newMat;
+            if (props.isMini) {
+                newMat = new THREE.MeshBasicMaterial(materialParams);
+            } else {
+                newMat = new THREE.MeshStandardMaterial({
+                    ...materialParams,
+                    roughness: 0.5,
+                    metalness: 0.1,
+                });
+            }
+
             if (texture) {
                 texture.flipY = false;
                 texture.colorSpace = THREE.SRGBColorSpace;
@@ -234,7 +245,7 @@ const ShirtModel = ({
             }
             setMaterial(newMat);
         }
-    }, [texture, color, nodes, vNeckAlphaMap]);
+    }, [texture, color, nodes, vNeckAlphaMap, props.isMini]);
 
     const handleMeshPointerMove = (e) => {
         if (isDraggingAny && selectedLogo && meshRef.current) {
@@ -274,7 +285,7 @@ const ShirtModel = ({
                 material={material || materials.lambert1}
                 onPointerMove={handleMeshPointerMove}
             >
-                {teamLogo && teamLogoState && teamLogoTex && (
+                {!props.isMini && teamLogo && teamLogoState && teamLogoTex && (
                     <MovableDecal
                         texture={teamLogoTex}
                         position={teamLogoState.pos}
@@ -291,7 +302,7 @@ const ShirtModel = ({
                         aspectRatio={teamLogoTex.image.width / teamLogoTex.image.height}
                     />
                 )}
-                {sponsorLogo && sponsorLogoState && sponsorLogoTex && (
+                {!props.isMini && sponsorLogo && sponsorLogoState && sponsorLogoTex && (
                     <MovableDecal
                         texture={sponsorLogoTex}
                         position={sponsorLogoState?.pos || [0, -0.10, 0.16]}
@@ -308,7 +319,7 @@ const ShirtModel = ({
                         aspectRatio={sponsorLogoTex.image.width / sponsorLogoTex.image.height}
                     />
                 )}
-                {customText && customTextState && customTextTex && (
+                {!props.isMini && customText && customTextState && customTextTex && (
                     <MovableDecal
                         texture={customTextTex}
                         position={customTextState?.pos || [0, -0.05, 0.165]}
@@ -326,7 +337,7 @@ const ShirtModel = ({
                         aspectRatio={1}
                     />
                 )}
-                {decalTexture && (
+                {!props.isMini && decalTexture && (
                     <Decal
                         position={[0, 0.0, -0.15]}
                         rotation={[0, Math.PI, 0]}
@@ -351,7 +362,7 @@ const ShirtModel = ({
                     />
                 </Decal>
             </mesh>
-            {collar === 'polo' && <PoloCollar color={accentColor || color} />}
+            {collar === 'polo' && <PoloCollar color={accentColor || color} isMini={props.isMini} />}
         </group>
     );
 };
