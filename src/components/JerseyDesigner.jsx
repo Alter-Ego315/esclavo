@@ -441,12 +441,11 @@ const JerseyDesigner = () => {
 
     // Navigation State
 
-    // Intersection Observer to toggle Mini PIP Preview on mobile
+    // Scroll Listener to toggle Mini PIP Preview on mobile consistently across tabs
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                // If the 3D canvas is NOT visible (scrolled down), show the mini preview
-                if (!entry.isIntersecting && window.innerWidth <= 768) {
+        const handleScroll = () => {
+            if (window.innerWidth <= 768) {
+                if (window.scrollY > 350) {
                     if (!userClosedMiniPreview) {
                         setShowMiniPreview(true);
                     }
@@ -454,18 +453,16 @@ const JerseyDesigner = () => {
                     setShowMiniPreview(false);
                     setUserClosedMiniPreview(false); // Reset when user scrolls back to the top
                 }
-            },
-            { threshold: 0.1 } // 10% visible
-        );
+            } else {
+                setShowMiniPreview(false);
+            }
+        };
 
-        if (canvasContainerRef.current) {
-            observer.observe(canvasContainerRef.current);
-        }
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Initial check
 
         return () => {
-            if (canvasContainerRef.current) {
-                observer.unobserve(canvasContainerRef.current);
-            }
+            window.removeEventListener('scroll', handleScroll);
         };
     }, [userClosedMiniPreview]);
 

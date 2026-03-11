@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion, useDragControls } from 'framer-motion';
-import JerseyPreview from './JerseyPreview';
+import Jersey3D from './Jersey3D';
 import { Maximize2, Minimize2, X, Move } from 'lucide-react';
 
 const MiniPreview = ({
@@ -29,15 +29,13 @@ const MiniPreview = ({
             drag
             dragElastic={0.1}
             dragMomentum={false}
-            initial={{ opacity: 0, scale: 0.8, y: 50, x: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+            initial={{ opacity: 0, scale: 0.8, y: 50, x: 20, width: 120, height: 160 }}
+            animate={{ opacity: 1, scale: 1, y: 0, x: 0, width: isExpanded ? 240 : 120, height: isExpanded ? 320 : 160 }}
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
             style={{
                 position: 'fixed',
                 bottom: '20px',
                 right: '20px',
-                width: isExpanded ? '200px' : '100px',
-                height: isExpanded ? '200px' : '120px', // Explicit height to prevent stretching
                 background: 'var(--surface)',
                 border: '2px solid var(--border)',
                 borderRadius: '12px',

@@ -484,11 +484,11 @@ const Jersey3D = forwardRef((props, ref) => {
     }, [props.colors, props.pattern, props.name, props.number, props.font, props.collar, props.backgroundImage, props.bgOffset]);
 
     return (
-        <div className="jersey-3d-wrapper studio-mode" ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
+        <div className={`jersey-3d-wrapper ${props.isMini ? 'mini-mode' : 'studio-mode'}`} ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative', pointerEvents: props.isMini ? 'none' : 'auto' }}>
             <Canvas
-                shadows dpr={[1, 2]}
+                shadows={!props.isMini} dpr={props.isMini ? [1, 1.5] : [1, 2]}
                 camera={{ position: [0, 0.15, 1.3], fov: 45 }}
-                gl={{ preserveDrawingBuffer: true }}
+                gl={{ preserveDrawingBuffer: true, powerPreference: 'low-power' }}
                 onCreated={({ gl }) => { canvasRef.current = gl.domElement; }}
                 onPointerMissed={() => props.onSelectLogo && props.onSelectLogo(null)}
             >
@@ -514,8 +514,8 @@ const Jersey3D = forwardRef((props, ref) => {
                     ref={controlsRef}
                     target={[0, props.viewLocked ? 0.25 : 0.15, 0]}
                     enablePan={false}
-                    enabled={!isDraggingAny}
-                    enableZoom={!props.viewLocked}
+                    enabled={!isDraggingAny && !props.isMini}
+                    enableZoom={!props.viewLocked && !props.isMini}
                     minDistance={props.viewLocked ? 1.1 : 0.5}
                     maxDistance={props.viewLocked ? 1.1 : 3}
                     minPolarAngle={props.viewLocked ? Math.PI / 2 : 0}
@@ -524,9 +524,11 @@ const Jersey3D = forwardRef((props, ref) => {
                 />
                 <CameraAdjuster viewLocked={props.viewLocked} controlsRef={controlsRef} />
             </Canvas>
-            <div className="hidden-previews" style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', top: 0, left: 0, zIndex: -1 }}>
-                <div className="full-view"><JerseyPreview {...props} view="full" /></div>
-            </div>
+            {!props.isMini && (
+                <div className="hidden-previews" style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', top: 0, left: 0, zIndex: -1 }}>
+                    <div className="full-view"><JerseyPreview {...props} view="full" /></div>
+                </div>
+            )}
         </div>
     );
 });
