@@ -442,29 +442,21 @@ const JerseyDesigner = () => {
     // Navigation State
 
     // Scroll Listener to toggle Mini PIP Preview on mobile consistently across tabs
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.innerWidth <= 768) {
-                if (window.scrollY > 350) {
-                    if (!userClosedMiniPreview) {
-                        setShowMiniPreview(true);
-                    }
-                } else {
-                    setShowMiniPreview(false);
-                    setUserClosedMiniPreview(false); // Reset when user scrolls back to the top
+    const handleMainScroll = (e) => {
+        if (window.innerWidth <= 768) {
+            const scrollTop = e.target.scrollTop;
+            if (scrollTop > 350) {
+                if (!userClosedMiniPreview) {
+                    setShowMiniPreview(true);
                 }
             } else {
                 setShowMiniPreview(false);
+                setUserClosedMiniPreview(false); // Reset when user scrolls back to the top
             }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        handleScroll(); // Initial check
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [userClosedMiniPreview]);
+        } else {
+            setShowMiniPreview(false);
+        }
+    };
 
     // Navigation State
     const [activeTab, setActiveTab] = useState('shield'); // shield, neck, sleeves, text, design
@@ -560,7 +552,7 @@ const JerseyDesigner = () => {
     };
 
     return (
-        <div className="jersey-designer-container">
+        <div className="jersey-designer-container" onScroll={handleMainScroll}>
             {/* Header */}
             <header className="designer-header" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0 20px', position: 'relative' }}>
                 <a href="https://ginga.es" target="_blank" rel="noopener noreferrer" className="header-center" style={{ textDecoration: 'none', cursor: 'pointer' }}>

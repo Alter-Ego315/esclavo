@@ -85,22 +85,24 @@ const MiniPreview = ({
             {/* 3D Content Area */}
             <div style={{ padding: '0px', background: 'var(--bg-layer-1)', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative' }}>
                 <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Jersey3D
-                        colors={colors}
-                        pattern={pattern}
-                        name={name}
-                        number={number}
-                        font={font}
-                        teamLogo={teamLogo}
-                        sponsorLogo={sponsorLogo}
-                        brandLogoColor={brandLogoColor}
-                        collar={collar}
-                        sleeve={sleeve}
-                        backgroundImage={backgroundImage}
-                        bgOffset={bgOffset}
-                        viewLocked={true} // Locks rotation zoom on mini view
-                        isMini={true}     // Tells Jersey3D not to render duplicate SVGs
-                    />
+                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+                        <Jersey3D
+                            colors={colors}
+                            pattern={pattern}
+                            name={name}
+                            number={number}
+                            font={font}
+                            teamLogo={teamLogo}
+                            sponsorLogo={sponsorLogo}
+                            brandLogoColor={brandLogoColor}
+                            collar={collar}
+                            sleeve={sleeve}
+                            backgroundImage={backgroundImage}
+                            bgOffset={bgOffset}
+                            viewLocked={true} // Locks rotation zoom on mini view
+                            isMini={true}     // Tells Jersey3D not to render duplicate SVGs
+                        />
+                    </div>
 
                     {/* Invisible overlay to prevent 3D canvas from stealing touch events so the whole card is draggable */}
                     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10, cursor: 'grab' }} />
