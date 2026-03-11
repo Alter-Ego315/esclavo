@@ -7,6 +7,7 @@ import '../styles/JerseyDesigner.css';
 const PATTERNS_LIST = [
     { id: 'none', label: 'Ninguno' },
     { id: 'chevron', label: 'Chevron' },
+    { id: 'norvehc', label: 'Norvehc' },
     { id: 'zigzag', label: 'Zig zag' },
     { id: 'halftone-lines', label: 'Líneas' },
     { id: 'ocean-waves', label: 'Olas' },
@@ -245,6 +246,13 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                             <path d="M0,100 L50,70 L100,100" fill="none" stroke={color2} strokeWidth="12" opacity={0.9} />
                         </g>
                     )}
+                    {pattern === 'norvehc' && (
+                        <g>
+                            <rect width="100" height="100" fill={color1} />
+                            <path d="M0,40 L50,70 L100,40" fill="none" stroke={color2} strokeWidth="12" opacity={0.9} />
+                            <path d="M0,70 L50,100 L100,70" fill="none" stroke={color2} strokeWidth="12" opacity={0.9} />
+                        </g>
+                    )}
                     {pattern === 'center-stripe' && (
                         <g>
                             <rect width="100" height="100" fill={color1} />
@@ -340,7 +348,7 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                         </g>
                     )}
 
-                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves', 'hexagons'].includes(pattern) && pattern !== 'none' && (
+                    {!['gradient', 'gradient-multi', 'stepped-gradient', 'checkers', 'halftone-lines', 'halftone-dots', 'zigzag', 'waves', 'cross', 'cross-offset', 'stripes', 'hoops', 'diagonal', 'diamonds', 'chevron', 'norvehc', 'center-stripe', 'sash', 'double-stripe', 'triangles', 'camo', 'arches', 'star', 'pixels', 'hoops-thin', 'ocean-waves', 'hexagons'].includes(pattern) && pattern !== 'none' && (
                         <g opacity={0.3}>
                             <path d={shirtPath} fill={color2} />
                         </g>

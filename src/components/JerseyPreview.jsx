@@ -300,6 +300,15 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     </g>
                 )}
 
+                {pattern === 'norvehc' && (
+                    <g fill={secondary} opacity={0.9}>
+                        {/* Inverted chevron for front */}
+                        <path d="M50,370 L252,550 L454,370 L454,520 L252,700 L50,520 Z" />
+                        {/* Inverted chevron for back */}
+                        <path d="M560,370 L762,550 L964,370 L964,520 L762,700 L560,520 Z" />
+                    </g>
+                )}
+
                 {pattern === 'double-stripe' && (
                     <g fill={secondary} opacity={0.9}>
                         <rect x="182" y="0" width="60" height="1024" /> {/* 252 - 10 - 60 = 182 */}
