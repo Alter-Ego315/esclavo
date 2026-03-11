@@ -338,7 +338,7 @@ const ShirtModel = ({
                 )}
                 <Decal
                     position={[-0.08, 0.08, 0.15]}
-                    rotation={[0, 0, 0]}
+                    rotation={[0, 0, Math.PI]}
                     scale={[0.045, 0.045, 0.2]}
                     map={brandTexture}
                 >
