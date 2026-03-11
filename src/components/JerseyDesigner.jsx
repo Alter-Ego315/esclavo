@@ -446,8 +446,8 @@ const JerseyDesigner = () => {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (window.innerWidth <= 800) {
-                    // Show PIP when the main 3D canvas is out of view
-                    if (!entry.isIntersecting) {
+                    // Show PIP when the main 3D canvas is less than 50% visible
+                    if (entry.intersectionRatio < 0.5) {
                         if (!userClosedMiniPreview) {
                             setShowMiniPreview(true);
                         }
@@ -461,7 +461,7 @@ const JerseyDesigner = () => {
             },
             {
                 root: null, // Viewport
-                threshold: 0.1 // Triggers when less than 10% is visible
+                threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6] // Evaluate at these visibility points
             }
         );
 
