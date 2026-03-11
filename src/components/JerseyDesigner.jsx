@@ -639,6 +639,30 @@ const JerseyDesigner = () => {
                             />
                         )}
                     </React.Suspense>
+
+                    {/* Controles para mover patrón (mobile & PC) */}
+                    {backgroundImage && (
+                        <div className="pattern-move-controls" style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '15px',
+                            padding: '12px',
+                            background: 'var(--surface)',
+                            borderTop: '1px solid var(--border)',
+                            borderBottom: '1px solid var(--border)'
+                        }}>
+                            <span style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: '500' }}>
+                                Mover Patrón:
+                            </span>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <button title="Izquierda" onClick={() => setBgOffset(prev => ({ ...prev, x: prev.x - 20 }))} style={{ padding: '8px 12px', cursor: 'pointer', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>⬅️</button>
+                                <button title="Arriba" onClick={() => setBgOffset(prev => ({ ...prev, y: prev.y - 20 }))} style={{ padding: '8px 12px', cursor: 'pointer', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>⬆️</button>
+                                <button title="Abajo" onClick={() => setBgOffset(prev => ({ ...prev, y: prev.y + 20 }))} style={{ padding: '8px 12px', cursor: 'pointer', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>⬇️</button>
+                                <button title="Derecha" onClick={() => setBgOffset(prev => ({ ...prev, x: prev.x + 20 }))} style={{ padding: '8px 12px', cursor: 'pointer', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>➡️</button>
+                            </div>
+                        </div>
+                    )}
                 </section>
 
                 <aside className="controls-section">
