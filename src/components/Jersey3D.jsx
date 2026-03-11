@@ -222,7 +222,7 @@ const ShirtModel = ({
                 color: texture ? 0xffffff : new THREE.Color(color),
                 roughness: 0.5,
                 metalness: 0.1,
-                side: THREE.DoubleSide,
+                side: THREE.FrontSide, // Render outside texture on front faces only
                 alphaMap: vNeckAlphaMap,
                 transparent: !!vNeckAlphaMap,
                 alphaTest: 0.5
@@ -274,6 +274,11 @@ const ShirtModel = ({
                 material={material || materials.lambert1}
                 onPointerMove={handleMeshPointerMove}
             >
+                {/* White Interior Mesh */}
+                <mesh geometry={nodes.T_Shirt_male.geometry}>
+                    <meshStandardMaterial color="#ffffff" side={THREE.BackSide} roughness={0.8} />
+                </mesh>
+
                 {teamLogo && teamLogoState && teamLogoTex && (
                     <MovableDecal
                         texture={teamLogoTex}
