@@ -11,7 +11,6 @@ const MiniPreview = ({
     font,
     teamLogo,
     sponsorLogo,
-    brandLogo,
     brandLogoColor,
     collar,
     sleeve,
@@ -99,7 +98,6 @@ const MiniPreview = ({
                         font={font}
                         teamLogo={teamLogo}
                         sponsorLogo={sponsorLogo}
-                        brandLogo={brandLogo}
                         brandLogoColor={brandLogoColor}
                         collar={collar}
                         sleeve={sleeve}

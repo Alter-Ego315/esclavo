@@ -1130,7 +1130,6 @@ const JerseyDesigner = () => {
                             font={font}
                             teamLogo={teamLogo}
                             sponsorLogo={sponsorLogo}
-                            brandLogo={brandLogo}
                             brandLogoColor={brandLogoColor}
                             collar={collar}
                             sleeve={sleeve}
