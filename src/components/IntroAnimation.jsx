@@ -36,11 +36,7 @@ const IntroAnimation = ({ onComplete }) => {
             </div>
 
             <div className="brand-wrapper ginga-wrapper">
-                <svg className="ginga-icon" viewBox="0 0 100 100">
-                    <path d="M25 45 C45 10 55 10 60 20 L55 40 L65 70 L55 95 M55 40 L45 70 M45 70 L40 90 M50 40 L40 30" stroke="#00FF00" strokeWidth="8" fill="none" strokeLinecap="round" />
-                    <circle cx="65" cy="15" r="8" fill="#00FF00" />
-                </svg>
-                <div className="brand-text ginga-text">Ginga</div>
+                <img src="/ginga-logo-header.png" alt="Ginga" className="ginga-icon-img" />
             </div>
             
             <div className="ambient-glow"></div>
