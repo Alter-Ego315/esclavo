@@ -372,7 +372,7 @@ const JerseyDesigner = () => {
     });
     const [pattern, setPattern] = useState('none');
     const [name, setName] = useState('TEO');
-    const [number, setNumber] = useState('69');
+    const [number, setNumber] = useState('21');
     const [font, setFont] = useState('Oswald');
     const [teamLogo, setTeamLogo] = useState(null);
     const [sponsorLogo, setSponsorLogo] = useState(null);
