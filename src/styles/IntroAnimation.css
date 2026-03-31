@@ -26,7 +26,7 @@
     transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.mysimetri-wrapper {
+.mysimetry-wrapper {
     transform: translateX(-100px);
 }
 
@@ -62,7 +62,7 @@
     letter-spacing: 4px;
 }
 
-.mysimetri-text {
+.mysimetry-text {
     color: #FF8C00;
 }
 
@@ -133,7 +133,7 @@
     .intro-container {
         flex-direction: column;
     }
-    .mysimetri-wrapper { transform: translateY(-50px); }
+    .mysimetry-wrapper { transform: translateY(-50px); }
     .ginga-wrapper { transform: translateY(50px); }
     
     .intro-container.centered .brand-wrapper {
