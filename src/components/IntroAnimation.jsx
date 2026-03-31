@@ -19,7 +19,7 @@ const IntroAnimation = ({ onComplete }) => {
     return (
         <div className={`intro-container ${animationState}`}>
             <div className="brand-wrapper mysimetry-wrapper">
-                <img src="/Logos de Ginga/mysimetry-logo.png" alt="mySimetry" className="mysimetry-icon-img" />
+                <img src="/mysimetry-logo.png" alt="mySimetry" className="mysimetry-icon-img" />
             </div>
 
             <div className="x-separator">
