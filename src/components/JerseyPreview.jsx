@@ -89,6 +89,18 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     <pattern id="diagonalPattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
                         <rect width="40" height="80" fill={secondary} opacity={0.15} />
                     </pattern>
+
+                    <clipPath id="torsoClip">
+                        {/* Front Torso Panel */}
+                        <rect x="50" y="0" width="402" height="1024" />
+                        {/* Back Torso Panel */}
+                        <rect x="560" y="0" width="404" height="1024" />
+                    </clipPath>
+                    <clipPath id="sleeveNeckClip">
+                        <rect x="0" y="0" width="1024" height="1024" />
+                        {/* Cut out Torso panels to create Sleeve/Neck mask */}
+                        <path d="M0,0 H1024 V1024 H0 Z M50,0 V1024 H452 V0 Z M560,0 V1024 H964 V0 Z" fillRule="evenodd" />
+                    </clipPath>
                 </defs>
 
                 {/* 1. BASE COLOR LAYER - Default Solid */}
@@ -159,257 +171,21 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     </pattern>
                 </defs>
 
-                {/* --- APPLY PATTERNS --- */}
+                {/* --- RENDER DESIGN --- */}
+                {/* 1. TORSO DESIGN (NORMAL) */}
+                <g clipPath="url(#torsoClip)">
+                    {renderDesignLayers(0)}
+                </g>
 
-                {/* 1. GRADIENTS */}
-                {pattern === 'gradient' && (
-                    <rect width="1024" height="1024" fill="url(#gradSoft)" />
-                )}
+                {/* 2. SLEEVE & NECK DESIGN (OFFSET) */}
+                {/* Fixed mapping: Shift the pattern DOWN by 750 so the shoulder level design 
+                    appears at the bottom of the SVG where the 3D model pulls sleeve textures. */}
+                <g clipPath="url(#sleeveNeckClip)">
+                    {renderDesignLayers(750)}
+                </g>
 
-                {/* HEXAGONS (Fading out honeycomb) */}
-                {pattern === 'hexagons' && (
-                    <g mask="url(#hexFade)">
-                        <rect width="1024" height="1024" fill="url(#hexagonsPat)" />
-                    </g>
-                )}
-
-                {/* 2. HALFTONE LINES (Horizontal Scanlines fading out) */}
-                {pattern === 'halftone-lines' && (
-                    <g fill={secondary} mask="url(#halftoneFade)">
-                        {Array.from({ length: 100 }).map((_, i) => (
-                            <rect key={i} x="0" y={i * 10} width="1024" height="5" />
-                        ))}
-                    </g>
-                )}
-
-                {/* 3. HALFTONE DOTS (Grid of dots fading out) */}
-                {pattern === 'halftone-dots' && (
-                    <g fill={secondary} mask="url(#halftoneFade)">
-                        {Array.from({ length: 40 }).map((_, y) => (
-                            Array.from({ length: 40 }).map((_, x) => (
-                                <circle key={`${x} -${y} `} cx={x * 25 + 12} cy={y * 25 + 12} r="8" />
-                            ))
-                        ))}
-                    </g>
-                )}
-
-                {/* 4. CHECKERS (Refined) */}
-                {pattern === 'checkers' && (
-                    <g fill={secondary}>
-                        {Array.from({ length: 8 }).map((_, y) => (
-                            Array.from({ length: 8 }).map((_, x) => (
-                                (x + y) % 2 === 1 ? <rect key={`${x} -${y} `} x={x * 128} y={y * 128} width="128" height="128" /> : null
-                            ))
-                        ))}
-                    </g>
-                )}
-
-                {/* 5. ZIG ZAG (Vertical) */}
-                {pattern === 'zigzag' && (
-                    <g stroke={secondary} strokeWidth="20" fill="none">
-                        {Array.from({ length: 20 }).map((_, i) => (
-                            <path key={i} d={`M${i * 100}, 0 L${i * 100 + 50}, 50 L${i * 100}, 100 L${i * 100 - 50}, 150 L${i * 100}, 200 L${i * 100 + 50}, 250 L${i * 100}, 300 L${i * 100 - 50}, 350 L${i * 100}, 400 L${i * 100 + 50}, 450 L${i * 100}, 500 L${i * 100 - 50}, 550 L${i * 100}, 600 L${i * 100 + 50}, 650 L${i * 100}, 700 L${i * 100 - 50}, 750 L${i * 100}, 800 L${i * 100 + 50}, 850 L${i * 100}, 900 L${i * 100 - 50}, 950 L${i * 100}, 1000`} transform="translate(-100,0)" />
-                        ))}
-                    </g>
-                )}
-
-                {/* 6. THIN HOOPS (Straight Lines) */}
-                {pattern === 'hoops-thin' && (
-                    <g fill={secondary} opacity="0.6">
-                        {Array.from({ length: 40 }).map((_, i) => (
-                            <rect key={i} x="0" y={i * 25} width="1024" height="4" />
-                        ))}
-                    </g>
-                )}
-
-                {/* 7. OCEAN WAVES (Organic Waves) */}
-                {pattern === 'ocean-waves' && (
-                    <g stroke={secondary} strokeWidth="12" fill="none" opacity="0.6">
-                        {Array.from({ length: 15 }).map((_, i) => (
-                            <path key={i} d={`M0,${i * 70} Q128,${i * 70 - 40} 256,${i * 70} T512,${i * 70} T768,${i * 70} T1024,${i * 70}`} />
-                        ))}
-                    </g>
-                )}
-
-                {/* 7. CROSS VARIANTS */}
-                {pattern === 'cross' && (
-                    <g fill={secondary}>
-                        {/* Front Cross */}
-                        <rect x="206" y="0" width="100" height="1024" />
-                        <rect x="0" y="312" width="512" height="100" />
-                        {/* Back Cross */}
-                        <rect x="718" y="0" width="100" height="1024" />
-                        <rect x="512" y="312" width="512" height="100" />
-                    </g>
-                )}
-
-                {pattern === 'cross-offset' && (
-                    <g fill={secondary}>
-                        {/* Front Offset Cross (Scandinavian style) */}
-                        <rect x="150" y="0" width="80" height="1024" />
-                        <rect x="0" y="312" width="512" height="80" />
-                        {/* Back Offset Cross (mirrored) */}
-                        <rect x="794" y="0" width="80" height="1024" />
-                        <rect x="512" y="312" width="512" height="80" />
-                    </g>
-                )}
-
-                {/* 5. DECALS (Logos & Text) - Removed to avoid baking them into the base texture. 
-                     They are now rendered exclusively as MovableDecals in Jersey3D */}
-
-                {/* 8. STANDARD PATTERNS (Legacy/Simple) */}
-                {pattern === 'diagonal' && (
-                    <defs>
-                        <pattern id="diagPat" width="100" height="100" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                            <rect width="50" height="100" fill={secondary} opacity="0.3" />
-                        </pattern>
-                    </defs>
-                )}
-                {pattern === 'diagonal' && <rect width="1024" height="1024" fill="url(#diagPat)" />}
-
-                {pattern === 'stripes' && (
-                    <g fill={secondary}>
-                        {/* 10 Stripes evenly distributed across 1024 width (5 front, 5 back) */}
-                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (
-                            <rect key={i} x={i * 102.4 + 25.6} y="0" width="51.2" height="1024" />
-                        ))}
-                    </g>
-                )}
-                {pattern === 'hoops' && (
-                    <g fill={secondary}>
-                        {[100, 300, 500, 700, 900].map(y => <rect key={y} x="0" y={y} width="1024" height="100" />)}
-                    </g>
-                )}
-
-                {pattern === 'diamonds' && (
-                    <defs>
-                        <pattern id="diamondPat" width="128" height="128" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                            <rect x="32" y="32" width="64" height="64" fill={secondary} opacity="0.2" />
-                        </pattern>
-                    </defs>
-                )}
-                {pattern === 'diamonds' && <rect width="1024" height="1024" fill="url(#diamondPat)" />}
-
-                {/* 9. RESTORED STANDARD PATTERNS */}
-                {pattern === 'center-stripe' && (
-                    <g fill={secondary} opacity={0.9}>
-                        <rect x="206" y="0" width="100" height="1024" />
-                        <rect x="718" y="0" width="100" height="1024" />
-                    </g>
-                )}
-
-                {pattern === 'sash' && (
-                    <g fill={secondary} opacity={0.9}>
-                        {/* Wraparound sash approx. matching front-to-back */}
-                        <path d="M0,80 L100,0 L200,0 L512,312 L512,412 L100,100 Z" />
-                        <path d="M512,312 L1024,824 L1024,924 L512,412 Z" />
-                        <path d="M0,80 L0,180 L200,1024 L100,1024 Z" />
-                    </g>
-                )}
-
-                {pattern === 'chevron' && (
-                    <g fill={secondary} opacity={0.9}>
-                        {/* Front chevron: strictly meeting at edges (0 and 512) */}
-                        <path d="M0,550 L256,370 L512,550 L512,700 L256,520 L0,700 Z" />
-                        {/* Back chevron: meeting front at edges (512 and 1024/0) */}
-                        <path d="M512,550 L768,370 L1024,550 L1024,700 L768,520 L512,700 Z" />
-                    </g>
-                )}
-
-                {pattern === 'norvehc' && (
-                    <g fill={secondary} opacity={0.9}>
-                        {/* Inverted chevron for front */}
-                        <path d="M0,370 L256,550 L512,370 L512,520 L256,700 L0,520 Z" />
-                        {/* Inverted chevron for back */}
-                        <path d="M512,370 L768,550 L1024,370 L1024,520 L768,700 L512,520 Z" />
-                    </g>
-                )}
-
-                {pattern === 'double-stripe' && (
-                    <g fill={secondary} opacity={0.9}>
-                        {/* Front */}
-                        <rect x="186" y="0" width="60" height="1024" />
-                        <rect x="266" y="0" width="60" height="1024" />
-                        {/* Back */}
-                        <rect x="698" y="0" width="60" height="1024" />
-                        <rect x="778" y="0" width="60" height="1024" />
-                    </g>
-                )}
-
-                {pattern === 'pixels' && (
-                    <g fill={secondary} opacity={0.3}>
-                        {Array.from({ length: 32 }).map((_, y) => (
-                            Array.from({ length: 32 }).map((_, x) => (
-                                Math.random() > 0.7 ? <rect key={`${x} -${y} `} x={x * 32} y={y * 32} width="32" height="32" /> : null
-                            ))
-                        ))}
-                    </g>
-                )}
-
-                {/* 10. EXTRA SHAPES */}
-                {pattern === 'triangles' && (
-                    <g fill={secondary} opacity={0.2} transform="translate(-100, 0)">
-                        {/* Shifted pattern slightly left to align grid with center */}
-                        {Array.from({ length: 12 }).map((_, y) => (
-                            Array.from({ length: 12 }).map((_, x) => (
-                                <path key={`${x}-${y}`} d={`M${x * 100 + 50},${y * 100} L${x * 100 + 100},${y * 100 + 100} L${x * 100},${y * 100 + 100} Z`} />
-                            ))
-                        ))}
-                    </g>
-                )}
-
-                {pattern === 'camo' && (
-                    <filter id="camoFilter">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" />
-                        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" in="noise" result="goo" />
-                        <feComposite operator="in" in="SourceGraphic" in2="goo" />
-                    </filter>
-                )}
-                {pattern === 'camo' && (
-                    <rect width="1024" height="1024" fill={secondary} opacity={0.4} filter="url(#camoFilter)" />
-                )}
-
-
-                {pattern === 'star' && (
-                    <g fill={secondary} opacity={0.2} transform="translate(256,400) scale(3)">
-                        <path d="M0,-100 L25,-30 L100,-30 L40,15 L60,90 L0,50 L-60,90 L-40,15 L-100,-30 L-25,-30 Z" />
-                    </g>
-                )}
-
-                {pattern === 'arches' && (
-                    <g fill="none" stroke={secondary} strokeWidth="15" opacity="0.6">
-                        {/* Centered at 256 (Front) and 768 (Back) */}
-                        {Array.from({ length: 8 }).map((_, i) => (
-                            <React.Fragment key={i}>
-                                <circle cx="256" cy="1024" r={i * 100 + 100} />
-                                <circle cx="768" cy="1024" r={i * 100 + 100} />
-                            </React.Fragment>
-                        ))}
-                    </g>
-                )}
-
-                {/* 2.5 SLEEVE STYLES (Raglan vs Normal) */}
-                {/* Regular Sleeves - Cover top corners and side strips */}
-                {/* 2.5 SLEEVE STYLES (Raglan vs Normal) */}
-                {/* Regular Sleeves logic removed to avoid artifacts as requested */}
-
-                {/* Raglan simulates a diagonal cut from neck to underarm. 
-                    Approximating on UV map: Draw diagonal patches from center-top outwards/downwards.
-                */}
-                {colors.accent && sleeve === 'raglan' && (
-                    <g fill={colors.accent}>
-                        {/* Left Raglan Shoulder (Adjusted for new center) */}
-                        <path d="M40,0 L252,200 L252,0 Z" />
-                        {/* Right Raglan Shoulder */}
-                        <path d="M464,0 L252,200 L252,0 Z" />
-                        {/* Side Sleeves for raglan usually full color too */}
-                        <rect x="0" y="0" width="100" height="1024" />
-                        <rect x="750" y="0" width="274" height="1024" />
-                    </g>
-                )}
-
-                {/* 2.6 COLLAR STYLES */}
-                <g transform="translate(256, 50)"> {/* Centered at 256 */}
+                {/* 2.6 COLLAR STYLES (Always on top, no pattern offset) */}
+                <g transform="translate(252, 50)"> {/* Centered at 252 */}
                     {/* V-NECK */}
                     {collar === 'v-neck' && (
                         <path d="M-50,0 L0,80 L50,0 L50,-20 L-50,-20 Z" fill={primary} stroke="none" />
@@ -443,6 +219,169 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
             </svg>
         </div>
     );
+
+    // ABSTRACTED DESIGN LAYERS (For mapping fix)
+    function renderDesignLayers(yOffset) {
+        return (
+            <g transform={`translate(0, ${yOffset})`}>
+                <rect width="1024" height="1024" fill={primary} />
+
+                {backgroundImageB64 && (
+                    <rect width="1024" height="1024" fill="url(#bgImagePattern)" style={{ mixBlendMode: 'normal' }} />
+                )}
+
+                {pattern === 'gradient' && <rect width="1024" height="1024" fill="url(#gradSoft)" />}
+
+                {pattern === 'hexagons' && (
+                    <g mask="url(#hexFade)">
+                        <rect width="1024" height="1024" fill="url(#hexagonsPat)" />
+                    </g>
+                )}
+
+                {pattern === 'halftone-lines' && (
+                    <g fill={secondary} mask="url(#halftoneFade)">
+                        {Array.from({ length: 100 }).map((_, i) => (
+                            <rect key={i} x="0" y={i * 10} width="1024" height="5" />
+                        ))}
+                    </g>
+                )}
+
+                {pattern === 'halftone-dots' && (
+                    <g fill={secondary} mask="url(#halftoneFade)">
+                        {Array.from({ length: 40 }).map((_, y) => (
+                            Array.from({ length: 40 }).map((_, x) => (
+                                <circle key={`${x}-${y}`} cx={x * 25 + 12} cy={y * 25 + 12} r="8" />
+                            ))
+                        ))}
+                    </g>
+                )}
+
+                {pattern === 'checkers' && (
+                    <g fill={secondary}>
+                        {Array.from({ length: 8 }).map((_, y) => (
+                            Array.from({ length: 8 }).map((_, x) => (
+                                (x + y) % 2 === 1 ? <rect key={`${x}-${y}`} x={x * 128} y={y * 128} width="128" height="128" /> : null
+                            ))
+                        ))}
+                    </g>
+                )}
+
+                {pattern === 'zigzag' && (
+                    <g stroke={secondary} strokeWidth="20" fill="none">
+                        {Array.from({ length: 20 }).map((_, i) => (
+                            <path key={i} d={`M${i * 100}, 0 L${i * 100 + 50}, 50 L${i * 100}, 100 L${i * 100 - 50}, 150 L${i * 100}, 200 L${i * 100 + 50}, 250 L${i * 100}, 300 L${i * 100 - 50}, 350 L${i * 100}, 400 L${i * 100 + 50}, 450 L${i * 100}, 500 L${i * 100 - 50}, 550 L${i * 100}, 600 L${i * 100 + 50}, 650 L${i * 100}, 700 L${i * 100 - 50}, 750 L${i * 100}, 800 L${i * 100 + 50}, 850 L${i * 100}, 900 L${i * 100 - 50}, 950 L${i * 100}, 1000`} transform="translate(-100,0)" />
+                        ))}
+                    </g>
+                )}
+
+                {pattern === 'hoops-thin' && (
+                    <g fill={secondary} opacity="0.6">
+                        {Array.from({ length: 40 }).map((_, i) => (
+                            <rect key={i} x="0" y={i * 25} width="1024" height="4" />
+                        ))}
+                    </g>
+                )}
+
+                {pattern === 'ocean-waves' && (
+                    <g stroke={secondary} strokeWidth="12" fill="none" opacity="0.6">
+                        {Array.from({ length: 15 }).map((_, i) => (
+                            <path key={i} d={`M0,${i * 70} Q128,${i * 70 - 40} 256,${i * 70} T512,${i * 70} T768,${i * 70} T1024,${i * 70}`} />
+                        ))}
+                    </g>
+                )}
+
+                {(pattern === 'cross' || pattern === 'cross-offset') && (
+                    <g fill={secondary}>
+                        <rect x={pattern === 'cross' ? 202 : 150} y="0" width={pattern === 'cross' ? 100 : 80} height="1024" />
+                        <rect x="0" y="312" width="1024" height={pattern === 'cross' ? 100 : 80} />
+                    </g>
+                )}
+
+                {pattern === 'diagonal' && <rect width="1024" height="1024" fill="url(#diagPat)" />}
+
+                {pattern === 'stripes' && (
+                    <g fill={secondary}>
+                        {[52, 252, 452, 652, 852].map(x => <rect key={x} x={x} y="0" width="100" height="1024" />)}
+                    </g>
+                )}
+
+                {pattern === 'hoops' && (
+                    <g fill={secondary}>
+                        {[100, 300, 500, 700, 900].map(y => <rect key={y} x="0" y={y} width="1024" height="100" />)}
+                    </g>
+                )}
+
+                {pattern === 'diamonds' && <rect width="1024" height="1024" fill="url(#diamondPat)" />}
+
+                {pattern === 'center-stripe' && (
+                    <rect x="202" y="0" width="100" height="1024" fill={secondary} opacity={0.9} />
+                )}
+
+                {pattern === 'sash' && (
+                    <path d="M100,0 L200,0 L700,1024 L600,1024 Z" fill={secondary} opacity={0.9} />
+                )}
+
+                {pattern === 'chevron' && (
+                    <g fill={secondary} opacity={0.9}>
+                        <path d="M50,550 L252,370 L454,550 L454,700 L252,520 L50,700 Z" />
+                        <path d="M560,550 L762,370 L964,550 L964,700 L762,520 L560,700 Z" />
+                    </g>
+                )}
+
+                {pattern === 'norvehc' && (
+                    <g fill={secondary} opacity={0.9}>
+                        <path d="M50,370 L252,550 L454,370 L454,520 L252,700 L50,520 Z" />
+                        <path d="M560,370 L762,550 L964,370 L964,520 L762,700 L560,520 Z" />
+                    </g>
+                )}
+
+                {pattern === 'double-stripe' && (
+                    <g fill={secondary} opacity={0.9}>
+                        <rect x="182" y="0" width="60" height="1024" />
+                        <rect x="262" y="0" width="60" height="1024" />
+                    </g>
+                )}
+
+                {pattern === 'pixels' && (
+                    <g fill={secondary} opacity={0.3}>
+                        {Array.from({ length: 32 }).map((_, y) => (
+                            Array.from({ length: 32 }).map((_, x) => (
+                                Math.random() > 0.7 ? <rect key={`${x}-${y}`} x={x * 32} y={y * 32} width="32" height="32" /> : null
+                            ))
+                        ))}
+                    </g>
+                )}
+
+                {pattern === 'triangles' && (
+                    <g fill={secondary} opacity={0.2} transform="translate(-100, 0)">
+                        {Array.from({ length: 12 }).map((_, y) => (
+                            Array.from({ length: 12 }).map((_, x) => (
+                                <path key={`${x}-${y}`} d={`M${x * 100 + 50},${y * 100} L${x * 100 + 100},${y * 100 + 100} L${x * 100},${y * 100 + 100} Z`} />
+                            ))
+                        ))}
+                    </g>
+                )}
+
+                {pattern === 'camo' && (
+                    <rect width="1024" height="1024" fill={secondary} opacity={0.4} filter="url(#camoFilter)" />
+                )}
+
+                {pattern === 'star' && (
+                    <g fill={secondary} opacity={0.2} transform="translate(252,400) scale(3)">
+                        <path d="M0,-100 L25,-30 L100,-30 L40,15 L60,90 L0,50 L-60,90 L-40,15 L-100,-30 L-25,-30 Z" />
+                    </g>
+                )}
+
+                {pattern === 'arches' && (
+                    <g fill="none" stroke={secondary} strokeWidth="15" opacity="0.6">
+                        {Array.from({ length: 8 }).map((_, i) => (
+                            <circle key={i} cx="252" cy="1024" r={i * 100 + 100} />
+                        ))}
+                    </g>
+                )}
+            </g>
+        );
+    }
 };
 
 export default JerseyPreview;

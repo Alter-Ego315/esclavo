@@ -413,21 +413,35 @@ const Jersey3D = forwardRef((props, ref) => {
     // Watch customText changes
     useEffect(() => {
         if (!props.customText) {
-            setCustomTextTex(null);
+            setCustomTextTex(prev => {
+                if (prev) prev.dispose();
+                return null;
+            });
             return;
         }
 
         const updateTextTex = async () => {
             try { await document.fonts.load(`100px "${props.font}"`); } catch (e) { }
             const tex = generateCustomTextTexture(props.customText, props.font, props.customTextColor || '#ffffff');
-            if (tex) setCustomTextTex(tex);
+            if (tex) {
+                setCustomTextTex(prev => {
+                    if (prev) prev.dispose();
+                    return tex;
+                });
+            }
         };
         updateTextTex();
     }, [props.customText, props.font, props.customTextColor]);
 
     // Load team logo into a Three.js texture when the base64 data URL changes
     useEffect(() => {
-        if (!props.teamLogo) { setTeamLogoTex(null); return; }
+        if (!props.teamLogo) {
+            setTeamLogoTex(prev => {
+                if (prev) prev.dispose();
+                return null;
+            });
+            return;
+        }
         const img = new Image();
         img.onload = () => {
             const canvas = document.createElement('canvas');
@@ -439,14 +453,23 @@ const Jersey3D = forwardRef((props, ref) => {
             tex.minFilter = THREE.LinearFilter;
             tex.magFilter = THREE.LinearFilter;
             tex.flipY = false;
-            setTeamLogoTex(tex);
+            setTeamLogoTex(prev => {
+                if (prev) prev.dispose();
+                return tex;
+            });
         };
         img.src = props.teamLogo;
     }, [props.teamLogo]);
 
     // Load sponsor logo into a Three.js texture when the base64 data URL changes
     useEffect(() => {
-        if (!props.sponsorLogo) { setSponsorLogoTex(null); return; }
+        if (!props.sponsorLogo) {
+            setSponsorLogoTex(prev => {
+                if (prev) prev.dispose();
+                return null;
+            });
+            return;
+        }
         const img = new Image();
         img.onload = () => {
             const canvas = document.createElement('canvas');
@@ -458,7 +481,10 @@ const Jersey3D = forwardRef((props, ref) => {
             tex.minFilter = THREE.LinearFilter;
             tex.magFilter = THREE.LinearFilter;
             tex.flipY = false;
-            setSponsorLogoTex(tex);
+            setSponsorLogoTex(prev => {
+                if (prev) prev.dispose();
+                return tex;
+            });
         };
         img.src = props.sponsorLogo;
     }, [props.sponsorLogo]);
@@ -472,11 +498,21 @@ const Jersey3D = forwardRef((props, ref) => {
             // If this was triggered rapidly but isn't just a bg change, throttle
 
             const mainTex = await generateTextureFromSvg(`.hidden-previews .full-view svg`, false);
-            if (isMounted && mainTex) setTexture(mainTex);
+            if (isMounted && mainTex) {
+                setTexture(prev => {
+                    if (prev) prev.dispose();
+                    return mainTex;
+                });
+            }
 
             try { await document.fonts.load(`100px "${props.font}"`); } catch (e) { }
             const decalTex = generateNameNumberTexture(props.name, props.number, props.font, props.colors.textColor || props.colors.secondary, props.colors.primary);
-            if (isMounted && decalTex) setDecalTexture(decalTex);
+            if (isMounted && decalTex) {
+                setDecalTexture(prev => {
+                    if (prev) prev.dispose();
+                    return decalTex;
+                });
+            }
         };
 
         // We use a small debounce for everything to prevent double-bakes on load, but short enough that panning feels okay

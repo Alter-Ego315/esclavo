@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Jersey3D from './Jersey3D';
 import JerseyPreview from './JerseyPreview';
-import { ChevronRight, ChevronLeft, Upload, Shirt, RotateCcw, Share2, Download, Eye, Layers, Type, Palette, Scissors, Binary, Grip, RotateCw, Image, ArrowLeftRight, Move, Check, Trash2 } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Upload, Shirt, RotateCcw, Share2, Download, Eye, Layers, Type, Palette, Scissors, Binary, Grip, RotateCw, Image, ArrowLeftRight, Move, Check, Trash2, Save, Info } from 'lucide-react';
 import '../styles/JerseyDesigner.css';
 
 const PATTERNS_LIST = [
@@ -362,41 +362,168 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
     );
 };
 
+const ExportWarningModal = ({ onConfirm, onCancel, mode = 'export' }) => (
+    <div className="modal-overlay" style={{
+        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+        background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', zIndex: 9999, backdropFilter: 'blur(8px)',
+        padding: '20px'
+    }}>
+        <div className="modal-content" style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            padding: '40px', borderRadius: '32px', maxWidth: '500px', width: '100%',
+            textAlign: 'center', boxShadow: '0 30px 60px rgba(0,0,0,0.6)',
+            color: 'var(--text-primary)', position: 'relative',
+            overflow: 'hidden'
+        }}>
+            {/* Subtle Gradient Background Effect for Premium Look */}
+            <div style={{
+                position: 'absolute', top: '-50%', left: '-50%', width: '200%', height: '200%',
+                background: 'radial-gradient(circle, rgba(57, 255, 20, 0.05) 0%, transparent 70%)',
+                pointerEvents: 'none', zIndex: 0
+            }}></div>
+
+            <div style={{ position: 'relative', zIndex: 1 }}>
+                <h2 style={{ color: '#39FF14', marginBottom: '24px', fontSize: '28px', fontWeight: '900', letterSpacing: '3px' }}>
+                    {mode === 'export' ? '¡ATENCIÓN!' : 'INFORMACIÓN'}
+                </h2>
+                <p style={{ lineHeight: '1.8', marginBottom: '32px', fontSize: '18px', color: 'var(--text-secondary)', fontWeight: '500' }}>
+                    Si ya has terminado con tu diseño o si quieres añadir algún detalle más, <a href="https://wa.me/34711245855" target="_blank" rel="noopener noreferrer" style={{ color: '#00ff00', textDecoration: 'underline', fontWeight: 'bold' }}>escríbenos al WhatsApp</a> con tus ideas para que tu diseño sea 100% personalizado.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+                    <button
+                        className="btn-primary"
+                        onClick={onConfirm}
+                        style={{
+                            width: 'auto', minWidth: '220px', padding: '18px 40px', fontSize: '16px',
+                            fontWeight: 'bold', letterSpacing: '2px', cursor: 'pointer',
+                            borderRadius: '16px', border: 'none', boxShadow: '0 10px 20px rgba(57, 255, 20, 0.2)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'
+                        }}
+                    >
+                        {mode === 'export' ? 'ENTENDIDO' : 'ACEPTAR'}
+                    </button>
+                    {mode === 'export' && (
+                        <button
+                            onClick={onCancel}
+                            style={{
+                                background: 'transparent', border: 'none', color: 'var(--text-dim)',
+                                cursor: 'pointer', fontSize: '14px', fontWeight: '600',
+                                opacity: 0.7, padding: '10px'
+                            }}
+                        >
+                            Cancelar
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
 const JerseyDesigner = () => {
-    // Default "Blank White" State
-    const [colors, setColors] = useState({
+    // Keys for localStorage
+    const STORAGE_KEY = 'ginga_designer_state';
+
+    // 1. Definitively load state from localStorage or use defaults
+    const getInitialState = (key, defaultValue) => {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                return parsed[key] !== undefined ? parsed[key] : defaultValue;
+            }
+        } catch (e) {
+            console.error("Error loading state from localStorage", e);
+        }
+        return defaultValue;
+    };
+
+    // Default "Blank White" State with initialization logic
+    const [colors, setColors] = useState(() => getInitialState('colors', {
         primary: '#ffffff',
         secondary: '#000000',
         accent: '#ffffff',
-        textColor: '#000000'
-    });
-    const [pattern, setPattern] = useState('none');
-    const [name, setName] = useState('TEO');
-    const [number, setNumber] = useState('21');
-    const [font, setFont] = useState('Oswald');
-    const [teamLogo, setTeamLogo] = useState(null);
-    const [sponsorLogo, setSponsorLogo] = useState(null);
-    const [backgroundImage, setBackgroundImage] = useState(null);
-    const [bgOffset, setBgOffset] = useState({ x: 0, y: 0 });
+        textColor: '#000000',
+        sleeves: '#ffffff',
+        collar: '#ffffff'
+    }));
+    const [pattern, setPattern] = useState(() => getInitialState('pattern', 'none'));
+    const [name, setName] = useState(() => getInitialState('name', 'TEO'));
+    const [number, setNumber] = useState(() => getInitialState('number', '69'));
+    const [font, setFont] = useState(() => getInitialState('font', 'Oswald'));
+    const [teamLogo, setTeamLogo] = useState(() => getInitialState('teamLogo', null));
+    const [sponsorLogo, setSponsorLogo] = useState(() => getInitialState('sponsorLogo', null));
+    const [backgroundImage, setBackgroundImage] = useState(() => getInitialState('backgroundImage', null));
+    const [bgOffset, setBgOffset] = useState(() => getInitialState('bgOffset', { x: 0, y: 0 }));
 
     // Custom Text Block State
-    const [customText, setCustomText] = useState('');
-    const [customTextColor, setCustomTextColor] = useState('#000000');
-    const [customTextPos, setCustomTextPos] = useState({ pos: [0, -0.05, 0.165], rot: Math.PI, scaleX: 0.12, scaleY: 0.12 });
+    const [customText, setCustomText] = useState(() => getInitialState('customText', ''));
+    const [customTextColor, setCustomTextColor] = useState(() => getInitialState('customTextColor', '#000000'));
+    const [customTextPos, setCustomTextPos] = useState(() => getInitialState('customTextPos', { pos: [0, -0.05, 0.165], rot: Math.PI, scaleX: 0.12, scaleY: 0.12 }));
 
-    const [brandLogoColor, setBrandLogoColor] = useState('verde');
-    const [vibrancy, setVibrancy] = useState(50);
+    const [brandLogoColor, setBrandLogoColor] = useState(() => getInitialState('brandLogoColor', 'verde'));
+    const [vibrancy, setVibrancy] = useState(() => getInitialState('vibrancy', 50));
 
     // New Features State
-    const [collar, setCollar] = useState('round'); // round, v-neck, polo
-    const [sleeve, setSleeve] = useState('normal'); // normal, raglan
+    const [collar, setCollar] = useState(() => getInitialState('collar', 'round'));
+    const [sleeve, setSleeve] = useState(() => getInitialState('sleeve', 'normal'));
     const [showFontDropdown, setShowFontDropdown] = useState(false);
+    const [showExportModal, setShowExportModal] = useState(false);
+    const [showInfoModal, setShowInfoModal] = useState(false);
+    const [saveStatus, setSaveStatus] = useState(null); // 'saving', 'saved', null
 
-    // Logo Position State - Now 3D
     // Crest (Escudo): Positioned to match the SVG placement x=-170, and aligned Y with Ginga logo
-    const [teamLogoPos, setTeamLogoPos] = useState({ pos: [0.06, 0.08, 0.15], rot: Math.PI, scaleX: 0.07, scaleY: 0.07 });
-    // Sponsor: Center, lowered and rotated 180deg to appear upright
-    const [sponsorLogoPos, setSponsorLogoPos] = useState({ pos: [0, -0.10, 0.16], rot: Math.PI, scaleX: 0.25, scaleY: 0.25 });
+    const [teamLogoPos, setTeamLogoPos] = useState(() => getInitialState('teamLogoPos', { pos: [0.06, 0.08, 0.15], rot: Math.PI, scaleX: 0.07, scaleY: 0.07 }));
+    const [sponsorLogoPos, setSponsorLogoPos] = useState(() => getInitialState('sponsorLogoPos', { pos: [0, -0.10, 0.16], rot: Math.PI, scaleX: 0.25, scaleY: 0.25 }));
+
+    // 2. Auto-save Effect
+    useEffect(() => {
+        const stateToSave = {
+            colors, pattern, name, number, font, teamLogo, sponsorLogo,
+            backgroundImage, bgOffset, customText, customTextColor, customTextPos,
+            brandLogoColor, vibrancy, collar, sleeve, teamLogoPos, sponsorLogoPos
+        };
+
+        const timer = setTimeout(() => {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+            } catch (e) {
+                // If it's a quota exceeded error (likely due to base64 images), try to save without images at least
+                if (e.name === 'QuotaExceededError') {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...stateToSave, teamLogo: null, sponsorLogo: null, backgroundImage: null }));
+                }
+            }
+        }, 1000); // 1 second debounce
+
+        return () => clearTimeout(timer);
+    }, [colors, pattern, name, number, font, teamLogo, sponsorLogo, backgroundImage, bgOffset, customText, customTextColor, customTextPos, brandLogoColor, vibrancy, collar, sleeve, teamLogoPos, sponsorLogoPos]);
+
+    const handleManualSave = () => {
+        const stateToSave = {
+            colors, pattern, name, number, font, teamLogo, sponsorLogo,
+            backgroundImage, bgOffset, customText, customTextColor, customTextPos,
+            brandLogoColor, vibrancy, collar, sleeve, teamLogoPos, sponsorLogoPos
+        };
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+            setSaveStatus('saved');
+            setTimeout(() => setSaveStatus(null), 3000);
+        } catch (e) {
+            console.error("Error saving design", e);
+            setSaveStatus('error');
+            setTimeout(() => setSaveStatus(null), 3000);
+        }
+    };
+
+    const handleReset = () => {
+        if (window.confirm('¿Estás seguro de que quieres borrar el diseño actual?')) {
+            localStorage.removeItem(STORAGE_KEY);
+            window.location.reload();
+        }
+    };
+
     const [selectedLogo, setSelectedLogo] = useState(null); // 'team' or 'sponsor'
 
     // Handlers for 3D Decal Updates
@@ -503,7 +630,12 @@ const JerseyDesigner = () => {
 
 
 
-    const handleExport = async () => {
+    const handleExport = () => {
+        setShowExportModal(true);
+    };
+
+    const triggerExport = async () => {
+        setShowExportModal(false);
         if (jersey3DRef.current) {
             // Show loading state or feedback here if needed
             const images = await jersey3DRef.current.captureViews();
@@ -602,6 +734,29 @@ const JerseyDesigner = () => {
                                     onSelectLogo={setSelectedLogo}
                                 />
 
+                                <div style={{
+                                    position: 'absolute', top: '20px', left: '20px', zIndex: 10,
+                                    display: 'flex', gap: '10px'
+                                }}>
+                                    <button
+                                        onClick={() => setShowInfoModal(true)}
+                                        style={{
+                                            width: '46px', height: '46px', borderRadius: '14px',
+                                            padding: 0,
+                                            background: 'rgba(57, 255, 20, 0.1)',
+                                            border: '1px solid rgba(57, 255, 20, 0.4)',
+                                            color: '#39FF14', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            cursor: 'pointer', transition: 'all 0.3s ease',
+                                            backdropFilter: 'blur(12px)',
+                                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                                        }}
+                                        className="premium-info-btn"
+                                        title="Información"
+                                    >
+                                        <Info size={24} strokeWidth={2.5} />
+                                    </button>
+                                </div>
+
                                 {/* View Controls Overlay */}
                                 <div className="view-controls" style={{ position: 'absolute', bottom: '20px', right: '20px', display: 'flex', gap: '10px', zIndex: 10 }}>
                                     <button
@@ -667,7 +822,7 @@ const JerseyDesigner = () => {
                             zIndex: 20
                         }}>
                             <span style={{ fontSize: '13px', color: '#fff', fontWeight: '500' }}>
-                                Mover Patrón:
+                                Mover patrón:
                             </span>
                             <div style={{ display: 'flex', gap: '8px' }}>
                                 <button title="Izquierda" onClick={() => setBgOffset(prev => ({ ...prev, x: prev.x - 20 }))} style={{ padding: '8px 12px', cursor: 'pointer', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>⬅️</button>
@@ -849,14 +1004,19 @@ const JerseyDesigner = () => {
                         {/* 4. SECCIÓN TEXTO */}
                         {activeTab === 'text' && (
                             <div className="control-group">
-                                <h3>Personalización</h3>
+                                <h3>TEXTO</h3>
                                 <div className="input-item">
                                     <label>Nombre Jugador (Espalda)</label>
                                     <input type="text" value={name} maxLength={10} onChange={(e) => setName(e.target.value)} />
                                 </div>
                                 <div className="input-item">
                                     <label>Dorsal (Espalda)</label>
-                                    <input type="text" value={number} maxLength={2} onChange={(e) => setNumber(e.target.value)} />
+                                    <input
+                                        type="text"
+                                        value={number}
+                                        maxLength={2}
+                                        onChange={(e) => setNumber(e.target.value.replace(/\D/g, ''))}
+                                    />
                                 </div>
 
                                 <div className="input-item" style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '15px' }}>
@@ -1038,7 +1198,7 @@ const JerseyDesigner = () => {
                                                 )}
                                             </div>
 
-                                            <h4 style={{ marginBottom: '15px', fontSize: '14px', color: 'var(--text-primary)' }}>Patrones Base</h4>
+                                            <h4 style={{ marginBottom: '15px', fontSize: '14px', color: 'var(--text-primary)' }}>Patrones base</h4>
                                             <div className="pattern-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '25px' }}>
                                                 {PATTERNS_LIST.map(p => (
                                                     <button
@@ -1074,7 +1234,40 @@ const JerseyDesigner = () => {
                     </div>
 
                     {/* Persistent Export Button */}
-                    <div className="controls-footer" style={{ padding: '20px', borderTop: '1px solid var(--border)', background: 'var(--surface)' }}>
+                    <div className="controls-footer" style={{
+                        padding: '20px', borderTop: '1px solid var(--border)', background: 'var(--surface)',
+                        display: 'flex', flexDirection: 'column', gap: '15px'
+                    }}>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            <button
+                                onClick={handleManualSave}
+                                className="btn-secondary"
+                                disabled={saveStatus === 'saving'}
+                                style={{
+                                    flex: 1, height: '40px', fontSize: '12px', padding: '0 15px',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                                    background: 'rgba(255,255,255,0.05)', borderRadius: '8px', border: '1px solid var(--border)',
+                                    color: 'var(--text-primary)', cursor: 'pointer'
+                                }}
+                            >
+                                <Save size={14} />
+                                {saveStatus === 'saving' ? 'Guardando...' : (saveStatus === 'saved' ? '¡Guardado!' : 'Guardar diseño')}
+                            </button>
+                            <button
+                                onClick={handleReset}
+                                className="btn-secondary"
+                                style={{
+                                    height: '40px', fontSize: '12px', padding: '0 15px',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                                    background: 'rgba(255, 68, 68, 0.05)', borderRadius: '8px', border: '1px solid rgba(255, 68, 68, 0.1)',
+                                    color: '#ff4444', cursor: 'pointer'
+                                }}
+                            >
+                                <RotateCcw size={14} />
+                                Reiniciar
+                            </button>
+                        </div>
+
                         <button className="btn-primary" onClick={handleExport} style={{ width: '100%', justifyContent: 'center', padding: '16px' }}>
                             <Download size={20} />
                             <span style={{ fontSize: '16px', letterSpacing: '1px' }}>EXPORTAR DISEÑO</span>
@@ -1082,6 +1275,22 @@ const JerseyDesigner = () => {
                     </div>
                 </aside>
             </main>
+
+            {showExportModal && (
+                <ExportWarningModal
+                    mode="export"
+                    onConfirm={triggerExport}
+                    onCancel={() => setShowExportModal(false)}
+                />
+            )}
+
+            {showInfoModal && (
+                <ExportWarningModal
+                    mode="info"
+                    onConfirm={() => setShowInfoModal(false)}
+                    onCancel={() => setShowInfoModal(false)}
+                />
+            )}
         </div>
     );
 };
