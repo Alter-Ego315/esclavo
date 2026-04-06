@@ -234,16 +234,23 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 {/* 7. CROSS VARIANTS */}
                 {pattern === 'cross' && (
                     <g fill={secondary}>
-                        <rect x="202" y="0" width="100" height="1024" /> {/* Vertical Center, narrowed */}
-                        <rect x="0" y="312" width="1024" height="100" /> {/* Horizontal, narrowed */}
+                        {/* Front Cross */}
+                        <rect x="206" y="0" width="100" height="1024" />
+                        <rect x="0" y="312" width="512" height="100" />
+                        {/* Back Cross */}
+                        <rect x="718" y="0" width="100" height="1024" />
+                        <rect x="512" y="312" width="512" height="100" />
                     </g>
                 )}
 
                 {pattern === 'cross-offset' && (
                     <g fill={secondary}>
-                        {/* Moved further left: x from 212 to 150 */}
+                        {/* Front Offset Cross (Scandinavian style) */}
                         <rect x="150" y="0" width="80" height="1024" />
-                        <rect x="0" y="312" width="1024" height="80" />
+                        <rect x="0" y="312" width="512" height="80" />
+                        {/* Back Offset Cross (mirrored) */}
+                        <rect x="794" y="0" width="80" height="1024" />
+                        <rect x="512" y="312" width="512" height="80" />
                     </g>
                 )}
 
@@ -262,8 +269,10 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
 
                 {pattern === 'stripes' && (
                     <g fill={secondary}>
-                        {/* Centered around 252 */}
-                        {[52, 252, 452, 652, 852].map(x => <rect key={x} x={x} y="0" width="100" height="1024" />)}
+                        {/* 10 Stripes evenly distributed across 1024 width (5 front, 5 back) */}
+                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (
+                            <rect key={i} x={i * 102.4 + 25.6} y="0" width="51.2" height="1024" />
+                        ))}
                     </g>
                 )}
                 {pattern === 'hoops' && (
@@ -283,36 +292,47 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
 
                 {/* 9. RESTORED STANDARD PATTERNS */}
                 {pattern === 'center-stripe' && (
-                    <rect x="202" y="0" width="100" height="1024" fill={secondary} opacity={0.9} /> /* 252 - 50 */
+                    <g fill={secondary} opacity={0.9}>
+                        <rect x="206" y="0" width="100" height="1024" />
+                        <rect x="718" y="0" width="100" height="1024" />
+                    </g>
                 )}
 
                 {pattern === 'sash' && (
-                    // Narrowed band: ~100px wide instead of 200px
-                    <path d="M100,0 L200,0 L700,1024 L600,1024 Z" fill={secondary} opacity={0.9} />
+                    <g fill={secondary} opacity={0.9}>
+                        {/* Wraparound sash approx. matching front-to-back */}
+                        <path d="M0,80 L100,0 L200,0 L512,312 L512,412 L100,100 Z" />
+                        <path d="M512,312 L1024,824 L1024,924 L512,412 Z" />
+                        <path d="M0,80 L0,180 L200,1024 L100,1024 Z" />
+                    </g>
                 )}
 
                 {pattern === 'chevron' && (
                     <g fill={secondary} opacity={0.9}>
-                        {/* Front chevron: strictly limited to front panel UV space (roughly x=50 to x=450) to avoid side distortion */}
-                        <path d="M50,550 L252,370 L454,550 L454,700 L252,520 L50,700 Z" />
-                        {/* Back chevron: strictly limited to back panel UV space (roughly x=550 to x=950) */}
-                        <path d="M560,550 L762,370 L964,550 L964,700 L762,520 L560,700 Z" />
+                        {/* Front chevron: strictly meeting at edges (0 and 512) */}
+                        <path d="M0,550 L256,370 L512,550 L512,700 L256,520 L0,700 Z" />
+                        {/* Back chevron: meeting front at edges (512 and 1024/0) */}
+                        <path d="M512,550 L768,370 L1024,550 L1024,700 L768,520 L512,700 Z" />
                     </g>
                 )}
 
                 {pattern === 'norvehc' && (
                     <g fill={secondary} opacity={0.9}>
                         {/* Inverted chevron for front */}
-                        <path d="M50,370 L252,550 L454,370 L454,520 L252,700 L50,520 Z" />
+                        <path d="M0,370 L256,550 L512,370 L512,520 L256,700 L0,520 Z" />
                         {/* Inverted chevron for back */}
-                        <path d="M560,370 L762,550 L964,370 L964,520 L762,700 L560,520 Z" />
+                        <path d="M512,370 L768,550 L1024,370 L1024,520 L768,700 L512,520 Z" />
                     </g>
                 )}
 
                 {pattern === 'double-stripe' && (
                     <g fill={secondary} opacity={0.9}>
-                        <rect x="182" y="0" width="60" height="1024" /> {/* 252 - 10 - 60 = 182 */}
-                        <rect x="262" y="0" width="60" height="1024" /> {/* 252 + 10 = 262 */}
+                        {/* Front */}
+                        <rect x="186" y="0" width="60" height="1024" />
+                        <rect x="266" y="0" width="60" height="1024" />
+                        {/* Back */}
+                        <rect x="698" y="0" width="60" height="1024" />
+                        <rect x="778" y="0" width="60" height="1024" />
                     </g>
                 )}
 
@@ -351,16 +371,19 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
 
 
                 {pattern === 'star' && (
-                    <g fill={secondary} opacity={0.2} transform="translate(252,400) scale(3)">
+                    <g fill={secondary} opacity={0.2} transform="translate(256,400) scale(3)">
                         <path d="M0,-100 L25,-30 L100,-30 L40,15 L60,90 L0,50 L-60,90 L-40,15 L-100,-30 L-25,-30 Z" />
                     </g>
                 )}
 
                 {pattern === 'arches' && (
                     <g fill="none" stroke={secondary} strokeWidth="15" opacity="0.6">
-                        {/* Centered at 252, bottom (1024) */}
+                        {/* Centered at 256 (Front) and 768 (Back) */}
                         {Array.from({ length: 8 }).map((_, i) => (
-                            <circle key={i} cx="252" cy="1024" r={i * 100 + 100} />
+                            <React.Fragment key={i}>
+                                <circle cx="256" cy="1024" r={i * 100 + 100} />
+                                <circle cx="768" cy="1024" r={i * 100 + 100} />
+                            </React.Fragment>
                         ))}
                     </g>
                 )}
@@ -386,7 +409,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 )}
 
                 {/* 2.6 COLLAR STYLES */}
-                <g transform="translate(252, 50)"> {/* Centered at 252 */}
+                <g transform="translate(256, 50)"> {/* Centered at 256 */}
                     {/* V-NECK */}
                     {collar === 'v-neck' && (
                         <path d="M-50,0 L0,80 L50,0 L50,-20 L-50,-20 Z" fill={primary} stroke="none" />
