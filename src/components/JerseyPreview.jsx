@@ -86,14 +86,22 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <rect x="20" y="20" width="20" height="20" fill={secondary} opacity={0.15} />
                     </pattern>
 
-                    <clipPath id="allGapsClip">
-                        <path d="M0,0 H1024 V1024 H0 Z M50,0 V1024 H452 V0 Z M560,0 V1024 H964 V0 Z" fillRule="evenodd" />
+                    <clipPath id="torsoClip">
+                        <rect x="60" y="0" width="380" height="1024" />
+                        <rect x="584" y="0" width="380" height="1024" />
                     </clipPath>
-                    <clipPath id="collarRimClipFront">
-                        <rect x="50" y="0" width="402" height="60" />
+                    <clipPath id="sleevesClip">
+                        {/* Outside Edges */}
+                        <rect x="0" y="0" width="60" height="1024" />
+                        <rect x="964" y="0" width="60" height="1024" />
+                        {/* Center Gap Bottom */}
+                        <rect x="440" y="200" width="144" height="824" />
                     </clipPath>
-                    <clipPath id="collarRimClipBack">
-                        <rect x="560" y="0" width="404" height="60" />
+                    <clipPath id="collarClip">
+                        {/* Center Gap Top - This is where the rim usually is */}
+                        <rect x="440" y="0" width="144" height="200" />
+                        {/* Also a bit of the top edge just in case */}
+                        <rect x="0" y="0" width="1024" height="40" />
                     </clipPath>
                 </defs>
 
@@ -166,34 +174,26 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 </defs>
 
                 {/* --- RENDER DESIGN --- */}
-                {/* 1. TORSO DESIGN (NORMAL) */}
+                {/* 1. TORSO DESIGN */}
                 <g clipPath="url(#torsoClip)">
                     {renderDesignLayers(0, primary)}
                 </g>
 
-                {/* 2. SLEEVES & SIDES DESIGN (Everything outside torso) */}
-                <g clipPath="url(#allGapsClip)">
+                {/* 2. SLEEVES DESIGN */}
+                <g clipPath="url(#sleevesClip)">
                     {renderDesignLayers(0, colors.sleeves || primary)}
                 </g>
 
-                {/* 3. COLLAR DESIGN (Rim overlays) */}
-                {/* Front Rim */}
-                <g clipPath="url(#collarRimClipFront)">
-                    <rect width="1024" height="1024" fill={colors.collar || primary} />
-                </g>
-                {/* Back Rim */}
-                <g clipPath="url(#collarRimClipBack)">
-                    <rect width="1024" height="1024" fill={colors.collar || primary} />
+                {/* 3. COLLAR DESIGN */}
+                <g clipPath="url(#collarClip)">
+                    {renderDesignLayers(0, colors.collar || primary)}
                 </g>
 
-                {/* 4. COLLAR DEPTH STYLES (Always on top) */}
+                {/* 4. OVERLAYS */}
                 <g transform="translate(252, 50)">
-                    {/* V-NECK Detail */}
                     {collar === 'v-neck' && (
                         <path d="M-80,-50 L0,110 L80,-50 Z" fill={colors.collar || primary} stroke="none" />
                     )}
-
-                    {/* POLO Detail */}
                     {collar === 'polo' && (
                         <g>
                             <path d="M-75,-25 L-15,65 L-35,90 L-115,30 Z" fill={colors.collar || primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
