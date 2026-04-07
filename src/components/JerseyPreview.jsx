@@ -4,27 +4,6 @@ import { GINGA_LOGOS } from './JerseyDesigner';
 const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, customText, backgroundImage, bgOffset = { x: 0, y: 0 }, font = 'Orbitron', view = 'full', vibrancy = 50, sleeve, collar, brandLogoColor }) => {
     const { primary, secondary, accent, textColor } = colors;
 
-    // Based on the standard shirt_baked.glb UV mapping:
-    // Front panel is roughly around x: 512, y: 512 (when flattened 1024x1024)
-    // Back panel is roughly around x: 512, y: 512 in the back view
-    // The texture is usually creating a full wrap.
-    // Center area (approx 50% width) is Front.
-    // Sides are Back.
-    // Bottom/Top areas map to sleeves/shoulders.
-    // *This is a common UV layout for this specific open-source model.*
-
-    // Special view for generating the Decal texture (Text only)
-    if (view === 'text-decal') {
-        return (
-            <div className="jersey-preview-container" style={{ width: '512px', height: '512px', background: 'transparent' }}>
-                <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
-                    <text x="256" y="220" textAnchor="middle" fill={textColor || secondary} style={{ fontFamily: font, fontSize: '60px', fontWeight: '900' }}>{name}</text>
-                    <text x="256" y="370" textAnchor="middle" fill={textColor || secondary} style={{ fontFamily: font, fontSize: '180px', fontWeight: '900' }}>{number}</text>
-                </svg>
-            </div>
-        );
-    }
-
     // Helper hook to convert URLs to Base64 for SVG embedding
     const useBase64Image = (url) => {
         const [base64, setBase64] = React.useState(null);
@@ -33,7 +12,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 setBase64(null);
                 return;
             }
-            // If already base64, use it
             if (url.startsWith('data:')) {
                 setBase64(url);
                 return;
@@ -51,7 +29,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
             };
             img.onerror = () => {
                 console.error('Failed to load image for base64 conversion:', url);
-                // Fallback: try to usage original url (might fail in blob)
                 setBase64(url);
             };
             img.src = url;
@@ -70,7 +47,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
     const backgroundImageB64 = useBase64Image(backgroundImage);
 
     return (
-        <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '4096px', height: '4096px' }}>
+        <div className={`jersey-preview-container ${view}-view`} style={{ background: 'transparent', width: '1024px', height: '1024px' }}>
             <svg viewBox="0 0 1024 1024" className="jersey-svg" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%', shapeRendering: 'geometricPrecision' }}>
                 <defs>
                     <style type="text/css">
@@ -81,65 +58,29 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <stop offset="100%" style={{ stopColor: secondary, stopOpacity: 1 }} />
                     </linearGradient>
 
-                    <pattern id="pixelPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <rect width="20" height="20" fill={secondary} opacity={0.15} />
-                        <rect x="20" y="20" width="20" height="20" fill={secondary} opacity={0.15} />
-                    </pattern>
-
+                    {/* --- CLIPPING PATHS FOR UNIVERSAL MAPPING --- */}
                     <clipPath id="torsoClip">
                         <rect x="50" y="0" width="402" height="1024" />
                         <rect x="560" y="0" width="404" height="1024" />
                     </clipPath>
-                    <clipPath id="gapsClip">
+                    <clipPath id="nonTorsoClip">
                         <path d="M0,0 H1024 V1024 H0 Z M50,0 V1024 H452 V0 Z M560,0 V1024 H964 V0 Z" fillRule="evenodd" />
                     </clipPath>
-                    <clipPath id="collarRimClip">
-                        <rect x="150" y="0" width="200" height="40" />
-                        <rect x="660" y="0" width="200" height="40" />
-                        <rect x="440" y="0" width="140" height="40" />
+                    <clipPath id="sidesClipY">
+                        <rect x="0" y="0" width="1024" height="700" />
                     </clipPath>
-                </defs>
+                    <clipPath id="sleevesClipY">
+                        <rect x="0" y="700" width="1024" height="230" />
+                    </clipPath>
+                    <clipPath id="collarClipY">
+                        <rect x="0" y="930" width="1024" height="94" />
+                    </clipPath>
 
-                {/* 1. BASE COLOR LAYER - Default Solid */}
-                <rect width="1024" height="1024" fill={primary} />
-
-                {backgroundImageB64 && (
-                    <defs>
-                        {/* Define the background image as a repeating pattern for infinite tiling */}
-                        <pattern id="bgImagePattern" x={bgOffset?.x || 0} y={bgOffset?.y || 0} width="1024" height="1024" patternUnits="userSpaceOnUse">
-                            <image
-                                href={backgroundImageB64}
-                                x="0"
-                                y="0"
-                                width="1024"
-                                height="1024"
-                                preserveAspectRatio="xMidYMid slice"
-                            />
-                        </pattern>
-                    </defs>
-                )}
-                {/* 1.5 BACKGROUND IMAGE LAYER - Rendered beneath patterns but above solid color */}
-                {backgroundImageB64 && (
-                    <rect width="1024" height="1024" fill="url(#bgImagePattern)" style={{ mixBlendMode: 'normal' }} />
-                )}
-
-                {/* --- DEFINITIONS FOR PATTERNS --- */}
-                <defs>
-                    {/* Linear Gradient (Soft) */}
+                    {/* --- PATTERNS --- */}
                     <linearGradient id="gradSoft" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stopColor={primary} />
                         <stop offset="100%" stopColor={secondary} />
                     </linearGradient>
-
-                    {/* Multi-Color Gradient */}
-                    <linearGradient id="gradMulti" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor={primary} />
-                        <stop offset="50%" stopColor={colors.accent || secondary} />
-                        <stop offset="100%" stopColor={secondary} />
-                    </linearGradient>
-
-                    {/* Stepped Gradient (Banded) */}
-                    {/* Mask for Halftone Lines (Gradient fade) */}
                     <linearGradient id="fadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stopColor="white" stopOpacity="1" />
                         <stop offset="100%" stopColor="white" stopOpacity="0" />
@@ -147,56 +88,37 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     <mask id="halftoneFade">
                         <rect x="0" y="0" width="1024" height="1024" fill="url(#fadeGrad)" />
                     </mask>
-
-                    <linearGradient id="hexFadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="white" stopOpacity="0.6" />
-                        <stop offset="35%" stopColor="white" stopOpacity="0" />
-                    </linearGradient>
-                    <mask id="hexFade">
-                        <rect x="0" y="0" width="1024" height="1024" fill="url(#hexFadeGrad)" />
-                    </mask>
-
-                    <pattern id="hexagonsPat" width="34.641" height="60" patternUnits="userSpaceOnUse" patternTransform="scale(0.18)">
-                        <g fill="none" stroke={secondary} strokeLinecap="round" strokeLinejoin="round">
-                            {[[0, 0], [34.641, 0], [-17.3205, 30], [17.3205, 30], [51.9615, 30], [0, 60], [34.641, 60]].map(([cx, cy], i) => (
-                                <g key={i}>
-                                    <polyline points={`${cx + 17.3205},${cy - 10} ${cx + 17.3205},${cy + 10} ${cx},${cy + 20} ${cx - 17.3205},${cy + 10} ${cx - 17.3205},${cy - 10}`} strokeWidth="3" />
-                                    <polyline points={`${cx - 12.1244},${cy - 7} ${cx - 12.1244},${cy + 7} ${cx},${cy + 14} ${cx + 12.1244},${cy + 7} ${cx + 12.1244},${cy - 7} ${cx},${cy - 14} ${cx - 12.1244},${cy - 7}`} strokeWidth="3" />
-                                </g>
-                            ))}
-                        </g>
-                    </pattern>
+                    {backgroundImageB64 && (
+                        <pattern id="bgImagePattern" x={bgOffset?.x || 0} y={bgOffset?.y || 0} width="1024" height="1024" patternUnits="userSpaceOnUse">
+                            <image href={backgroundImageB64} x="0" y="0" width="1024" height="1024" preserveAspectRatio="xMidYMid slice" />
+                        </pattern>
+                    )}
                 </defs>
 
-                {/* --- RENDER DESIGN --- */}
-                {/* 1. TORSO DESIGN */}
+                {/* --- RENDERING LAYERS --- */}
+
+                {/* 1. TORSO DESIGN (Main panels) */}
                 <g clipPath="url(#torsoClip)">
                     {renderDesignLayers(0, primary)}
                 </g>
 
-                {/* 2. SIDES DESIGN (Upper Gaps) */}
-                <g clipPath="url(#gapsClip)">
-                    <rect width="1024" height="700" fill={primary} />
-                    <g transform="translate(0,0)">
-                        {/* We use primary design for sides too as they usually continue torso pattern */}
+                {/* 2. NON-TORSO COMPONENTS (Universal Coverage) */}
+                <g clipPath="url(#nonTorsoClip)">
+                    {/* 2.1 SIDES (Upper part of gaps) - Continues Torso Design */}
+                    <g clipPath="url(#sidesClipY)">
                         {renderDesignLayers(0, primary)}
                     </g>
-                </g>
-
-                {/* 3. SLEEVES DESIGN (Lower Gaps) */}
-                <g clipPath="url(#gapsClip)">
-                    <rect y="700" width="1024" height="324" fill={colors.sleeves || primary} />
-                    <g transform="translate(0,0)">
-                        {/* Sleeves color with patterns */}
+                    {/* 2.2 SLEEVES (Middle-Lower part) */}
+                    <g clipPath="url(#sleevesClipY)">
                         {renderDesignLayers(0, colors.sleeves || primary)}
+                    </g>
+                    {/* 2.3 COLLAR (Very Bottom part) */}
+                    <g clipPath="url(#collarClipY)">
+                        {renderDesignLayers(0, colors.collar || primary)}
                     </g>
                 </g>
 
-                {/* 4. COLLAR DESIGN (Rim & Overlays) */}
-                <g clipPath="url(#collarRimClip)">
-                    <rect width="1024" height="1024" fill={colors.collar || primary} />
-                </g>
-
+                {/* 3. COLLAR OVERLAYS (Visual details) */}
                 <g transform="translate(252, 50)">
                     {collar === 'v-neck' && (
                         <path d="M-80,-50 L0,110 L80,-50 Z" fill={colors.collar || primary} />
@@ -209,30 +131,14 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         </g>
                     )}
                 </g>
-
                 <g transform="translate(762, 50)">
                     {collar === 'v-neck' && <rect x="-100" y="-50" width="200" height="70" fill={colors.collar || primary} />}
                 </g>
-
-                <g transform="translate(762, 50)">
-                    {collar === 'v-neck' && <rect x="-100" y="-50" width="200" height="70" fill={colors.collar || primary} />}
-                </g>
-
-                {/* 3. FRONT CHEST AREA */}
-                {/* Logos are now handled by 3D Decals in Jersey3D.jsx for better quality and interactivity. */}
-                {/* We keep this group structure in case we want to add baked-in elements later. */}
-                <g transform="translate(512, 512)">
-                    {/* TEAM LOGO (Shield) - Removed from SVG to prevent duplicate with 3D Decal */}
-                </g>
-
-                {/* 4. BACK AREA */}
-                {/* Text is now handled exclusively by the 3D Decal in Jersey3D.js to ensure meaningful positioning on the back. */}
 
             </svg>
         </div>
     );
 
-    // ABSTRACTED DESIGN LAYERS (For mapping fix)
     function renderDesignLayers(yOffset, baseColor) {
         return (
             <g transform={`translate(0, ${yOffset})`}>
@@ -243,12 +149,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 )}
 
                 {pattern === 'gradient' && <rect width="1024" height="1024" fill="url(#gradSoft)" />}
-
-                {pattern === 'hexagons' && (
-                    <g mask="url(#hexFade)">
-                        <rect width="1024" height="1024" fill="url(#hexagonsPat)" />
-                    </g>
-                )}
 
                 {pattern === 'halftone-lines' && (
                     <g fill={secondary} mask="url(#halftoneFade)">
@@ -276,22 +176,12 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     </g>
                 )}
 
-                {pattern === 'zigzag' && (
-                    <g stroke={secondary} strokeWidth="20" fill="none">
-                        {Array.from({ length: 20 }).map((_, i) => (
-                            <path key={i} d={`M${i * 100}, 0 L${i * 100 + 50}, 50 L${i * 100}, 100 L${i * 100 - 50}, 150 L${i * 100}, 200 L${i * 100 + 50}, 250 L${i * 100}, 300 L${i * 100 - 50}, 350 L${i * 100}, 400 L${i * 100 + 50}, 450 L${i * 100}, 500 L${i * 100 - 50}, 550 L${i * 100}, 600 L${i * 100 + 50}, 650 L${i * 100}, 700 L${i * 100 - 50}, 750 L${i * 100}, 800 L${i * 100 + 50}, 850 L${i * 100}, 900 L${i * 100 - 50}, 950 L${i * 100}, 1000`} transform="translate(-100,0)" />
-                        ))}
-                    </g>
-                )}
-
                 {(pattern === 'cross' || pattern === 'cross-offset') && (
                     <g fill={secondary}>
                         <rect x={pattern === 'cross' ? 202 : 150} y="0" width={pattern === 'cross' ? 100 : 80} height="1024" />
                         <rect x="0" y="312" width="1024" height={pattern === 'cross' ? 100 : 80} />
                     </g>
                 )}
-
-                {pattern === 'diagonal' && <rect width="1024" height="1024" fill="url(#diagPat)" />}
 
                 {pattern === 'stripes' && (
                     <g fill={secondary}>
@@ -303,12 +193,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     <g fill={secondary}>
                         {[100, 300, 500, 700, 900].map(y => <rect key={y} x="0" y={y} width="1024" height="100" />)}
                     </g>
-                )}
-
-                {pattern === 'diamonds' && <rect width="1024" height="1024" fill="url(#diamondPat)" />}
-
-                {pattern === 'center-stripe' && (
-                    <rect x="202" y="0" width="100" height="1024" fill={secondary} opacity={0.9} />
                 )}
 
                 {pattern === 'center-stripe' && (
@@ -354,10 +238,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                             ))
                         ))}
                     </g>
-                )}
-
-                {pattern === 'camo' && (
-                    <rect width="1024" height="1024" fill={secondary} opacity={0.4} filter="url(#camoFilter)" />
                 )}
 
                 {pattern === 'star' && (
