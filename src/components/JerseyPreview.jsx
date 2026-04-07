@@ -96,16 +96,19 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         {/* Back Torso Panel */}
                         <rect x="560" y="0" width="404" height="1024" />
                     </clipPath>
-                    <clipPath id="sleevesGapsClip">
-                        <rect x="0" y="0" width="55" height="1024" />
-                        <rect x="448" y="0" width="116" height="1024" />
-                        <rect x="964" y="0" width="60" height="1024" />
+                    <clipPath id="frontSleevesClip">
+                        <rect x="448" y="512" width="116" height="512" />
                     </clipPath>
-                    <clipPath id="collarRimClip">
-                        {/* Front Neck Rim */}
-                        <rect x="150" y="0" width="200" height="100" />
-                        {/* Back Neck Rim */}
-                        <rect x="660" y="0" width="200" height="100" />
+                    <clipPath id="backSleevesClip">
+                        <rect x="0" y="0" width="55" height="512" />
+                        <rect x="964" y="0" width="60" height="512" />
+                    </clipPath>
+                    <clipPath id="sidesClip">
+                        <rect x="0" y="512" width="55" height="512" />
+                        <rect x="964" y="512" width="60" height="512" />
+                    </clipPath>
+                    <clipPath id="collarGapClip">
+                        <rect x="448" y="0" width="116" height="512" />
                     </clipPath>
                 </defs>
 
@@ -184,12 +187,18 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 </g>
 
                 {/* 2. SLEEVES & SIDES DESIGN */}
-                <g clipPath="url(#sleevesGapsClip)">
+                <g clipPath="url(#frontSleevesClip)">
+                    {renderDesignLayers(0, colors.sleeves || primary)}
+                </g>
+                <g clipPath="url(#backSleevesClip)">
+                    {renderDesignLayers(0, colors.sleeves || primary)}
+                </g>
+                <g clipPath="url(#sidesClip)">
                     {renderDesignLayers(0, colors.sleeves || primary)}
                 </g>
 
-                {/* 3. COLLAR DESIGN (Rim on both sides) */}
-                <g clipPath="url(#collarRimClip)">
+                {/* 3. COLLAR DESIGN */}
+                <g clipPath="url(#collarGapClip)">
                     {renderDesignLayers(0, colors.collar || primary)}
                 </g>
 
@@ -197,12 +206,12 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
 
                 {/* 2.6 COLLAR STYLES (Always on top, no pattern offset) */}
                 <g transform="translate(252, 50)"> {/* Centered at 252 (Front View) */}
-                    {/* V-NECK */}
+                    {/* V-NECK Overlay */}
                     {collar === 'v-neck' && (
-                        <path d="M-80,-50 L0,120 L80,-50 Z" fill={colors.collar || primary} stroke="none" />
+                        <path d="M-60,-50 L0,80 L60,-50 Z" fill={colors.collar || primary} stroke="none" />
                     )}
 
-                    {/* POLO */}
+                    {/* POLO Overlay */}
                     {collar === 'polo' && (
                         <g>
                             {/* Collar Fold Left */}
