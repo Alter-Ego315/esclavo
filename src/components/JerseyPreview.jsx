@@ -86,20 +86,14 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <rect x="20" y="20" width="20" height="20" fill={secondary} opacity={0.15} />
                     </pattern>
 
-                    <linearGradient id="scanX" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#ff0000" /> {/* Red at x=0 */}
-                        <stop offset="100%" stopColor="#0000ff" /> {/* Blue at x=1024 */}
-                    </linearGradient>
-                    <linearGradient id="scanY" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#00ff00" /> {/* Green at y=0 */}
-                        <stop offset="100%" stopColor="#ffff00" /> {/* Yellow at y=1024 */}
-                    </linearGradient>
                     <clipPath id="allGapsClip">
-                        <rect x="0" y="0" width="1024" height="1024" />
+                        <path d="M0,0 H1024 V1024 H0 Z M50,0 V1024 H452 V0 Z M560,0 V1024 H964 V0 Z" fillRule="evenodd" />
                     </clipPath>
-                    <clipPath id="torsoClip">
-                        <rect x="50" y="0" width="402" height="1024" />
-                        <rect x="560" y="0" width="404" height="1024" />
+                    <clipPath id="collarRimClipFront">
+                        <rect x="50" y="0" width="402" height="60" />
+                    </clipPath>
+                    <clipPath id="collarRimClipBack">
+                        <rect x="560" y="0" width="404" height="60" />
                     </clipPath>
                 </defs>
 
@@ -174,54 +168,43 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 {/* --- RENDER DESIGN --- */}
                 {/* 1. TORSO DESIGN (NORMAL) */}
                 <g clipPath="url(#torsoClip)">
-                    <rect width="1024" height="1024" fill="url(#scanX)" opacity="0.3" />
                     {renderDesignLayers(0, primary)}
                 </g>
 
-                {/* 2. GAP SCANNER (EVERYTHING ELSE) */}
-                <g>
-                    {/* Background to avoid white spots */}
-                    <rect width="1024" height="1024" fill={primary} />
-
-                    {/* X Gradient (Red to Blue) */}
-                    <rect width="1024" height="1024" fill="url(#scanX)" clipPath="url(#torsoClip)" style={{ mixBlendMode: 'multiply' }} />
-
-                    {/* Y Gradient (Green to Yellow) across gaps */}
-                    <path d="M0,0 H1024 V1024 H0 Z M50,0 V1024 H452 V0 Z M560,0 V1024 H964 V0 Z" fill="url(#scanY)" fillRule="evenodd" />
-
-                    {/* X Labels (Indicators) */}
-                    <rect x="0" y="500" width="50" height="24" fill="white" />
-                    <rect x="452" y="500" width="108" height="24" fill="white" />
-                    <rect x="964" y="500" width="60" height="24" fill="white" />
+                {/* 2. SLEEVES & SIDES DESIGN (Everything outside torso) */}
+                <g clipPath="url(#allGapsClip)">
+                    {renderDesignLayers(0, colors.sleeves || primary)}
                 </g>
 
-                {/* 4. COLLAR OVERLAYS (V-Neck, Polo, etc.) */}
+                {/* 3. COLLAR DESIGN (Rim overlays) */}
+                {/* Front Rim */}
+                <g clipPath="url(#collarRimClipFront)">
+                    <rect width="1024" height="1024" fill={colors.collar || primary} />
+                </g>
+                {/* Back Rim */}
+                <g clipPath="url(#collarRimClipBack)">
+                    <rect width="1024" height="1024" fill={colors.collar || primary} />
+                </g>
 
-                {/* 2.6 COLLAR STYLES (Always on top, no pattern offset) */}
-                <g transform="translate(252, 50)"> {/* Centered at 252 (Front View) */}
-                    {/* V-NECK Overlay */}
+                {/* 4. COLLAR DEPTH STYLES (Always on top) */}
+                <g transform="translate(252, 50)">
+                    {/* V-NECK Detail */}
                     {collar === 'v-neck' && (
-                        <path d="M-60,-50 L0,80 L60,-50 Z" fill={colors.collar || primary} stroke="none" />
+                        <path d="M-80,-50 L0,110 L80,-50 Z" fill={colors.collar || primary} stroke="none" />
                     )}
 
-                    {/* POLO Overlay */}
+                    {/* POLO Detail */}
                     {collar === 'polo' && (
                         <g>
-                            {/* Collar Fold Left */}
-                            <path d="M-70,-20 L-15,60 L-35,85 L-110,25 Z" fill={colors.collar || primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
-                            {/* Collar Fold Right */}
-                            <path d="M70,-20 L15,60 L35,85 L110,25 Z" fill={colors.collar || primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
-                            {/* Placket */}
-                            <rect x="-12" y="55" width="24" height="70" fill={colors.collar || primary} />
-                            <circle cx="0" cy="75" r="3.5" fill="white" />
-                            <circle cx="0" cy="98" r="3.5" fill="white" />
+                            <path d="M-75,-25 L-15,65 L-35,90 L-115,30 Z" fill={colors.collar || primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
+                            <path d="M75,-25 L15,65 L35,90 L115,30 Z" fill={colors.collar || primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
+                            <rect x="-12" y="60" width="24" height="75" fill={colors.collar || primary} />
                         </g>
                     )}
                 </g>
 
-                {/* Back Collar Overlay */}
-                <g transform="translate(762, 50)"> {/* Centered at 762 (Back View) */}
-                    {collar === 'v-neck' && <rect x="-80" y="-50" width="160" height="60" fill={colors.collar || primary} />}
+                <g transform="translate(762, 50)">
+                    {collar === 'v-neck' && <rect x="-100" y="-50" width="200" height="70" fill={colors.collar || primary} />}
                 </g>
 
                 {/* 3. FRONT CHEST AREA */}
