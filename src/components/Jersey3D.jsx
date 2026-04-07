@@ -356,7 +356,7 @@ const ShirtModel = ({
                     />
                 </Decal>
             </mesh>
-            {collar === 'polo' && <PoloCollar color={accentColor || color} />}
+            {collar === 'polo' && <PoloCollar color={props.colors.collar || accentColor || color} />}
         </group>
     );
 };

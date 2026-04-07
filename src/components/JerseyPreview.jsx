@@ -96,10 +96,12 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         {/* Back Torso Panel */}
                         <rect x="560" y="0" width="404" height="1024" />
                     </clipPath>
-                    <clipPath id="sleeveNeckClip">
-                        <rect x="0" y="0" width="1024" height="1024" />
-                        {/* Cut out Torso panels to create Sleeve/Neck mask */}
-                        <path d="M0,0 H1024 V1024 H0 Z M50,0 V1024 H452 V0 Z M560,0 V1024 H964 V0 Z" fillRule="evenodd" />
+                    <clipPath id="sleevesClip">
+                        <rect x="0" y="0" width="50" height="1024" />
+                        <rect x="964" y="0" width="60" height="1024" />
+                    </clipPath>
+                    <clipPath id="collarClip">
+                        <rect x="452" y="0" width="108" height="1024" />
                     </clipPath>
                 </defs>
 
@@ -174,14 +176,17 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 {/* --- RENDER DESIGN --- */}
                 {/* 1. TORSO DESIGN (NORMAL) */}
                 <g clipPath="url(#torsoClip)">
-                    {renderDesignLayers(0)}
+                    {renderDesignLayers(0, primary)}
                 </g>
 
-                {/* 2. SLEEVE & NECK DESIGN (OFFSET) */}
-                {/* Fixed mapping: Shift the pattern DOWN by 750 so the shoulder level design 
-                    appears at the bottom of the SVG where the 3D model pulls sleeve textures. */}
-                <g clipPath="url(#sleeveNeckClip)">
-                    {renderDesignLayers(750)}
+                {/* 2. SLEEVES DESIGN */}
+                <g clipPath="url(#sleevesClip)">
+                    {renderDesignLayers(750, colors.sleeves || primary)}
+                </g>
+
+                {/* 3. COLLAR DESIGN */}
+                <g clipPath="url(#collarClip)">
+                    {renderDesignLayers(750, colors.collar || primary)}
                 </g>
 
                 {/* 2.6 COLLAR STYLES (Always on top, no pattern offset) */}
@@ -221,10 +226,10 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
     );
 
     // ABSTRACTED DESIGN LAYERS (For mapping fix)
-    function renderDesignLayers(yOffset) {
+    function renderDesignLayers(yOffset, baseColor) {
         return (
             <g transform={`translate(0, ${yOffset})`}>
-                <rect width="1024" height="1024" fill={primary} />
+                <rect width="1024" height="1024" fill={baseColor} />
 
                 {backgroundImageB64 && (
                     <rect width="1024" height="1024" fill="url(#bgImagePattern)" style={{ mixBlendMode: 'normal' }} />
@@ -242,16 +247,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     <g fill={secondary} mask="url(#halftoneFade)">
                         {Array.from({ length: 100 }).map((_, i) => (
                             <rect key={i} x="0" y={i * 10} width="1024" height="5" />
-                        ))}
-                    </g>
-                )}
-
-                {pattern === 'halftone-dots' && (
-                    <g fill={secondary} mask="url(#halftoneFade)">
-                        {Array.from({ length: 40 }).map((_, y) => (
-                            Array.from({ length: 40 }).map((_, x) => (
-                                <circle key={`${x}-${y}`} cx={x * 25 + 12} cy={y * 25 + 12} r="8" />
-                            ))
                         ))}
                     </g>
                 )}
@@ -274,18 +269,10 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     </g>
                 )}
 
-                {pattern === 'hoops-thin' && (
-                    <g fill={secondary} opacity="0.6">
-                        {Array.from({ length: 40 }).map((_, i) => (
-                            <rect key={i} x="0" y={i * 25} width="1024" height="4" />
-                        ))}
-                    </g>
-                )}
-
-                {pattern === 'ocean-waves' && (
-                    <g stroke={secondary} strokeWidth="12" fill="none" opacity="0.6">
-                        {Array.from({ length: 15 }).map((_, i) => (
-                            <path key={i} d={`M0,${i * 70} Q128,${i * 70 - 40} 256,${i * 70} T512,${i * 70} T768,${i * 70} T1024,${i * 70}`} />
+                {pattern === 'zigzag' && (
+                    <g stroke={secondary} strokeWidth="20" fill="none">
+                        {Array.from({ length: 20 }).map((_, i) => (
+                            <path key={i} d={`M${i * 100}, 0 L${i * 100 + 50}, 50 L${i * 100}, 100 L${i * 100 - 50}, 150 L${i * 100}, 200 L${i * 100 + 50}, 250 L${i * 100}, 300 L${i * 100 - 50}, 350 L${i * 100}, 400 L${i * 100 + 50}, 450 L${i * 100}, 500 L${i * 100 - 50}, 550 L${i * 100}, 600 L${i * 100 + 50}, 650 L${i * 100}, 700 L${i * 100 - 50}, 750 L${i * 100}, 800 L${i * 100 + 50}, 850 L${i * 100}, 900 L${i * 100 - 50}, 950 L${i * 100}, 1000`} transform="translate(-100,0)" />
                         ))}
                     </g>
                 )}
@@ -317,8 +304,8 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     <rect x="202" y="0" width="100" height="1024" fill={secondary} opacity={0.9} />
                 )}
 
-                {pattern === 'sash' && (
-                    <path d="M100,0 L200,0 L700,1024 L600,1024 Z" fill={secondary} opacity={0.9} />
+                {pattern === 'center-stripe' && (
+                    <rect x="202" y="0" width="100" height="1024" fill={secondary} opacity={0.9} />
                 )}
 
                 {pattern === 'chevron' && (

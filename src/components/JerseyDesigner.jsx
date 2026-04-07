@@ -10,15 +10,12 @@ const PATTERNS_LIST = [
     { id: 'norvehc', label: 'Chevron' },
     { id: 'zigzag', label: 'Zig zag' },
     { id: 'halftone-lines', label: 'Líneas' },
-    { id: 'ocean-waves', label: 'Olas' },
     { id: 'stripes', label: 'Rayas verticales' },
     { id: 'hoops', label: 'Rayas horizontales' },
     { id: 'diagonal', label: 'Diagonal' },
     { id: 'hexagons', label: 'Hexágonos' },
     { id: 'gradient', label: 'Degradado' },
-    { id: 'halftone-dots', label: 'Puntos' },
     { id: 'checkers', label: 'Ajedrez' },
-    { id: 'hoops-thin', label: 'Rayas finas' },
     { id: 'cross', label: 'Cruz' },
     { id: 'cross-offset', label: 'Cruz nórdica' },
     { id: 'diamonds', label: 'Rombos' },
@@ -28,8 +25,6 @@ const PATTERNS_LIST = [
     { id: 'star', label: 'Estrella' },
     { id: 'pixels', label: 'Pixelado' },
     { id: 'center-stripe', label: 'Franja central' },
-    { id: 'sash', label: 'Banda' },
-    { id: 'double-stripe', label: 'Doble franja' },
 ];
 
 
@@ -1127,6 +1122,14 @@ const JerseyDesigner = () => {
                                             <div className="color-picker-item">
                                                 <label>Color del texto</label>
                                                 <input type="color" value={colors.textColor} onChange={(e) => handleColorChange('textColor', e.target.value)} />
+                                            </div>
+                                            <div className="color-picker-item">
+                                                <label>Color de las mangas</label>
+                                                <input type="color" value={colors.sleeves} onChange={(e) => handleColorChange('sleeves', e.target.value)} />
+                                            </div>
+                                            <div className="color-picker-item">
+                                                <label>Color del cuello</label>
+                                                <input type="color" value={colors.collar} onChange={(e) => handleColorChange('collar', e.target.value)} />
                                             </div>
 
 
