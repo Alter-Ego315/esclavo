@@ -97,11 +97,13 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <rect x="560" y="0" width="404" height="1024" />
                     </clipPath>
                     <clipPath id="sleevesClip">
-                        <rect x="0" y="0" width="50" height="1024" />
+                        <rect x="0" y="0" width="55" height="1024" />
+                        <rect x="448" y="0" width="116" height="1024" />
                         <rect x="964" y="0" width="60" height="1024" />
                     </clipPath>
-                    <clipPath id="collarClip">
-                        <rect x="452" y="0" width="108" height="1024" />
+                    <clipPath id="collarOverlapExclude">
+                        <rect x="50" y="0" width="402" height="150" />
+                        <rect x="560" y="0" width="404" height="150" />
                     </clipPath>
                 </defs>
 
@@ -179,34 +181,37 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     {renderDesignLayers(0, primary)}
                 </g>
 
-                {/* 2. SLEEVES DESIGN */}
+                {/* 2. SLEEVES & SIDES DESIGN */}
                 <g clipPath="url(#sleevesClip)">
                     {renderDesignLayers(750, colors.sleeves || primary)}
                 </g>
 
-                {/* 3. COLLAR DESIGN */}
-                <g clipPath="url(#collarClip)">
-                    {renderDesignLayers(750, colors.collar || primary)}
-                </g>
+                {/* 3. COLLAR DESIGN OVERLAYS */}
+                {/* We apply collar color to the overlay components */}
 
                 {/* 2.6 COLLAR STYLES (Always on top, no pattern offset) */}
                 <g transform="translate(252, 50)"> {/* Centered at 252 */}
+                    {/* ROUND NECK (Base) */}
+                    {collar === 'round' && (
+                        <circle cx="0" cy="-20" r="100" fill={colors.collar || primary} />
+                    )}
+
                     {/* V-NECK */}
                     {collar === 'v-neck' && (
-                        <path d="M-50,0 L0,80 L50,0 L50,-20 L-50,-20 Z" fill={primary} stroke="none" />
+                        <path d="M-60,-20 L0,100 L60,-20 Z" fill={colors.collar || primary} stroke="none" />
                     )}
 
                     {/* POLO */}
                     {collar === 'polo' && (
                         <g>
                             {/* Collar Fold Left */}
-                            <path d="M-60,0 L-10,60 L-30,80 L-100,20 Z" fill={primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
+                            <path d="M-70,-20 L-15,60 L-35,85 L-110,25 Z" fill={colors.collar || primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
                             {/* Collar Fold Right */}
-                            <path d="M60,0 L10,60 L30,80 L100,20 Z" fill={primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
+                            <path d="M70,-20 L15,60 L35,85 L110,25 Z" fill={colors.collar || primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
                             {/* Placket */}
-                            <rect x="-10" y="50" width="20" height="60" fill={primary} />
-                            <circle cx="0" cy="70" r="3" fill="white" />
-                            <circle cx="0" cy="90" r="3" fill="white" />
+                            <rect x="-12" y="55" width="24" height="70" fill={colors.collar || primary} />
+                            <circle cx="0" cy="75" r="3.5" fill="white" />
+                            <circle cx="0" cy="98" r="3.5" fill="white" />
                         </g>
                     )}
                 </g>
