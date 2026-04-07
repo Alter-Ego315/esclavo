@@ -86,29 +86,20 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <rect x="20" y="20" width="20" height="20" fill={secondary} opacity={0.15} />
                     </pattern>
 
-                    <pattern id="diagonalPattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                        <rect width="40" height="80" fill={secondary} opacity={0.15} />
-                    </pattern>
-
+                    <linearGradient id="scanX" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#ff0000" /> {/* Red at x=0 */}
+                        <stop offset="100%" stopColor="#0000ff" /> {/* Blue at x=1024 */}
+                    </linearGradient>
+                    <linearGradient id="scanY" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#00ff00" /> {/* Green at y=0 */}
+                        <stop offset="100%" stopColor="#ffff00" /> {/* Yellow at y=1024 */}
+                    </linearGradient>
+                    <clipPath id="allGapsClip">
+                        <rect x="0" y="0" width="1024" height="1024" />
+                    </clipPath>
                     <clipPath id="torsoClip">
-                        {/* Front Torso Panel */}
                         <rect x="50" y="0" width="402" height="1024" />
-                        {/* Back Torso Panel */}
                         <rect x="560" y="0" width="404" height="1024" />
-                    </clipPath>
-                    <clipPath id="frontSleevesClip">
-                        <rect x="448" y="512" width="116" height="512" />
-                    </clipPath>
-                    <clipPath id="backSleevesClip">
-                        <rect x="0" y="0" width="55" height="512" />
-                        <rect x="964" y="0" width="60" height="512" />
-                    </clipPath>
-                    <clipPath id="sidesClip">
-                        <rect x="0" y="512" width="55" height="512" />
-                        <rect x="964" y="512" width="60" height="512" />
-                    </clipPath>
-                    <clipPath id="collarGapClip">
-                        <rect x="448" y="0" width="116" height="512" />
                     </clipPath>
                 </defs>
 
@@ -183,23 +174,25 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 {/* --- RENDER DESIGN --- */}
                 {/* 1. TORSO DESIGN (NORMAL) */}
                 <g clipPath="url(#torsoClip)">
+                    <rect width="1024" height="1024" fill="url(#scanX)" opacity="0.3" />
                     {renderDesignLayers(0, primary)}
                 </g>
 
-                {/* 2. SLEEVES & SIDES DESIGN */}
-                <g clipPath="url(#frontSleevesClip)">
-                    {renderDesignLayers(0, colors.sleeves || primary)}
-                </g>
-                <g clipPath="url(#backSleevesClip)">
-                    {renderDesignLayers(0, colors.sleeves || primary)}
-                </g>
-                <g clipPath="url(#sidesClip)">
-                    {renderDesignLayers(0, colors.sleeves || primary)}
-                </g>
+                {/* 2. GAP SCANNER (EVERYTHING ELSE) */}
+                <g>
+                    {/* Background to avoid white spots */}
+                    <rect width="1024" height="1024" fill={primary} />
 
-                {/* 3. COLLAR DESIGN */}
-                <g clipPath="url(#collarGapClip)">
-                    {renderDesignLayers(0, colors.collar || primary)}
+                    {/* X Gradient (Red to Blue) */}
+                    <rect width="1024" height="1024" fill="url(#scanX)" clipPath="url(#torsoClip)" style={{ mixBlendMode: 'multiply' }} />
+
+                    {/* Y Gradient (Green to Yellow) across gaps */}
+                    <path d="M0,0 H1024 V1024 H0 Z M50,0 V1024 H452 V0 Z M560,0 V1024 H964 V0 Z" fill="url(#scanY)" fillRule="evenodd" />
+
+                    {/* X Labels (Indicators) */}
+                    <rect x="0" y="500" width="50" height="24" fill="white" />
+                    <rect x="452" y="500" width="108" height="24" fill="white" />
+                    <rect x="964" y="500" width="60" height="24" fill="white" />
                 </g>
 
                 {/* 4. COLLAR OVERLAYS (V-Neck, Polo, etc.) */}
