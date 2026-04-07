@@ -87,21 +87,14 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     </pattern>
 
                     <clipPath id="torsoClip">
-                        <rect x="60" y="0" width="380" height="1024" />
-                        <rect x="584" y="0" width="380" height="1024" />
+                        <rect x="50" y="0" width="402" height="800" />
+                        <rect x="560" y="0" width="404" height="800" />
                     </clipPath>
                     <clipPath id="sleevesClip">
-                        {/* Outside Edges */}
-                        <rect x="0" y="0" width="60" height="1024" />
-                        <rect x="964" y="0" width="60" height="1024" />
-                        {/* Center Gap Bottom */}
-                        <rect x="440" y="200" width="144" height="824" />
+                        <rect x="0" y="800" width="1024" height="130" />
                     </clipPath>
                     <clipPath id="collarClip">
-                        {/* Center Gap Top - This is where the rim usually is */}
-                        <rect x="440" y="0" width="144" height="200" />
-                        {/* Also a bit of the top edge just in case */}
-                        <rect x="0" y="0" width="1024" height="40" />
+                        <rect x="0" y="930" width="1024" height="94" />
                     </clipPath>
                 </defs>
 
@@ -181,15 +174,15 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
 
                 {/* 2. SLEEVES DESIGN */}
                 <g clipPath="url(#sleevesClip)">
-                    {renderDesignLayers(0, colors.sleeves || primary)}
+                    {renderDesignLayers(800, colors.sleeves || primary)}
                 </g>
 
                 {/* 3. COLLAR DESIGN */}
                 <g clipPath="url(#collarClip)">
-                    {renderDesignLayers(0, colors.collar || primary)}
+                    {renderDesignLayers(930, colors.collar || primary)}
                 </g>
 
-                {/* 4. OVERLAYS */}
+                {/* 4. OVERLAYS (V-Neck/Polo) */}
                 <g transform="translate(252, 50)">
                     {collar === 'v-neck' && (
                         <path d="M-80,-50 L0,110 L80,-50 Z" fill={colors.collar || primary} stroke="none" />
@@ -198,7 +191,6 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <g>
                             <path d="M-75,-25 L-15,65 L-35,90 L-115,30 Z" fill={colors.collar || primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
                             <path d="M75,-25 L15,65 L35,90 L115,30 Z" fill={colors.collar || primary} stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
-                            <rect x="-12" y="60" width="24" height="75" fill={colors.collar || primary} />
                         </g>
                     )}
                 </g>
