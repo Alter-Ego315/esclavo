@@ -90,13 +90,20 @@ const apiMiddleware = (env) => ({
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
     return {
-        plugins: [react(), apiMiddleware(env)],
+        plugins: [
+            react({
+                babel: {
+                    plugins: ['styled-jsx/babel'],
+                },
+            }),
+            apiMiddleware(env)
+        ],
         server: {
-            port: 5190
+            port: 5190,
+            host: true
         },
         ssr: {
             noExternal: ['react-helmet-async']
         }
     }
 })
-

@@ -533,9 +533,14 @@ const Jersey3D = forwardRef((props, ref) => {
                 onCreated={({ gl }) => { canvasRef.current = gl.domElement; }}
                 onPointerMissed={() => props.onSelectLogo && props.onSelectLogo(null)}
             >
-                <ambientLight intensity={0.7} />
+                <ambientLight intensity={1.2} />
                 <Environment preset="city" />
-                <spotLight position={[0.5, 0.5, 1]} intensity={2} angle={0.5} penumbra={1} castShadow />
+                {/* Front spotlight */}
+                <spotLight position={[0, 1, 2]} intensity={2.5} angle={0.6} penumbra={1} castShadow />
+                {/* Side lights to power up sleeves */}
+                <pointLight position={[-1, 0.5, 1]} intensity={1.5} />
+                <pointLight position={[1, 0.5, 1]} intensity={1.5} />
+                <pointLight position={[0, 0.5, -1.5]} intensity={1} />
                 <group position={[0, 0.22, 0]}>
                     <ShirtModel
                         {...props}
