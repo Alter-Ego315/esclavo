@@ -92,8 +92,7 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
 
     return (
         <div ref={containerRef} style={{ width: '100%', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
-            {/* Hidden SVG used as texture source for 3D thumbnail */}
-            <svg id={`svg-pattern-${pattern}`} viewBox="0 0 100 100" style={{ position: 'absolute', width: '1px', height: '1px', opacity: 0, pointerEvents: 'none' }}>
+            <svg id={`svg-pattern-${pattern}`} viewBox="0 0 100 100" width="100" height="100" style={{ position: 'absolute', top: '-1000px', left: '-1000px', pointerEvents: 'none' }}>
                 <defs>
                     <clipPath id={`shirt-clip-${pattern}`}>
                         <path d={shirtBodyPath} />
@@ -1048,13 +1047,6 @@ const JerseyDesigner = () => {
                                                         <span style={{ fontSize: '13px', fontWeight: '500', textAlign: 'center', color: 'var(--text-primary)', width: '100%' }}>{p.label}</span>
                                                     </button>
                                                 ))}
-                                                
-                                                {/* Shared Canvas for 3D Thumbnails (renders via View.Port) */}
-                                                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 100 }}>
-                                                    <Canvas eventSource={document.getElementById('root')}>
-                                                        <View.Port />
-                                                    </Canvas>
-                                                </div>
                                             </div>
                                         </div>
                                     )}
@@ -1121,6 +1113,12 @@ const JerseyDesigner = () => {
                     onCancel={() => setShowInfoModal(false)}
                 />
             )}
+            {/* Global Shared Canvas for 3D Thumbnails (renders via View.Port) */}
+            <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 50 }}>
+                <Canvas eventSource={document.getElementById('root')}>
+                    <View.Port />
+                </Canvas>
+            </div>
         </div>
     );
 };
