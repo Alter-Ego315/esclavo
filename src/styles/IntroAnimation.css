@@ -40,10 +40,11 @@
     transform: translateX(0);
 }
 
-.ai-icon {
-    width: 120px;
-    height: 120px;
+.mysimetry-icon-img {
+    height: 180px;
+    max-width: 90vw;
     margin-bottom: 20px;
+    object-fit: contain;
     filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.4));
 }
 
@@ -62,9 +63,6 @@
     letter-spacing: 4px;
 }
 
-.mysimetri-text {
-    color: #FF8C00;
-}
 
 .ginga-text {
     color: #00FF00;

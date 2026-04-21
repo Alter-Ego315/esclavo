@@ -19,13 +19,7 @@ const IntroAnimation = ({ onComplete }) => {
     return (
         <div className={`intro-container ${animationState}`}>
             <div className="brand-wrapper mysimetri-wrapper">
-                <svg className="ai-icon" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" stroke="#FF8C00" strokeWidth="4" fill="none" />
-                    <circle cx="50" cy="50" r="25" fill="#FF8C00" opacity="0.2" />
-                    <path d="M50 20 L50 80 M20 50 L80 50 M30 30 L70 70 M30 70 L70 30" stroke="#FF8C00" strokeWidth="2" />
-                    <circle cx="50" cy="50" r="10" fill="#FF8C00" />
-                </svg>
-                <div className="brand-text mysimetri-text">mysimetri</div>
+                <img src="/mysimetry-logo.png" alt="mySimetry" className="mysimetry-icon-img" />
             </div>
 
             <div className="x-separator">
