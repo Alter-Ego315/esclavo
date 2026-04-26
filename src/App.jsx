@@ -11,6 +11,7 @@ import Footer from './components/landing/Footer';
 import PrivacyModal from './components/landing/PrivacyModal';
 import Chatbot from './components/landing/Chatbot';
 import LegalModal from './components/landing/LegalModal';
+import JerseyDesigner from './components/JerseyDesigner';
 
 import './index.css';
 
@@ -101,7 +102,8 @@ function App() {
                 <Navbar />
                 <div style={{ paddingTop: '100px' }}>
                     <Routes>
-                        <Route path="/" element={
+                        <Route path="/" element={<JerseyDesigner />} />
+                        <Route path="/landing" element={
                             <HomePage 
                                 setContactMessage={setContactMessage} 
                                 contactMessage={contactMessage}
