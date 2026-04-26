@@ -4,7 +4,7 @@ import JerseyPreview from './JerseyPreview';
 import { ChevronRight, ChevronLeft, Upload, Shirt, RotateCcw, Share2, Download, Eye, Layers, Type, Palette, Scissors, Binary, Grip, RotateCw, Image, ArrowLeftRight, Move, Check, Trash2, Save, Info } from 'lucide-react';
 import PatternThumbnail3D from './PatternThumbnail3D';
 import { Canvas } from '@react-three/fiber';
-import { View } from '@react-three/drei';
+import { OrbitControls, Decal, PerspectiveCamera, View, Environment, useTexture } from '@react-three/drei';
 import '../styles/JerseyDesigner.css';
 
 const PATTERNS_LIST = [
@@ -1116,7 +1116,11 @@ const JerseyDesigner = () => {
             )}
             {/* Global Shared Canvas for 3D Thumbnails (renders via View.Port) */}
             <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 10 }}>
-                <Canvas eventSource={document.body} gl={{ antialias: false, powerPreference: "high-performance" }}>
+                <Canvas 
+                    eventSource={document.body} 
+                    gl={{ antialias: false, powerPreference: "high-performance", alpha: true }}
+                    style={{ background: 'transparent' }}
+                >
                     <Environment preset="city" />
                     <ambientLight intensity={1.0} />
                     <pointLight position={[5, 10, 5]} intensity={2.0} />
