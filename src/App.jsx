@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/landing/Navbar';
 import Hero from './components/landing/Hero';
