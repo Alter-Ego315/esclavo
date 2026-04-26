@@ -86,13 +86,19 @@ const getFontCharacterLimit = (fontName) => {
     return 15; // default for all local fonts
 };
 // Helper component for pattern thumbnails with 3D effect
-const PatternThumbnail = ({ pattern, color1, color2 }) => {
+const PatternThumbnail = ({ pattern, color1, color2, show3D = false }) => {
     const shirtBodyPath = "M50,15 L30,22 L10,35 L15,55 L25,48 L25,95 L75,95 L75,48 L85,55 L90,35 L70,22 Z";
     const containerRef = useRef();
 
     return (
         <div ref={containerRef} style={{ width: '100%', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
-            <svg id={`svg-pattern-${pattern}`} viewBox="0 0 100 100" width="100" height="100" style={{ position: 'absolute', top: '-1000px', left: '-1000px', pointerEvents: 'none' }}>
+            <svg 
+                id={`svg-pattern-${pattern}`} 
+                viewBox="0 0 100 100" 
+                width="100" 
+                height="100" 
+                style={show3D ? { position: 'absolute', top: '-1000px', left: '-1000px', pointerEvents: 'none' } : { flexShrink: 0 }}
+            >
                 <defs>
                     <clipPath id={`shirt-clip-${pattern}`}>
                         <path d={shirtBodyPath} />
@@ -165,12 +171,14 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
             </svg>
 
             {/* Real 3D Thumbnail Rendered via View */}
-            <PatternThumbnail3D
-                pattern={pattern}
-                color1={color1}
-                color2={color2}
-                trackRef={containerRef}
-            />
+            {show3D && (
+                <PatternThumbnail3D
+                    pattern={pattern}
+                    color1={color1}
+                    color2={color2}
+                    trackRef={containerRef}
+                />
+            )}
         </div>
     );
 };
@@ -1021,7 +1029,7 @@ const JerseyDesigner = () => {
 
                                             <h4 style={{ marginBottom: '15px', fontSize: '14px', color: 'var(--text-primary)' }}>Patrones base</h4>
                                             <div className="pattern-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '25px', position: 'relative' }}>
-                                                {PATTERNS_LIST.map(p => (
+                                                {PATTERNS_LIST.map((p, index) => (
                                                     <button
                                                         key={p.id}
                                                         className={pattern === p.id ? 'active' : ''}
@@ -1043,7 +1051,7 @@ const JerseyDesigner = () => {
                                                         }}
                                                     >
                                                         <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '15px' }}>
-                                                            <PatternThumbnail pattern={p.id} color1={colors.primary} color2={colors.secondary} />
+                                                            <PatternThumbnail pattern={p.id} color1={colors.primary} color2={colors.secondary} show3D={index < 2} />
                                                         </div>
                                                         <span style={{ fontSize: '13px', fontWeight: '500', textAlign: 'center', color: 'var(--text-primary)', width: '100%' }}>{p.label}</span>
                                                     </button>
