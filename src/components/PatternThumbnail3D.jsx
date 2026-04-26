@@ -1,10 +1,15 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import { View, useGLTF, Environment, useTexture } from '@react-three/drei';
-import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 
 const ThumbnailShirtModel = ({ color1, color2, pattern, texture }) => {
     const { nodes } = useGLTF('/shirt_baked.glb');
+    const groupRef = React.useRef();
     
+    useFrame((state) => {
+        if (groupRef.current) {
+            groupRef.current.rotation.y = 0.4 + Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+        }
+    });
+
     const material = useMemo(() => {
         return new THREE.MeshStandardMaterial({
             map: texture || null,
@@ -18,7 +23,7 @@ const ThumbnailShirtModel = ({ color1, color2, pattern, texture }) => {
     if (!nodes.T_Shirt_male) return null;
 
     return (
-        <group scale={1.8} position={[0, -1.2, 0]}>
+        <group ref={groupRef} scale={1.8} position={[0, -1.2, 0]} rotation={[0.1, 0.4, 0]}>
             <mesh
                 geometry={nodes.T_Shirt_male.geometry}
                 material={material}
@@ -66,9 +71,10 @@ const PatternThumbnail3D = ({ pattern, color1, color2, trackRef }) => {
                 texture={texture} 
             />
             <Environment preset="city" />
-            <ambientLight intensity={1.5} />
-            <pointLight position={[5, 5, 5]} intensity={2} />
+            <ambientLight intensity={1.2} />
+            <pointLight position={[5, 10, 10]} intensity={2.5} />
             <pointLight position={[-5, 5, 5]} intensity={1.5} />
+            <pointLight position={[0, -5, 5]} intensity={0.5} />
         </View>
     );
 };

@@ -1031,14 +1031,15 @@ const JerseyDesigner = () => {
                                                             flexDirection: 'column',
                                                             alignItems: 'center',
                                                             padding: '20px 10px',
-                                                            background: 'var(--surface)',
+                                                            background: 'rgba(255, 255, 255, 0.03)',
                                                             border: pattern === p.id ? '2px solid var(--accent)' : '1px solid var(--border)',
                                                             borderRadius: '16px',
                                                             cursor: 'pointer',
-                                                            transition: 'transform 0.2s',
+                                                            transition: 'all 0.2s',
                                                             minHeight: '180px',
                                                             justifyContent: 'space-between',
-                                                            overflow: 'hidden'
+                                                            overflow: 'hidden',
+                                                            position: 'relative'
                                                         }}
                                                     >
                                                         <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '15px' }}>
@@ -1114,8 +1115,8 @@ const JerseyDesigner = () => {
                 />
             )}
             {/* Global Shared Canvas for 3D Thumbnails (renders via View.Port) */}
-            <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 50 }}>
-                <Canvas eventSource={document.getElementById('root')}>
+            <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 10 }}>
+                <Canvas eventSource={document.body}>
                     <View.Port />
                 </Canvas>
             </div>
