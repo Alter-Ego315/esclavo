@@ -6,7 +6,7 @@ const ThumbnailShirtModel = ({ color1, color2, pattern, texture }) => {
     
     useFrame((state) => {
         if (groupRef.current) {
-            groupRef.current.rotation.y = 0.4 + Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+            groupRef.current.rotation.y = 0.4 + Math.sin(state.clock.elapsedTime * 0.4) * 0.15;
         }
     });
 
