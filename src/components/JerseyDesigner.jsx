@@ -1116,7 +1116,10 @@ const JerseyDesigner = () => {
             )}
             {/* Global Shared Canvas for 3D Thumbnails (renders via View.Port) */}
             <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 10 }}>
-                <Canvas eventSource={document.body}>
+                <Canvas eventSource={document.body} gl={{ antialias: false, powerPreference: "high-performance" }}>
+                    <Environment preset="city" />
+                    <ambientLight intensity={1.0} />
+                    <pointLight position={[5, 10, 5]} intensity={2.0} />
                     <View.Port />
                 </Canvas>
             </div>
