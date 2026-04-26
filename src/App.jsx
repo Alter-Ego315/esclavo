@@ -23,12 +23,20 @@ const ScrollToTop = () => {
     return null;
 };
 
-const HomePage = ({ setContactMessage, contactMessage, openPrivacy }) => (
+const HomePage = ({ setContactMessage, contactMessage, openPrivacy, openLegal, openCookiePreferences }) => (
     <>
-        <Hero />
-        <About />
-        <Services setContactMessage={setContactMessage} />
-        <Contact contactMessage={contactMessage} openPrivacy={openPrivacy} />
+        <Navbar />
+        <div style={{ paddingTop: '100px' }}>
+            <Hero />
+            <About />
+            <Services setContactMessage={setContactMessage} />
+            <Contact contactMessage={contactMessage} openPrivacy={openPrivacy} />
+        </div>
+        <Footer 
+            openPrivacy={openPrivacy}
+            openLegal={openLegal}
+            openCookiePreferences={openCookiePreferences}
+        />
     </>
 );
 
@@ -99,29 +107,34 @@ function App() {
         <Router>
             <ScrollToTop />
             <div style={{ background: '#0a0a0a', minHeight: '100vh', color: 'white' }}>
-                <Navbar />
-                <div style={{ paddingTop: '100px' }}>
-                    <Routes>
-                        <Route path="/" element={<JerseyDesigner />} />
-                        <Route path="/landing" element={
-                            <HomePage 
-                                setContactMessage={setContactMessage} 
-                                contactMessage={contactMessage}
-                                openPrivacy={openPrivacy} 
+                <Routes>
+                    <Route path="/" element={<JerseyDesigner />} />
+                    <Route path="/landing" element={
+                        <HomePage 
+                            setContactMessage={setContactMessage} 
+                            contactMessage={contactMessage}
+                            openPrivacy={openPrivacy} 
+                            openLegal={openLegal}
+                            openCookiePreferences={openCookiePreferences}
+                        />
+                    } />
+                    <Route path="/experiencia" element={
+                        <>
+                            <Navbar />
+                            <div style={{ paddingTop: '100px' }}>
+                                <Portfolio />
+                            </div>
+                            <Footer 
+                                openPrivacy={openPrivacy}
+                                openLegal={openLegal}
+                                openCookiePreferences={openCookiePreferences}
                             />
-                        } />
-                        <Route path="/experiencia" element={<Portfolio />} />
-                    </Routes>
-                </div>
+                        </>
+                    } />
+                </Routes>
                 <PrivacyModal isOpen={isPrivacyOpen} onClose={closePrivacy} />
                 <LegalModal isOpen={isLegalOpen} onClose={closeLegal} />
-                {/* <CookieConsent showPreferences={showCookiePreferences} setShowPreferences={setShowCookiePreferences} /> */}
                 <Chatbot />
-                <Footer 
-                    openPrivacy={openPrivacy}
-                    openLegal={openLegal}
-                    openCookiePreferences={openCookiePreferences}
-                />
             </div>
         </Router>
     );

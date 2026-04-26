@@ -41,6 +41,7 @@ const PatternThumbnail3D = ({ pattern, color1, color2, trackRef }) => {
         const svgElement = document.querySelector(`#svg-pattern-${pattern}`);
         if (!svgElement) return;
 
+        let isMounted = true;
         const generateTexture = async () => {
             const svgString = new XMLSerializer().serializeToString(svgElement);
             const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
@@ -48,11 +49,12 @@ const PatternThumbnail3D = ({ pattern, color1, color2, trackRef }) => {
 
             const img = new Image();
             img.onload = () => {
+                if (!isMounted) return;
                 const canvas = document.createElement('canvas');
-                canvas.width = 512;
-                canvas.height = 512;
+                canvas.width = 256; // Reduced quality for stability
+                canvas.height = 256;
                 const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, 512, 512);
+                ctx.drawImage(img, 0, 0, 256, 256);
                 const tex = new THREE.CanvasTexture(canvas);
                 tex.colorSpace = THREE.SRGBColorSpace;
                 setTexture(tex);
@@ -62,6 +64,7 @@ const PatternThumbnail3D = ({ pattern, color1, color2, trackRef }) => {
         };
 
         generateTexture();
+        return () => { isMounted = false; };
     }, [pattern, color1, color2]);
 
     return (
@@ -71,10 +74,8 @@ const PatternThumbnail3D = ({ pattern, color1, color2, trackRef }) => {
                 texture={texture} 
             />
             <Environment preset="city" />
-            <ambientLight intensity={1.2} />
-            <pointLight position={[5, 10, 10]} intensity={2.5} />
-            <pointLight position={[-5, 5, 5]} intensity={1.5} />
-            <pointLight position={[0, -5, 5]} intensity={0.5} />
+            <ambientLight intensity={0.8} />
+            <pointLight position={[5, 10, 5]} intensity={1.5} />
         </View>
     );
 };
