@@ -9,7 +9,6 @@ import Portfolio from './components/landing/Portfolio';
 import Contact from './components/landing/Contact';
 import Footer from './components/landing/Footer';
 import PrivacyModal from './components/landing/PrivacyModal';
-import Chatbot from './components/landing/Chatbot';
 import LegalModal from './components/landing/LegalModal';
 import JerseyDesigner from './components/JerseyDesigner';
 
@@ -134,7 +133,6 @@ function App() {
                 </Routes>
                 <PrivacyModal isOpen={isPrivacyOpen} onClose={closePrivacy} />
                 <LegalModal isOpen={isLegalOpen} onClose={closeLegal} />
-                <Chatbot />
             </div>
         </Router>
     );
