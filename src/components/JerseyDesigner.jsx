@@ -1051,7 +1051,7 @@ const JerseyDesigner = () => {
                                                         }}
                                                     >
                                                         <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '15px' }}>
-                                                            <PatternThumbnail pattern={p.id} color1={colors.primary} color2={colors.secondary} show3D={index < 2} />
+                                                            <PatternThumbnail pattern={p.id} color1={colors.primary} color2={colors.secondary} show3D={index === 0} />
                                                         </div>
                                                         <span style={{ fontSize: '13px', fontWeight: '500', textAlign: 'center', color: 'var(--text-primary)', width: '100%' }}>{p.label}</span>
                                                     </button>
