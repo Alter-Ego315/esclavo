@@ -399,7 +399,7 @@ const Jersey3D = forwardRef((props, ref) => {
             controls.object.position.set(0, 0, -0.9);
             controls.update();
             const backImage = await capture();
-
+yvgtghdsth7g6            
             // Restore normal view wrapper parameters
             controls.object.position.copy(savedPos);
             controls.target.copy(savedTarget);
