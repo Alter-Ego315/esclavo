@@ -1,4 +1,7 @@
+import React, { useState, useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useGLTF, View } from '@react-three/drei';
+import * as THREE from 'three';
 
 const ThumbnailShirtModel = ({ color1, color2, pattern, texture }) => {
     const { nodes } = useGLTF('/shirt_baked.glb');
