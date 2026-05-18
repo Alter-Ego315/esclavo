@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Jersey3D from './Jersey3D';
 import JerseyPreview from './JerseyPreview';
 import { ChevronRight, ChevronLeft, Upload, Shirt, RotateCcw, Share2, Download, Eye, Layers, Type, Palette, Scissors, Binary, Grip, RotateCw, Image, ArrowLeftRight, Move, Check, Trash2, Save, Info } from 'lucide-react';
-import PatternThumbnail3D from './PatternThumbnail3D';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Decal, PerspectiveCamera, View, Environment, useTexture } from '@react-three/drei';
 import '../styles/JerseyDesigner.css';
@@ -85,19 +84,18 @@ const getFontCharacterLimit = (fontName) => {
     if (fontName === 'Oswald') return 22; // condensed
     return 15; // default for all local fonts
 };
-// Helper component for pattern thumbnails with 3D effect
-const PatternThumbnail = ({ pattern, color1, color2, show3D = false }) => {
+// Helper component for pattern thumbnails with 2D effect
+const PatternThumbnail = ({ pattern, color1, color2 }) => {
     const shirtBodyPath = "M50,15 L30,22 L10,35 L15,55 L25,48 L25,95 L75,95 L75,48 L85,55 L90,35 L70,22 Z";
-    const containerRef = useRef();
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ width: '100%', height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
             <svg 
                 id={`svg-pattern-${pattern}`} 
                 viewBox="0 0 100 100" 
                 width="100" 
                 height="100" 
-                style={show3D ? { position: 'absolute', top: '-1000px', left: '-1000px', pointerEvents: 'none' } : { flexShrink: 0 }}
+                style={{ flexShrink: 0 }}
             >
                 <defs>
                     <clipPath id={`shirt-clip-${pattern}`}>
@@ -169,16 +167,6 @@ const PatternThumbnail = ({ pattern, color1, color2, show3D = false }) => {
                     {pattern === 'hoops-thin' && Array.from({ length: 15 }).map((_, i) => <rect key={i} y={i * 7} width="100" height="2" fill={color2} />)}
                 </g>
             </svg>
-
-            {/* Real 3D Thumbnail Rendered via View */}
-            {show3D && (
-                <PatternThumbnail3D
-                    pattern={pattern}
-                    color1={color1}
-                    color2={color2}
-                    trackRef={containerRef}
-                />
-            )}
         </div>
     );
 };
