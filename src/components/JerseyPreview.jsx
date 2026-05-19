@@ -241,7 +241,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 )}
 
                 {pattern === 'star' && (
-                    <g fill={secondary} opacity={0.2} transform="translate(252,400) scale(3)">
+                    <g fill={secondary} opacity={0.8} transform="translate(252,400) scale(3)">
                         <path d="M0,-100 L25,-30 L100,-30 L40,15 L60,90 L0,50 L-60,90 L-40,15 L-100,-30 L-25,-30 Z" />
                     </g>
                 )}

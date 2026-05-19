@@ -331,7 +331,7 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                     {pattern === 'star' && (
                         <g>
                             <rect width="100" height="100" fill={color1} />
-                            <polygon points="50,15 61,35 85,35 66,50 75,75 50,60 25,75 34,50 15,35 39,35" fill={color2} opacity={0.6} />
+                            <polygon points="50,15 61,35 85,35 66,50 75,75 50,60 25,75 34,50 15,35 39,35" fill={color2} opacity={0.9} />
                         </g>
                     )}
                     {pattern === 'pixels' && (
