@@ -10,12 +10,15 @@ const PATTERNS_LIST = [
     { id: 'norvehc', label: 'Chevron' },
     { id: 'zigzag', label: 'Zig zag' },
     { id: 'halftone-lines', label: 'Líneas' },
+    { id: 'ocean-waves', label: 'Olas' },
     { id: 'stripes', label: 'Rayas verticales' },
     { id: 'hoops', label: 'Rayas horizontales' },
     { id: 'diagonal', label: 'Diagonal' },
     { id: 'hexagons', label: 'Hexágonos' },
     { id: 'gradient', label: 'Degradado' },
+    { id: 'halftone-dots', label: 'Puntos' },
     { id: 'checkers', label: 'Ajedrez' },
+    { id: 'hoops-thin', label: 'Rayas finas' },
     { id: 'cross', label: 'Cruz' },
     { id: 'cross-offset', label: 'Cruz nórdica' },
     { id: 'diamonds', label: 'Rombos' },
@@ -25,6 +28,8 @@ const PATTERNS_LIST = [
     { id: 'star', label: 'Estrella' },
     { id: 'pixels', label: 'Pixelado' },
     { id: 'center-stripe', label: 'Franja central' },
+    { id: 'sash', label: 'Banda' },
+    { id: 'double-stripe', label: 'Doble franja' },
 ];
 
 
