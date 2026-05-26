@@ -82,8 +82,8 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <stop offset="100%" stopColor={secondary} />
                     </linearGradient>
                     <linearGradient id="gradSoftSleeves" x1="0%" y1="700" x2="0%" y2="930" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stopColor={colors.sleeves || primary} />
-                        <stop offset="100%" stopColor={secondary} />
+                        <stop offset="0%" stopColor={secondary} />
+                        <stop offset="100%" stopColor={colors.sleeves || primary} />
                     </linearGradient>
                     <linearGradient id="fadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stopColor="white" stopOpacity="1" />
