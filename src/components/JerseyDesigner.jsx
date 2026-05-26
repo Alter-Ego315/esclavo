@@ -258,13 +258,13 @@ const PatternThumbnail = ({ pattern, color1, color2 }) => {
                             <rect width="100" height="100" fill={color1} />
                             <rect x="40" y="0" width="20" height="100" fill={color2} opacity={0.9} />
                         </g>
-                    )}
-                    {pattern === 'sash' && (
+                    )}                    {pattern === 'sash' && (
                         <g>
                             <rect width="100" height="100" fill={color1} />
-                            <path d="M0,0 L25,0 L100,75 L100,100 L75,100 L0,25 Z" fill={color2} opacity={0.9} />
+                            <path d="M0,0 L15,0 L100,85 L100,100 L85,100 L0,15 Z" fill={color2} opacity={0.9} />
                         </g>
                     )}
+
                     {pattern === 'double-stripe' && (
                         <g>
                             <rect width="100" height="100" fill={color1} />

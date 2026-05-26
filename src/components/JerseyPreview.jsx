@@ -321,7 +321,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                 {pattern === 'camo' && <rect width="1024" height="1024" fill="url(#pattern-camo)" />}
 
                 {pattern === 'sash' && (
-                    <path d="M0,0 L256,0 L1024,768 L1024,1024 L768,1024 L0,256 Z" fill={secondary} opacity={0.9} />
+                    <path d="M0,0 L150,0 L1024,874 L1024,1024 L874,1024 L0,150 Z" fill={secondary} opacity={0.9} />
                 )}
             </g>
         );
