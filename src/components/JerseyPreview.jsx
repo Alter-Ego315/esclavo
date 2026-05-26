@@ -81,6 +81,10 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                         <stop offset="0%" stopColor={primary} />
                         <stop offset="100%" stopColor={secondary} />
                     </linearGradient>
+                    <linearGradient id="gradSoftSleeves" x1="0%" y1="700" x2="0%" y2="930" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stopColor={colors.sleeves || primary} />
+                        <stop offset="100%" stopColor={secondary} />
+                    </linearGradient>
                     <linearGradient id="fadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" stopColor="white" stopOpacity="1" />
                         <stop offset="100%" stopColor="white" stopOpacity="0" />
@@ -143,7 +147,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     </g>
                     {/* 2.2 SLEEVES (Middle-Lower part) */}
                     <g clipPath="url(#sleevesClipY)">
-                        {renderDesignLayers(0, colors.sleeves || primary)}
+                        {renderDesignLayers(0, colors.sleeves || primary, true)}
                     </g>
                     {/* 2.3 COLLAR (Very Bottom part) */}
                     <g clipPath="url(#collarClipY)">
@@ -172,7 +176,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
         </div>
     );
 
-    function renderDesignLayers(yOffset, baseColor) {
+    function renderDesignLayers(yOffset, baseColor, isSleeves = false) {
         return (
             <g transform={`translate(0, ${yOffset})`}>
                 <rect width="1024" height="1024" fill={baseColor} />
@@ -181,7 +185,7 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                     <rect width="1024" height="1024" fill="url(#bgImagePattern)" style={{ mixBlendMode: 'normal' }} />
                 )}
 
-                {pattern === 'gradient' && <rect width="1024" height="1024" fill="url(#gradSoft)" />}
+                {pattern === 'gradient' && <rect width="1024" height="1024" fill={isSleeves ? "url(#gradSoftSleeves)" : "url(#gradSoft)"} />}
 
                 {pattern === 'halftone-lines' && (
                     <g fill={secondary} mask="url(#halftoneFade)">
