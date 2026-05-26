@@ -93,6 +93,39 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                             <image href={backgroundImageB64} x="0" y="0" width="1024" height="1024" preserveAspectRatio="xMidYMid slice" />
                         </pattern>
                     )}
+                    <pattern id="pattern-ocean-waves" width="128" height="128" patternUnits="userSpaceOnUse">
+                        <g stroke={secondary} strokeWidth="6" fill="none" opacity="0.6">
+                            <path d="M0,20 Q32,0 64,20 T128,20" />
+                            <path d="M0,52 Q32,32 64,52 T128,52" />
+                            <path d="M0,84 Q32,64 64,84 T128,84" />
+                            <path d="M0,116 Q32,96 64,116 T128,116" />
+                        </g>
+                    </pattern>
+                    <pattern id="pattern-hexagons" width="34.641" height="60" patternUnits="userSpaceOnUse">
+                        <g fill="none" stroke={secondary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.6">
+                            {[[0, 0], [34.641, 0], [-17.3205, 30], [17.3205, 30], [51.9615, 30], [0, 60], [34.641, 60]].map(([cx, cy], i) => (
+                                <g key={i}>
+                                    <polyline points={`${cx + 17.3205},${cy - 10} ${cx + 17.3205},${cy + 10} ${cx},${cy + 20} ${cx - 17.3205},${cy + 10} ${cx - 17.3205},${cy - 10}`} />
+                                    <polyline points={`${cx - 12.1244},${cy - 7} ${cx - 12.1244},${cy + 7} ${cx},${cy + 14} ${cx + 12.1244},${cy + 7} ${cx + 12.1244},${cy - 7} ${cx},${cy - 14} ${cx - 12.1244},${cy - 7}`} />
+                                </g>
+                            ))}
+                        </g>
+                    </pattern>
+                    <pattern id="pattern-diamonds" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+                        <rect x="60" y="0" width="60" height="60" transform="rotate(45 60 0)" fill={secondary} opacity="0.8" />
+                    </pattern>
+                    <pattern id="pattern-camo" width="250" height="250" patternUnits="userSpaceOnUse">
+                        <g fill={secondary}>
+                            <circle cx="50" cy="50" r="45" opacity="0.4" />
+                            <circle cx="160" cy="80" r="55" opacity="0.3" />
+                            <circle cx="110" cy="170" r="60" opacity="0.4" />
+                            <circle cx="210" cy="190" r="38" opacity="0.3" />
+                            <circle cx="35" cy="200" r="30" opacity="0.4" />
+                            <path d="M100,50 Q150,25 175,100 Q125,150 75,100 Z" opacity="0.3" />
+                            <path d="M50,150 Q100,120 120,180 Q80,220 30,180 Z" opacity="0.3" />
+                            <path d="M180,120 Q220,90 240,150 Q200,190 160,150 Z" opacity="0.4" />
+                        </g>
+                    </pattern>
                 </defs>
 
                 {/* --- RENDERING LAYERS --- */}
@@ -252,6 +285,43 @@ const JerseyPreview = ({ colors, pattern, name, number, teamLogo, sponsorLogo, c
                             <circle key={i} cx="252" cy="1024" r={i * 100 + 100} />
                         ))}
                     </g>
+                )}
+
+                {pattern === 'ocean-waves' && <rect width="1024" height="1024" fill="url(#pattern-ocean-waves)" />}
+
+                {pattern === 'diagonal' && (
+                    <path d="M-100,1124 L1124,-100" stroke={secondary} strokeWidth="200" opacity={0.8} />
+                )}
+
+                {pattern === 'hexagons' && <rect width="1024" height="1024" fill="url(#pattern-hexagons)" />}
+
+                {pattern === 'halftone-dots' && (
+                    <g fill={secondary} opacity={0.6}>
+                        {Array.from({ length: 32 }).map((_, yi) => {
+                            const y = yi * 32 + 16;
+                            const r = Math.max(1, 10 * (1 - y / 1024));
+                            return Array.from({ length: 32 }).map((_, xi) => {
+                                const x = xi * 32 + 16;
+                                return <circle key={`${xi}-${yi}`} cx={x} cy={y} r={r} />;
+                            });
+                        })}
+                    </g>
+                )}
+
+                {pattern === 'hoops-thin' && (
+                    <g fill={secondary} opacity={0.6}>
+                        {Array.from({ length: 50 }).map((_, i) => (
+                            <rect key={i} x="0" y={i * 20} width="1024" height="6" />
+                        ))}
+                    </g>
+                )}
+
+                {pattern === 'diamonds' && <rect width="1024" height="1024" fill="url(#pattern-diamonds)" />}
+
+                {pattern === 'camo' && <rect width="1024" height="1024" fill="url(#pattern-camo)" />}
+
+                {pattern === 'sash' && (
+                    <path d="M0,0 L256,0 L1024,768 L1024,1024 L768,1024 L0,256 Z" fill={secondary} opacity={0.9} />
                 )}
             </g>
         );
